@@ -1,4 +1,4 @@
-lc-paper
+#lc-paper
 
 To use `minted` one needs to install `pygments`
 
