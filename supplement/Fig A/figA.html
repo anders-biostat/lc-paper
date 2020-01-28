@@ -1,0 +1,14 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="../src/linked-charts.css">
+	<script type="text/javascript" src = "../src/linked-charts.min.js"></script>
+	<script type="text/javascript" src = "iris.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		lc.scatter()
+			.nelements(iris.length)
+			.x(i => +iris[i].sepal_length)
+			.y(i => +iris[i].petal_length)
+			.place()
+	</script>
+</body>
