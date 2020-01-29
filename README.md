@@ -23,9 +23,9 @@ Figures are made as JS/LinkedCharts scripts. To get .svg files (or may be .png)
 
 * install wkhtmltopdf from https://wkhtmltopdf.org/index.html
 
-* save html page from the browser to get a static page
+* save html page from the browser to get a static page (if opened it will show both static and interactive plots, but that's fine).
 
-* get an image with
+* get an image with (looks like convertion to png istead of svg works way better)
 ```
-wkhtmltoimage -f "svg" figA_static.html figA.svg
+wkhtmltoimage -f png figA_static.html figA.png
 ```
