@@ -7,18 +7,30 @@
     .tableCell {
       border: 1px solid #777;
       vertical-align: top;
+			position: relative;
     }
     .header {
       text-align: center;
       font-family: 'Courier New', Courier, monospace;
       padding-top: 10px;
       padding-bottom: 10px;
+			padding-left: 45px;
       vertical-align: middle;
       border-bottom: 1px solid #777;
       background-color: honeydew;
       height: 40px;
       font-weight: bold;
     }
+		.panelLabel {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			font-weight: bold;
+			font-size: 20pt;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			padding-top: 10px;
+			padding-left: 10px;
+		}
   </style>
 </head>
 <body>
@@ -236,7 +248,20 @@
         "Or images</center>" + 
         "<img src='https://via.placeholder.com/400x150.png' style = 'margin-left: 5px;'>" +
         "<div style='background: lightgreen; padding: 10px 10px 10px 10px; margin-top: 20px;'>" +
-          "Or any ohter HTML element</div>"
+		  "Or any ohter HTML element</div>";
+		
+		var labels = ["a", "b", "c", "d", "e", "f", "g", "h"].map(el => el + ")");
+
+		d3.selectAll(".tableCell")
+			.append("div")
+				.attr("class", "panelLabel")
+				.text(function(d) {
+					val = 0;
+					if(d[0] == "B") val += 4;
+					val += +d[1] - 1;
+					return labels[val];
+				});
+		
     
   </script>
   

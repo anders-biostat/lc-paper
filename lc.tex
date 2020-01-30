@@ -56,12 +56,14 @@ Keeping these two goals in mind, we've designed LinkedCharts: a library for maki
 
 \section{Results}
 \subsection{Structure and linking}
-R/LinkedCharts syntax is very similar to most commonly used plotting libraries. There is a set of plotting function - each responsible for a specific type of chart (such as scatter plot, heatmap, bar plot, etc.). Each plot is defined by setting its prperties. Some of those properties are required (such as `x` and `y` for a scatter plot for instance) and others are optional (`palette`, `title`, etc.).
+R/LinkedCharts syntax is very similar to most commonly used plotting libraries. There is a set of 14 main functions - each responsible for a specific type of chart (such as scatter plot, heatmap, bar plot, etc.). Figure \ref{FigA} shows them all with some basic examples. Each plot is defined by its properties: some of them are required (such as \mintinline{R}{x} and \mintinline{R}{y} for a scatter plot or \mintinline{R}{value} for a heat map) many others are optional (\mintinline{R}{palette}, \mintinline{R}{title}, \mintinline{R}{ticks} etc.). A full list of all the properties with live examples is available at \url{https://anders-biostat.github.io/linked-charts/rlc/tutorials/props.html} and also on the R man page for each plotting function. Many of the properties accept minor variations in spelling (\mintinline{R}{colour} vs. \mintinline{R}{color} or \mintinline{R}{label} vs. \mintinline{R}{labels}).
+
 \begin{figure*}
 	\includegraphics[width=\textwidth]{FigA/figA.png}
-	\caption{Some caption}
+	\caption{Gallery of all plotting available in \mintinline{R}{rlc}. }
 	\label{FigA}
 \end{figure*}
+
 The properties, however, are not static, but can be reevaluated at any moment and if something has changed, the chart will be updated accordingly. For example, imagine, we have a matrix `countMatrix` with some single-cell RNA-seq experiment results. Each row of the table is a gene, and each column is a cell. Now we want to plot gene expression of two cells against each other and we have index of one of them stored in a variable named `cell1` and of the second on in `cell2`. Then plotting function will look like
 
 \begin{minted}{R}
