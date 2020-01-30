@@ -1,0 +1,55 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="../src/linked-charts.css">
+	<script type="text/javascript" src = "../src/linked-charts.min.js"></script>
+  <script type="text/javascript" src = "iris.js"></script>
+  <link rel="stylesheet" type="text/css" href="../src/prism.css">
+  <script type="text/javascript" src="../src/prism.js"></script>
+</head>
+<body>
+  <table>
+    <tr>
+      <td>
+        <img src="ggplot.png">
+      </td>
+      <td id = "lcCell"></td>
+    </tr>
+    <tr>
+      <td>
+        <p class="header">ggplot2</p>
+        <pre class="language-r line-numbers"><code>
+ggplot(iris) + geom_point(aes(
+  x = Sepal.Length,
+  y = Petal.Length,
+  size = Sepal.Width * 2,
+  colour = Petal.Width,
+  shape = Species
+))
+        </code></pre>
+      </td>
+      <td>
+        <p class="header">rlc</p>
+        <pre class="language-r line-numbers"><code>
+lc_scatter(with = iris, data = dat(
+  x = Sepal.Length,
+  y = Petal.Length,
+  size = Sepal.Width * 2,
+  colourValue = Petal.Width,
+  symbolValue = Species
+))
+        </code></pre>
+      </td>
+    </tr>
+  </table>
+  <script>
+    lc.scatter()
+      .nelements(iris.length)
+		  .x(i => +iris[i].sepal_length)
+      .y(i => +iris[i].petal_length)
+      .size(i => +iris[i].sepal_width * 2)
+      .colourValue(i => +iris[i].petal_width)
+      .symbolValue(i => iris[i].species)
+      .colourLegendTitle("")
+      .symbolLegendTitle("")
+      .place("#lcCell");
+  </script>
+</body>
