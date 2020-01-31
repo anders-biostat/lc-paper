@@ -4,45 +4,50 @@
   <script type="text/javascript" src = "iris.js"></script>
   <link rel="stylesheet" type="text/css" href="../src/prism.css">
   <script type="text/javascript" src="../src/prism.js"></script>
+  <style>
+    .header {
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16pt;
+    }
+  </style>
 </head>
 <body>
   <table>
     <tr>
       <td>
-        <img src="ggplot.png">
+        <img src="ggplot.png" width="400px">
       </td>
       <td id = "lcCell"></td>
     </tr>
     <tr>
       <td>
         <p class="header">ggplot2</p>
-        <pre class="language-r line-numbers"><code>
-ggplot(iris) + geom_point(aes(
+        <pre class="language-r line-numbers"><code>ggplot(iris) + geom_point(aes(
   x = Sepal.Length,
   y = Petal.Length,
   size = Sepal.Width * 2,
   colour = Petal.Width,
   shape = Species
-))
-        </code></pre>
+))</code></pre>
       </td>
       <td>
         <p class="header">rlc</p>
-        <pre class="language-r line-numbers"><code>
-lc_scatter(with = iris, data = dat(
+        <pre class="language-r line-numbers"><code>lc_scatter(with = iris, data = dat(
   x = Sepal.Length,
   y = Petal.Length,
   size = Sepal.Width * 2,
   colourValue = Petal.Width,
   symbolValue = Species
-))
-        </code></pre>
+))</code></pre>
       </td>
     </tr>
   </table>
   <script>
-    lc.scatter()
+    var sc = lc.scatter()
       .nelements(iris.length)
+      .width(300)
+      .height(350)
 		  .x(i => +iris[i].sepal_length)
       .y(i => +iris[i].petal_length)
       .size(i => +iris[i].sepal_width * 2)
@@ -51,5 +56,6 @@ lc_scatter(with = iris, data = dat(
       .colourLegendTitle("")
       .symbolLegendTitle("")
       .place("#lcCell");
+    sc.legend.width(100).update();
   </script>
 </body>

@@ -56,28 +56,30 @@ Keeping these two goals in mind, we've designed LinkedCharts: a library for maki
 
 \section{Results}
 \subsection{Structure and linking}
-R/LinkedCharts syntax is very similar to most commonly used plotting libraries. There is a set of 14 main functions - each responsible for a specific type of chart (such as scatter plot, heatmap, bar plot, etc.). Figure \ref{FigA} shows them all with some basic examples. Each plot is defined by its properties: some of them are required (such as \mintinline{R}{x} and \mintinline{R}{y} for a scatter plot or \mintinline{R}{value} for a heat map) many others are optional (\mintinline{R}{palette}, \mintinline{R}{title}, \mintinline{R}{ticks} etc.). A full list of all the properties with live examples is available at \url{https://anders-biostat.github.io/linked-charts/rlc/tutorials/props.html} and also on the R man page for each plotting function. Many of the properties accept minor variations in spelling (\mintinline{R}{colour/color} or \mintinline{R}{labels/label}).
-
 \begin{figure*}
 	\includegraphics[width=\textwidth]{FigA/figA.png}
 	\caption{Gallery of all plotting available in \mintinline{R}{rlc}. A scatter plot (a); a bee swarm plot (based on d3-beeswarm plugin [reference]) (b); a collection of various line plotting functions (c); a histogram and a density plot (density was multiplied by a factor of 500 to be visible on the same plot as a histogram) (d); a heat map (e); a bar chart (f); a collection of elements to gather input from user (g); a function to add custom HTML code to the page (h). All this examples with code to create them can be found in the supplement.}
 	\label{FigA}
 \end{figure*}
 
+R/LinkedCharts syntax is very similar to most commonly used plotting libraries. There is a set of 14 main functions - each responsible for a specific type of chart (such as scatter plot, heatmap, bar plot, etc.). Figure \ref{FigA} shows them all with some basic examples. Each plot is defined by its properties: some of them are required (such as \mintinline{R}{x} and \mintinline{R}{y} for a scatter plot or \mintinline{R}{value} for a heat map) many others are optional (\mintinline{R}{palette}, \mintinline{R}{title}, \mintinline{R}{ticks} etc.). A full list of all the properties with live examples is available at \url{https://anders-biostat.github.io/linked-charts/rlc/tutorials/props.html} and also on the R man page for each plotting function. Many of the properties accept minor variations in spelling (\mintinline{R}{colour/color} or \mintinline{R}{labels/label}).
 
+\begin{figure*}
+	\includegraphics[width=\textwidth]{FigB/figB.png}
+	\caption{Some caption}
+	\label{FigB}
+\end{figure*}
 
-The properties, however, are not static, but can be reevaluated at any moment and if something has changed, the chart will be updated accordingly. For example, imagine, we have a matrix `countMatrix` with some single-cell RNA-seq experiment results. Each row of the table is a gene, and each column is a cell. Now we want to plot gene expression of two cells against each other and we have index of one of them stored in a variable named `cell1` and of the second on in `cell2`. Then plotting function will look like
+The same structure with some minor differences in syntax is used in most common plotting libraries. For instance, in Figure \ref{FigB} a comparison between \mintinline{R}{ggplot2} and \mintinline{R}{rlc} is shown for making a simple scatter plot. As one can see, there is hardly any differences there. An important thing to notice here is the \mintinline{R}{dat} function, which plays the key role in R/LinkedCharts. Any property, defined inside this function, can be reevaluated at any moment simply by calling the \mintinline{R}{updateCharts()} and the corresponding plot will be redrawn accordingly. To make it more clear, let us imagine that we have a matrix \mintinline{R}{countMatrix} with some single-cell RNA-seq experiment results. Each row of the matrix is a gene, each column is a cell and values are number of reads from given gene detected in a given cell. Now we want to plot gene expression in two cells against each other and we have index of one of them stored in a variable named \mintinline{R}{cell1} and of the second on in \mintinline{R}{cell2}. To do this in R/LinkedCharts one should write the following code:
 
 \begin{minted}{R}
 lc_scatter(dat(x = countMatrix[, cell1], 
    y = countMatrix[, cell2]))
 \end{minted}
 
-where `dat` is a function that makes properties not static.
+If now something happens and values of \mintinline{R}{cell1} and \mintinline{R}{cell2} are changed, calling the \mintinline{R}{updateCharts} function will change the scatter plot to show gene expression in these new cells. The only thing that is missing now to make an interactive app is a reaction to some events on the web page. To this end, R/LinkedCharts provides user with a set of callback functions for most common mouse events. 
 
-If now something happens and values of `cell1` and `cell2` changes, one would like the chart to change as well and show gene expression of these new cells against. And this is exactly what will happen, if someone calls the `updateCharts()` function. 
-
-The next question is when to call this function. Each chart in the `rlc` library has an `on_click` argument. This argument should be a callback function in R that is called every time a user clicks on an element of a chart.
+ Each chart in the `rlc` library has an `on_click` argument. This argument should be a callback function in R that is called every time a user clicks on an element of a chart.
 
 So if we want to make a simplest possible example of Linked-Charts, it will be something like
 
