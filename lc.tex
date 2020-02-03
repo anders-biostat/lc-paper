@@ -77,11 +77,17 @@ lc_scatter(dat(x = countMatrix[, cell1],
    y = countMatrix[, cell2]))
 \end{minted}
 
-If now something happens and values of \mintinline{R}{cell1} and \mintinline{R}{cell2} are changed, calling the \mintinline{R}{updateCharts} function will change the scatter plot to show gene expression in these new cells. The only thing that is missing now to make an interactive app is a reaction to some events on the web page. To this end, R/LinkedCharts provides user with a set of callback functions for most common mouse events. 
+If now something happens and values of \mintinline{R}{cell1} and \mintinline{R}{cell2} are changed, calling the \mintinline{R}{updateCharts} function will change the scatter plot to show gene expression in these new cells. The only thing that is missing now to make an interactive app is a reaction to some events on the web page. To this end, R/LinkedCharts provides a set of callback functions for most common mouse events. They are all arguments with names spelled as \mintinline{R}{on_`eventName`} and a list of available listeners can differ between different chart types. A full list can be found on R man pages for every plotting function.
 
- Each chart in the `rlc` library has an `on_click` argument. This argument should be a callback function in R that is called every time a user clicks on an element of a chart.
+The most common callback function is \mintinline{R}{on_click}. It is called every time an element of a chart (point, line, bar, cell) is clicked. A an argument this function gets index of the clicked element or two indices - for a row and a column in case of a heatmap. Let's extend our example to demonstrate the use of the \mintinline{R}{on_click} callback. Based on the above mentioned \mintinline{R}{countMatrix}, we can calculate some distance or correlation matrix to explore cell-to-cell similarities. For demonstration purposes, distances can be obtained in a very straightforward manner.
 
-So if we want to make a simplest possible example of Linked-Charts, it will be something like
+\begin{minted}{R}
+distMatrix = as.matrix(dist(countMatrix))
+\end{minted}
+
+Now, next to the scatter plot of \mintinline{R}{cell1} against \mintinline{R}{cell2} expression, we can have a heatmap of distances which is also used for navigation through all the pairs of cells. 
+
+Code for such a minimalistic, but already fully functional interactive app will look like this:
 
 \begin{minted}{R}
 lc_heatmap(value = distMatrix, 
@@ -94,19 +100,17 @@ lc_scatter(dat(x = countMatrix[, cell1],
 	y = countMatrix[, cell2]))
 \end{minted}
 
-This example makes a heatmap of distances between cells (stored in `distMatrix`) and a scatter plot of gene expression of two selected cells. When user clicks on a cell of the heatmap, cells from the corresponding row and column are selected and the scatter plot is redrawn.
+You can find the app produced by this code in the supplement alongside with a more nicely looking version.
 
-And this is already a working piece of code. You can see the result in the supplement alongside a more nicely looking version of the same app.
+In this example we use the \mintinline{R}{on_click} callback function to change state variables \mintinline{R}{cell1} and \mintinline{R}{cell2} and to redraw the scatter plot. As it was previously mentioned, properties \mintinline{R}{x} and \mintinline{R}{y} will be reevaluated according to the current values of the state variables, thus insuring interactive manipulation with the app.
 
-As one can see from this example, the main idea behing Linked-Charts is the following. We add charts, using some state variables, i.e. variables that describe current state of the app (in the example above they are `cell1` and `cell2`). These variables will be changed as a result of some user actions, such as clicking on a heatmap cell (hovering mouse over a point, selecting multiple elements of a chart, etc.) and after this happens `updateCharts()` is called. That is what "linked" in "Linked-Charts" stands for. We link several charts together by the means of the `on_click` callback function and updating charts.
+This basic example illustrates the main idea behind LinkedCharts. We define a set of charts employing a collection of variables to specify current state of the chart, i.e. selected cells, genes, samples, color labels, etc. With the help of the mouse event callback functions we change the state variables and call the \mintinline{R}{updateCharts} function to put the charts in accordance with their new values. This process is what "linked" in "LinkedCharts" stands for. We link several charts together by the means of \mintinline{R}{on_click} and other callback functions and updating charts. Though quite simple, this structure can produce powerful interactive apps for various research purposes.
 
-Though quite simple, this structure can produce powerfull interactive apps for various research purposes.
-
-Of course, lots of details can be added to the example above. We can customize colours and labels, place charts alongside each other and change their sizes, specify what exactly is going to be redrawn on the `updateCharts()` call. Please, check the supplement for a prettified version of the app with all necessary explanations.
+The app from the example can be further cutomized by changing colours, shapes and sizes or adding meaningful labels and titles. Some technical aspects can be changed as well for better performance. For instance, we can specify what exactly should be redrawn on each \mintinline{R}{updateCharts} call and prevent meaningless updates of the heatmap. Please, check the supplement for a prettified version of the app with all necessary explanations.
 
 \subsection{Use Cases}
 \subsubsection{Quality check}
-It is common that on the way from obtaining raw data towards meaningful conclusions one undertakes a number of steps each involving some data condensing and inavitable information loss. For example, raw reads in RNA-seq are aligned and counted to produce a gene expression levels for each sample. However, quality of reads and confidence of alignment is no longer included in the data. If now researcher is interested in clusters of samples and other patterns such as trajectories, the next step may be to calculate a distance matrix. This will make data even more interprateable, but now we loose gene expression values. Of cource, various steps are performed on each step. Low-quality reads are usually removed from the study as well as samples that show weird expression patterns. We tend to beleive that we now longer care about those pieces of data that are left behind in the research flow, since we've already taken everything we need from them.
+It is common that on the way from obtaining raw data towards meaningful conclusions one undertakes a number of steps each involving some data condensing and inevitable information loss. For example, raw reads in RNA-seq are aligned and counted to produce a gene expression levels for each sample. However, quality of reads and confidence of alignment is no longer included in the data. If now researcher is interested in clusters of samples and other patterns such as trajectories, the next step may be to calculate a distance matrix. This will make data even more interprateable, but now we loose gene expression values. Of cource, various steps are performed on each step. Low-quality reads are usually removed from the study as well as samples that show weird expression patterns. We tend to beleive that we now longer care about those pieces of data that are left behind in the research flow, since we've already taken everything we need from them.
 
 However, it is always good to check wether an intresting pattern that one observes in a 2D embedding is a real finding or a technincal artifact of some sort. Generally, it requieres taking one or several steps back, retrieving only the data that is related to samples in question, making some new plots. All this can be easily done with a Linked-Charts app.
 
