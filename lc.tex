@@ -66,7 +66,7 @@ R/LinkedCharts syntax is very similar to most commonly used plotting libraries. 
 
 \begin{figure*}
 	\includegraphics[width=\textwidth]{FigB/figB.png}
-	\caption{Some caption}
+	\caption{}
 	\label{FigB}
 \end{figure*}
 
@@ -106,13 +106,13 @@ In this example we use the \mintinline{R}{on_click} callback function to change 
 
 This basic example illustrates the main idea behind LinkedCharts. We define a set of charts employing a collection of variables to specify current state of the chart, i.e. selected cells, genes, samples, color labels, etc. With the help of the mouse event callback functions we change the state variables and call the \mintinline{R}{updateCharts} function to put the charts in accordance with their new values. This process is what "linked" in "LinkedCharts" stands for. We link several charts together by the means of \mintinline{R}{on_click} and other callback functions and updating charts. Though quite simple, this structure can produce powerful interactive apps for various research purposes.
 
-The app from the example can be further cutomized by changing colours, shapes and sizes or adding meaningful labels and titles. Some technical aspects can be changed as well for better performance. For instance, we can specify what exactly should be redrawn on each \mintinline{R}{updateCharts} call and prevent meaningless updates of the heatmap. Please, check the supplement for a prettified version of the app with all necessary explanations.
+The app from the example can be further customized by changing colours, shapes and sizes or adding meaningful labels and titles. Some technical aspects can be changed as well for better performance. For instance, we can specify what exactly should be redrawn on each \mintinline{R}{updateCharts} call and prevent meaningless updates of the heatmap. Please, check the supplement for a prettified version of the app with all necessary explanations.
 
 \subsection{Use Cases}
 \subsubsection{Quality check}
 It is common that on the way from obtaining raw data towards meaningful conclusions one undertakes a number of steps each involving some data condensing and inevitable information loss. For example, raw reads in RNA-seq are aligned and counted to produce a gene expression levels for each sample. However, quality of reads and confidence of alignment is no longer included in the data. If now researcher is interested in clusters of samples and other patterns such as trajectories, the next step may be to calculate a distance matrix. This will make data even more interprateable, but now we loose gene expression values. Of cource, various steps are performed on each step. Low-quality reads are usually removed from the study as well as samples that show weird expression patterns. We tend to beleive that we now longer care about those pieces of data that are left behind in the research flow, since we've already taken everything we need from them.
 
-However, it is always good to check wether an intresting pattern that one observes in a 2D embedding is a real finding or a technincal artifact of some sort. Generally, it requieres taking one or several steps back, retrieving only the data that is related to samples in question, making some new plots. All this can be easily done with a Linked-Charts app.
+However, it is always good to check whether an intresting pattern that one observes in a 2D embedding is a real finding or a technical artifact of some sort. Generally, it requieres taking one or several steps back, retrieving only the data that is related to samples in question, making some new plots. All this can be easily done with a Linked-Charts app.
 
 The idea is to make a chain of charts, where each new one explains each element of the previous one. For example, in the app from the previous section, scatter plot explains each cell of the heatmap. When a cell is clicked, we can see all the expression values for the two selected samples and thus it "explains" the obtained distance value. We can continue the chain of charts and, for instance, add a chart that for a selected gene will show quality of reads all the reads for the two selected samples.
 
@@ -123,9 +123,9 @@ Another example is given in the supplement. It is based on the data from a drug-
 \subsubsection{Exploratory analysis}
 To emphasize the simplicity of the Linked-Charts library, for every example in supplement we provide two versions. One contains bare minimum of code to produce working and useful app. This kind of apps can be easily written on-the-fly to facilitate current research steps. The other shows how to make those work-in-progress-apps more presentable. This, usually, takes more effort, but not much more than to prepare a usual static plot for a paper of a presentation.
 
-Sytax of Linked-Charts is made as simple and as similar to syntax of commonly used plotting libraries to urge researchers to employ interactivity for every-day exploration analysis. We beleive that one doesn't need to wait for special occasion or some final results to start playing with interactivity. Instead, interactive apps can be made as often and easily as static plots. For example, if you are performing some differential expression analysis and want to make an MA-plot, it may be reasonable to always have a plot showing individual expression levels next to it. It takes just a few extra lines of code, yet provides a whole layer of useful information.
+Syntax of Linked-Charts is made as simple and as similar to syntax of commonly used plotting libraries to urge researchers to employ interactivity for every-day exploration analysis. We beleive that one doesn't need to wait for special occasion or some final results to start playing with interactivity. Instead, interactive apps can be made as often and easily as static plots. For example, if you are performing some differential expression analysis and want to make an MA-plot, it may be reasonable to always have a plot showing individual expression levels next to it. It takes just a few extra lines of code, yet provides a whole layer of useful information.
 
-Here, how one can make these two linked plots using the Linked-Charts library (more details and used data can be found in supplemnt).
+Here, how one can make these two linked plots using the Linked-Charts library (more details and used data can be found in supplement).
 
 \begin{verbatim}
 openPage(layout = "table1x2")
@@ -163,7 +163,7 @@ Of course, there are other things that can make a server app more customized. On
 Linked-Charts can also be used to create stand-alone apps. For this kind of apps you don't need a server, but can directly send them to a collaborator as an HTML file that can be opened in any browser. The page will already contain all the data and interactive functionality. Yet to make such an app one should use a JavaScript version of the Linked-Charts library. We tried to make required level of experience with JavaScript to minimum and make necessary code understandable. For each example in the supplement we also provide the JavaScript code necessary to create the same app without running R session. More documentation on linked-charts.js as well as various tutorials are available at...
 
 \subsection{Further customization}
-Some stuff about `lc_html`, `lc_input`, `startPage` and so on...
+
 
 
 \end{document}
