@@ -119,7 +119,7 @@ ggdraw(ylim = c(0.45, 0.55)) +
   draw_line(c(0.55, 0.6), c(0.5, 0.5), size = 2, arrow = arrow(), colour = "#fe4a49") +
   draw_text("Data generation", .13, 0.5, hjust = 0, colour = "#1a2c79") +
   draw_text("Data visualization", .63, 0.5, hjust = 0, colour = "#fe4a49") -> legend
-
+  
 plot_grid(plots, legend, nrow = 2, rel_heights = c(0.95, 0.05)) -> figC
 
 png("figC.png", width = 1500, height = 1500)
