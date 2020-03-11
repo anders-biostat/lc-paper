@@ -104,7 +104,7 @@ lc_scatter(dat(x = countMatrix[, cell1],
 
 You can find the app produced by this code in the supplement alongside with a more nicely looking version.
 
-In this example we use the \mintinline{R}{on_click} callback function to change the state variables \mintinline{R}{cell1} and \mintinline{R}{cell2} and to redraw the scatter plot. As it was previously mentioned, properties \mintinline{R}{x} and \mintinline{R}{y} will be reevaluated using the current values of the state variables, thus making it easy to keep charts up-to-date and ensure interactive behaviour.
+In this example we use the \mintinline{R}{on_click} callback function to change the state variables \mintinline{R}{cell1} and \mintinline{R}{cell2} and to redraw the scatter plot. As it was previously mentioned, properties \mintinline{R}{x} and \mintinline{R}{y} will be reevaluated using the current values of the state variables, thus making it easy to keep charts up-to-date and ensure interactive behavior.
 
 This basic example illustrates the main idea behind the LinkedCharts library. We define a set of charts employing a collection of variables to specify current state of the chart, i.e. selected cells, genes, samples, color labels, etc. With the help of the mouse event callback functions we change the state variables and call the \mintinline{R}{updateCharts} function to put the charts in accordance with their new values. This process is what "linked" in "LinkedCharts" stands for. We link several charts together by the means of \mintinline{R}{on_click} and other callback functions and updating charts. Though quite simple, this structure can produce powerful interactive apps for various research purposes.
 
@@ -115,13 +115,13 @@ The app from the example can be further customized by changing colours, shapes a
 
 It is common that on the way from obtaining raw data towards meaningful conclusions one undertakes a number of steps each involving some data condensing and inevitable information loss. For example, raw reads in RNA-seq are aligned and counted to produce gene expression levels for each sample. However, quality of reads and confidence of alignment is no longer included in the data. If now researcher is interested in clusters of samples and other patterns such as trajectories, the next step may be to calculate a distance matrix. This will make data even more interprateable, but now we loose gene expression values. 
 
-Of cource, information that is put aside is not only used to produce the next step values, but also to perform various quality checks. Low-quality reads are usually removed from the study as well as samples that show abnormal expression patterns. We tend to beleive that we no longer care about those pieces of data that are left behind in the research flow, since we've already taken everything we need from them. Yet, espesially in studies involving big data, these checks are automated. The researcher only looks at some summarized reports and may also have a look at some random examples. If those look reasonable, the general assumption is that all the data that was not filtered out is also reasonable. However, while there is only one thing of everything being right, there are numerous ways for the data to be either wrong or just to be not like one has expected. Therefore, it's important to be able to look back, before making any kind of conclusions from a figure that show a condenced result.
+Of course, information that is put aside is not only used to produce the next step values, but also to perform various quality checks. Low-quality reads are usually removed from the study as well as samples that show abnormal expression patterns. We tend to believe that we no longer care about those pieces of data that are left behind in the research flow, since we've already taken everything we need from them. Yet, especially in studies involving big data, these checks are automated. The researcher only looks at some summarized reports and may also have a look at some random examples. If those look reasonable, the general assumption is that all the data that was not filtered out is also reasonable. However, while there is only one thing of everything being right, there are numerous ways for the data to be either wrong or just to be not like one has expected. Therefore, it's important to be able to look back, before making any kind of conclusions from a figure that show a condenced result.
 
 This idea is the main motivation behind the LinkedCharts library. It is illustrated in the Figure \ref{FigC}. If we have a workflow or a pipeline, that performs certain transformations of the data, LinkedCharts offers an easy way to look back through each of the steps. Whenever a researcher encounters an interesting or suspicious pattern in the data, he or she can with minimal effort check that whether it real biological finding or some technical artifact, missed by quality checks. 
 
 \begin{figure*}
 	\includegraphics[width=\textwidth]{FigC/figC.png}
-	\caption{Main idea behind the LinkedCharts library is shown based on a drug screening experiment. Blue arrow shows a direction of a common pipeline. We start with reading intesity values from plates with different cell lines, grown in the presence of a number drugs in different concentrations (A). These values are then normalized and aggregated to yeild a single score for each drug (B). The scores of different drugs are compared to each other across all the tested cell lines (C). A drug-drug correlation heatmap is then produced to identify clusters of similar durgs (D). This pipeline is a simplified version of study from [reference? Have they published that by now?] for demonstration purposes. The live app and related code can be found in the supplement.}
+	\caption{Main idea behind the LinkedCharts library is shown based on a drug screening experiment. Blue arrow shows a direction of a common pipeline. We start with reading intensity values from plates with different cell lines, grown in the presence of a number drugs in different concentrations (A). These values are then normalized and aggregated to yield a single score for each drug (B). The scores of different drugs are compared to each other across all the tested cell lines (C). A drug-drug correlation heatmap is then produced to identify clusters of similar drugs (D). This pipeline is a simplified version of study from [reference? Have they published that by now?] for demonstration purposes. The live app and related code can be found in the supplement.}
 	\label{FigC}
 \end{figure*}
 
@@ -133,39 +133,52 @@ Another example is shown in Figure \ref{FigC} and also is available in the suppl
 For demonstration purposes, we use only a subset of available data here to simulate a typical drug-screening pipeline. In this subset 50 drugs each in five different concentrations were tested against 17 (?? check that) pancreatic cancer cell lines. The main heatmap shows drug-drug correlation values. By clicking on a cell of the heatmap user selects two drugs and can check individual drug scores (?) of each of them against all the tested cell lines. The inhibition values were calculated based on drug activity in five tested concentrations. So the third plot shows all those activity levels for each conentration. Finally, one can also find raw readouts from the plates in order to check for plate-related effects if any. More details as well as code and links to download the data one can find in the supplement.
 
 \subsubsection{Exploratory analysis}
-To emphasize the simplicity of the Linked-Charts library, for every example in supplement we provide two versions. One contains bare minimum of code to produce working and useful app. This kind of apps can be easily written on-the-fly to facilitate current research steps. The other shows how to make those work-in-progress-apps more presentable. This, usually, takes more effort, but not much more than to prepare a usual static plot for a paper of a presentation.
 
-Syntax of Linked-Charts is made as simple and as similar to syntax of commonly used plotting libraries to urge researchers to employ interactivity for every-day exploration analysis. We beleive that one doesn't need to wait for special occasion or some final results to start playing with interactivity. Instead, interactive apps can be made as often and easily as static plots. For example, if you are performing some differential expression analysis and want to make an MA-plot, it may be reasonable to always have a plot showing individual expression levels next to it. It takes just a few extra lines of code, yet provides a whole layer of useful information.
+While interactivity is already heavily used for presenting study results to the research community, with R/LinkedCharts we would like to emphasize its advantages for everyday exploratory analysis. Since the syntax of R/LinkedCharts is made to resemble popular R packages such as ggplot2, it is not much more effort to make an interactive app instead of a usual static plot or a collection of plots. This app may not look pretty as most plots one makes while exploring new data aren't. Yet such a quick and dirty solution allows the researcher to pick into the data in an interactive manner without spending time on deploying a propper app. Therefore, interactive apps can be made as often and easily as static plots.
 
-Here, how one can make these two linked plots using the Linked-Charts library (more details and used data can be found in supplement).
+To illustrate this, every live example in the supplement is shown in two versions. One contains bare minimum of code to produce working and useful app. This kind of apps can be easily written on-the-fly to facilitate current research steps. The other shows how to make those work-in-progress-apps more presentable. This, usually, takes more effort, but not much more than to prepare a usual static plot for a paper or a presentation.
 
-\begin{verbatim}
+As an example, let us think about a routine differential expression analisys. A question that is often arises as a part of some bigger study is how the two groups of samples or cells are different. Here and in the live version in the supplement, we've used data from [reference]. In this study, from each of 17 patients with oral cancer three samples were taken: one of normal tissue, one of tumour and one of displasia tissue. mRNA from all these samples was sequenced to obtain gene expression values. Now, one may want to know what genes are significantly different between, let say, normal and cancerous tissues. Many packages offer functions to answer this question and for this example it is not important, which one to use. We've applied function \mintinline{R}{voom} from the ``limma'' package. To explore results of this function it is common to make an MA-plot with the average gene expression on the x-axis and log fold change between the two groups on the y-axis. It can be also convenient to have such a plot next to another that shows expression of the selected gene across all the samples. This can be easily done with R/LinkedCharts.
+
+Let say, normalized counts are stored as matrix in the \mintinline{R}{normCounts}. \mintinline{R}{sampleTable} is a \mintinline{R}{data.frame} with information about samples: patient IDs, tissue types, etc. \mintinline{R}{voomResult} is an output of the \mintinline{R}{voom} function from the ``limma'' package. This data frame for each gene contains its average expression, log fold change and p-value for significance of the expression difference.
+
+Here, how one can make an app with these two linked plots using the R/LinkedCharts library.
+
+\begin{minted}{R}
 openPage(layout = "table1x2")
-
 gene <- 1
 
 lc_scatter(dat(
-x = voomResult\$AveExpr,
-y = voomResult\$tissuetumour,
-on_click = function(k) { gene <<- k; updateCharts("A2") }),
-"A1")
-
-countsums <- colSums(countMatrix)
+   x = AveExpr,
+   y = tissuetumour,
+   colour = ifelse(adj.P.Val < 0.1, 
+                   "red", "black"),
+   on_click = function(k) { 
+      gene <<- k
+      updateCharts("A2") 
+   }),
+"A1", with = voomResult)
 
 lc_scatter(dat(
-x = sampleTable\$patient,
-y = countMatrix[gene,] / countsums * 1e6 + .1,
-logScaleY = 10),
-"A2")
-\end{verbatim}
+   x = patient,
+   y = normCounts[gene, ],
+   colourValue = tissue, 
+   logScaleY = 10),
+"A2", with = sampleTable)
+\end{minted}
 
-This example is very similar to the one from the previous section, but we've added the `openPage` function to set a table layout to the web page. This step is optional and allows us to put the two charts next to each other.
+The app produced by this code and the data to reproduce it can be found in the supplement.
+
+The example is very similar to the one from the previous section. The state of the app is now stored in the \mintinline{R}{gene} variable. Whenever a point in the MA-plot is clicked, this varible is changed and the second plot is updated. Different colours are used to indicated gene with significantly different expression between tumour and normal tissue in the MA-plot and to show different tissue types in the expression plot. We've added the \mintinline{R}{openPage} function to add a table layout to the web page. This step is optional and allows us to put the two charts next to each other.
 
 \subsubsection{Server apps}
+
 Linked-Charts apps can be used locally by the researcher and can also be shared as sever apps. And there is only one additional thing that is required to turn local app into a server app: One needs to specify a list of local variables and their default values. Local variables are ones that can be rewritten by several users independently. In most cases they are also state variables: i.e. variables that store current state of an app (selected genes, samples, etc.). Thus, to run the app from the previous section, one would need just to replace the first two lines with
-\begin{verbatim}
-openPage(layout = "table1x2", sessionVars = list(gene = 1))
-\end{verbatim}
+
+\begin{minted}{R}
+openPage(layout = "table1x2", 
+         sessionVars = list(gene = 1))
+\end{minted}
 
 Now the app can be accessed by multiple users simultaneously.
 
