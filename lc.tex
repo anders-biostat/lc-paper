@@ -173,19 +173,22 @@ The example is very similar to the one from the previous section. The state of t
 
 \subsubsection{Server apps}
 
-Linked-Charts apps can be used locally by the researcher and can also be shared as sever apps. And there is only one additional thing that is required to turn local app into a server app: One needs to specify a list of local variables and their default values. Local variables are ones that can be rewritten by several users independently. In most cases they are also state variables: i.e. variables that store current state of an app (selected genes, samples, etc.). Thus, to run the app from the previous section, one would need just to replace the first two lines with
+So far, we've only talked about local apps, i.e. ones that are created by running script locally and are intended to be used by the person who made it. However, the same apps can also be run on the server and shared between multiple users. There is only one additional thing that is required to turn a local app into a server app: One needs to specify a list of local variables and their default values. Local variables are those that can be rewritten by several users independently. In most cases they are also state variables: i.e. variables that store current state of an app (selected genes, samples, etc.). Thus, to run the app from the previous section on a server, one would need just to replace the first two lines with
 
 \begin{minted}{R}
 openPage(layout = "table1x2", 
          sessionVars = list(gene = 1))
 \end{minted}
 
-Now the app can be accessed by multiple users simultaneously.
+Now a link to the app  can be shared and it can be accessed by multiple users simultaneously.
 
-Of course, there are other things that can make a server app more customized. One can add some default content to each opened page, control each client session (and, for example, close those, that don't show any activity for considerable amount of time), limit memory usage or number of active connections simultaneously. Yet, all these parameters are optional.
+Of course, there are other things that can make a server app more customized. One can add some default content to each opened page, control each client session (and, for example, close those, that don't show any activity for considerable amount of time), limit memory usage or number of active connections simultaneously. Yet, all these parameters are optional. More information about possible options can be found on R man pages for classes \mintinline{R}{App} and \mintinline{R}{Session}.
 
-\subsubsection{Stand alone apps}
-Linked-Charts can also be used to create stand-alone apps. For this kind of apps you don't need a server, but can directly send them to a collaborator as an HTML file that can be opened in any browser. The page will already contain all the data and interactive functionality. Yet to make such an app one should use a JavaScript version of the Linked-Charts library. We tried to make required level of experience with JavaScript to minimum and make necessary code understandable. For each example in the supplement we also provide the JavaScript code necessary to create the same app without running R session. More documentation on linked-charts.js as well as various tutorials are available at...
+\subsubsection{Stand-alone apps}
+
+LinkedCharts can also be used to create stand-alone apps. This kind of apps do not rely on a running R session and thus can be directly sent to a collaborator or used as a supplement to a paper. To make such an app, one should use the JavaScript version of the LinkedCharts library and either load preprocessed data or perform all the calculations with JavaScript. 
+
+For this kind of apps you don't need a server, but can directly send them to a collaborator as an HTML file that can be opened in any browser. The page will already contain all the data and interactive functionality. Yet to make such an app one should use a JavaScript version of the Linked-Charts library. We tried to make required level of experience with JavaScript to minimum and make necessary code understandable. For each example in the supplement we also provide the JavaScript code necessary to create the same app without running R session. More documentation on linked-charts.js as well as various tutorials are available at...
 
 \subsection{Further customization}
 
