@@ -1,0 +1,75 @@
+<head>
+	<script type="text/javascript" src = "maData.js"></script>
+	<script type="text/javascript" src = "heatmapData.js"></script>
+	<script type="text/javascript" src = "../src/linked-charts.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../src/linked-charts.css">
+	<style>
+		.fig-labels {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			font-weight: bold;
+			font-size: 20pt;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			padding-top: 10px;
+			padding-left: 10px;
+		}		
+	</style>
+</head>
+<body>
+<div id = "ma-expr">
+<table>
+   <tr>
+      <td id = "ma"></td>
+      <td id = "expr"></td>
+   </tr>
+</table>
+</div>	
+	<script type="text/javascript">
+var selGene = 1914;
+
+lc.scatter()
+	.x(i => maData.pvals[i].AveExpr)
+	.y(i => maData.pvals[i].tissuetumour)
+	.colour(i => maData.pvals[i]["adj.P.Val"] < 0.1 ? "red" : "black")
+	.label(i => maData.geneNames[i])
+	.size(1.3)
+	.axisTitleY("log2 fc")
+	.axisTitleX("Average expression")
+	.showLegend(false)
+	.width(550)
+	.mode("svg")
+	.on_click(i => {selGene = i; exprPlot.update();})
+	.set_paddings({left: 100})
+	.place(d3.select("#ma-expr").select("#ma"));
+
+var exprPlot = lc.scatter()
+	.elementIds(d3.range(maData.patients.length)
+		.filter((e, i) => maData.tissue[i] != "dysplasia")
+	)
+	.x(i => maData.patients[i])
+	.y(i => maData.countMatrix[selGene][i]/maData.countSums[i] * 1e6 + .1)
+	.logScaleY(10)
+	.colourValue(i => maData.tissue[i])
+	.title(function() {return maData.geneNames[selGene]})
+	.axisTitleY("CPM")
+	.axisTitleX("Patients")
+	.ticksRotateX(45)
+	.width(550)
+	.set_paddings({left: 100})
+	.colourLegendTitle("Tissue")
+	.place(d3.select("#ma-expr").select("#expr"));
+
+exprPlot.legend.width(120).update();
+d3.selectAll(".axis")
+	.selectAll(".label")
+	.style("fill", "#444")
+	.style("font-size", 18);
+
+conts = d3.selectAll(".linked-charts")
+	.data(["a)", "b)"])
+		.append("div")
+			.attr("class", "fig-labels")
+			.text(d => d);
+	</script>
+</body>
