@@ -27,5 +27,5 @@ Figures are made as JS/LinkedCharts scripts. To get .svg files (or may be .png)
 
 * get an image with (looks like convertion to png istead of svg works way better)
 ```
-wkhtmltoimage -f png figA_static.html figA.png
+wkhtmltoimage --enable-local-file-access -f png figA_static.html figA.png
 ```
