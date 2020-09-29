@@ -49,21 +49,59 @@ In exploratory data analysis, one usually jumps back and forth between visualiza
 
 Problem of effective visualization has been there since the first reported experiment results. Continuously growing amount and complexity of available data over the last decades made it a challenging issue \citep{fisher_2017}. For a while the only available way to tackle the problem was to come up with more elaborate types of plots imploying colour, shape, transparensy and other visual aspects to combine multiple layers of information \citep{keahey_2013}. Yet, there are certain limits to how much information one can grasp from a static image. Excessive details and overcomplexity make visualization less interprateable. Thus a researcher is forced to make a decision on what information to keep when preparing figures for a paper or any other kind of report. From one hand, it is a good thing, since often data contains plenty of noise and information that is irrelevant to the point one tries to make. From the other hand, it may be complicated to make sure, that nothing of importance is missing in the graphical representation.
 
-With the advance of mordern technologies, interactive visualisation emerged to offer a solution to this problem. In an interactive figure there is no need to make all aspects visible simultaneously or highlight anything of importance. Instead user is allowed to explore the figure in a quick and intuitive manner, concentrating at a time on the most interesting or suspicsious parts of the plot. Numerous tools now provide means of creating interactive visualizations not only for research, but for any area that involves data analisys and presentation of any sort \citep{caldarola_2017}. With their help one may avoid overburdening of figures without a need to put some information aside.
+With the advance of mordern technologies, interactive visualisation emerged to offer a solution to this problem. In an interactive figure there is no need to make all aspects visible simultaneously or highlight everything of importance at once. Instead user is allowed to explore the figure in a quick and intuitive manner, concentrating at a time on the most interesting or suspicsious parts of the plot. Numerous tools now provide means of creating interactive visualizations not only for research, but for any area that involves data analisys and presentation of any sort \citep{caldarola_2017}. With their help one may avoid overburdening of figures without a need to put some information aside.
 
 The advantage of interactivity lies beyond just simplifying navigation through big massives of data. When adding small changes to a plot takes just a click or two, it urges a researcher not to put aside ideas or concerns and thus go through the data more thoroughly. At the same time a possibility for readers to check conclusions and claims of a paper on the fly, without going through all the script and analysis, makes the paper more credible. Therefore, we believe that further integration of interactive tools in a researchers' routine can strongly improve quality of studies.
 
-Today many papers offer an interactive resource as a way to present their data and results. Though these visualizations are often useful and provide a comprahensive insight into the data, they generally serve presentation purposes only. This means that only after completing main work on the project, researches spend a couple of days to deploy a nice interactive app to share their data and results with the scientific community. We, however, believe, that interactivity should also be used every day tasks to facilitate data exploration. To this end, the too
+Today many papers offer an interactive resource as a way to present their data and results. Though these visualizations are often useful and provide a comprahensive insight into the data, they generally serve presentation purposes only. This means that only after completing main work on the project, researches spend a couple of days to deploy a nice interactive app to share their data and results with the scientific community. We, however, believe, that interactivity should also be used in every day tasks to facilitate data exploration. To this end, the tool to produce interactive apps should be both simple and highly customizeable.
 
+Simplicity should serve as incentive to use interactivity whenever there is a smallest hint that it may be useful. If a tool is too complicated, one may prefer to do most of the analysis by more habitual static means, and wait for a special occasion when it's worthwhile to invest time into designing an interactive app. It should also be similar in design to most common visualization means, since tools with too specific interface tend to be used by people with more extensive programming skill. Even if a researcher with less expertise in coding has an eager-to-help colleague, he or she may be unwilling to ask for an assistance in minual every day tasks and wait for something big.
 
-Today there are no doubts that interactivity is becoming an extremely powerful tool for data exploration and presentation. Many journals now expect authors to provide access to their data and results in the form of an interactive app. This way readers get an opportunity to check important claims of the paper directly and even to find answers to their own questions. Such apps generally provide an intuitive way to dive into the data without any need of going through software and scripts used in the paper. Another common area of interactivity application is data exploration. In recent years lots of software packages have emerged that generate interactive reports, produce interactive plots or provide other means of obtaining information about the data set in an interactive manner (some references).
+At the same time, an attempt to simplify a tool may result in hardcoding and presetting too many parameters. As a result, a simple-to-use tool can be applied to a single task it was designed for and any attempt of custamization, if at all possible, requires a considerable effort. Yet, it may be useful if one doesn't try to force a research problem in the predefined mould of a certain tool, but rather makes tool to fit a problem. This requires a reasonable degree of flexibility.
 
+With the LinkedCharts, we've tried to find a ballance between the two goals of a tool for interactive data exploration. It requires only basic knowledge in R or JavaScript to produce fully functional apps that can be used for \emph{ad hoc} analysis. With a little more effort one can make a nicer looking app and customize most of commonly used plot settings (such as colours, labels, axes, etc.). And finally, with the time and skills that is generally required for the same task, one can use LinkedCharts to make a presentable app deployed on a server. Since the library is JavaScript based, it can be combined with various existing web solutions. One can also write cutom scripts that will change even hardcoded aspects of the library without making changes to the source code, thus making LinkedCharts extremely flexible. 
 
-To this end tools that produce interactive apps should be both simple to use and highly customizeable. One doesn't want to spend couple of days on designing an app just for some \emph{ad hoc} analysis. At the same time, software that is too specific and has too many hard-coded elements will not allow for much freedom of ideas.
+LinkedCharts is not fixed on any specific task. It is rather a toolbox and its blocks can be combined in any manner the same way as one combines plots for a complex paper figure. All block share the same interface and very similar interactivity capabilities, which means that understanding one of them is enough to grasp the entire concept of LinkedCharts.
 
-Keeping these two goals in mind, we've designed LinkedCharts: a library for making interactive apps available both as R version (can be installed from CRAN) and as a JavaScript library. This paper will be concentrated on R implementation of LinkedCharts. R/LinkedCharts allows to create and share interactive apps with not more effort than it takes to make conventional static plots.
+With all these, we hope that LinkedCharts can become a useful asset for a scientific community that can be used both for everyday routine and for presenting one's reasearch to a greater audience. LinkedCharts available as an R package (can be downloaded from CRAN) and as a JavaScript library. This paper is focused on R implementation of LinkedCharts. 
 
 \section{Results}
+\subsection{Linking charts}
+
+The main consept behind LinkedCharts is connecting to or more plots together so that manipulation with one of them affect the others. This process is what ``linked'' in ``LinkedCharts'' stands for. It can be better explained with a simple example based on data from 
+
+As an example, let us think about a routine differential expression analisys. A question that is often arises as a part of some bigger study is how the two groups of samples or cells are different. Here and in the live version in the supplement, we've used data from [reference]. In this study, from each of 17 patients with oral cancer three samples were taken: one of normal tissue, one of tumour and one of displasia tissue. mRNA from all these samples was sequenced to obtain gene expression values. Now, one may want to know what genes are significantly different between, let say, normal and cancerous tissues. Many packages offer functions to answer this question and for this example it is not important, which one to use. We've applied function \mintinline{R}{voom} from the ``limma'' package. To explore results of this function it is common to make an MA-plot with the average gene expression on the x-axis and log fold change between the two groups on the y-axis. It can be also convenient to have such a plot next to another that shows expression of the selected gene across all the samples. This can be easily done with R/LinkedCharts.
+
+Let say, normalized counts are stored as matrix in the \mintinline{R}{normCounts}. \mintinline{R}{sampleTable} is a \mintinline{R}{data.frame} with information about samples: patient IDs, tissue types, etc. \mintinline{R}{voomResult} is an output of the \mintinline{R}{voom} function from the ``limma'' package. This data frame for each gene contains its average expression, log fold change and p-value for significance of the expression difference.
+
+Here, how one can make an app with these two linked plots using the R/LinkedCharts library.
+
+\begin{minted}{R}
+openPage(layout = "table1x2")
+gene <- 1
+
+lc_scatter(dat(
+   x = AveExpr,
+   y = tissuetumour,
+   colour = ifelse(adj.P.Val < 0.1, 
+                   "red", "black"),
+   on_click = function(k) { 
+      gene <<- k
+      updateCharts("A2") 
+   }),
+"A1", with = voomResult)
+
+lc_scatter(dat(
+   x = patient,
+   y = normCounts[gene, ],
+   colourValue = tissue, 
+   logScaleY = 10),
+"A2", with = sampleTable)
+\end{minted}
+
+The app produced by this code and the data to reproduce it can be found in the supplement.
+
+
 \subsection{Structure and linking}
 \begin{figure*}
 	\includegraphics[width=\textwidth]{FigA/figA.png}
@@ -147,36 +185,6 @@ While interactivity is already heavily used for presenting study results to the 
 
 To illustrate this, every live example in the supplement is shown in two versions. One contains bare minimum of code to produce working and useful app. This kind of apps can be easily written on-the-fly to facilitate current research steps. The other shows how to make those work-in-progress-apps more presentable. This, usually, takes more effort, but not much more than to prepare a usual static plot for a paper or a presentation.
 
-As an example, let us think about a routine differential expression analisys. A question that is often arises as a part of some bigger study is how the two groups of samples or cells are different. Here and in the live version in the supplement, we've used data from [reference]. In this study, from each of 17 patients with oral cancer three samples were taken: one of normal tissue, one of tumour and one of displasia tissue. mRNA from all these samples was sequenced to obtain gene expression values. Now, one may want to know what genes are significantly different between, let say, normal and cancerous tissues. Many packages offer functions to answer this question and for this example it is not important, which one to use. We've applied function \mintinline{R}{voom} from the ``limma'' package. To explore results of this function it is common to make an MA-plot with the average gene expression on the x-axis and log fold change between the two groups on the y-axis. It can be also convenient to have such a plot next to another that shows expression of the selected gene across all the samples. This can be easily done with R/LinkedCharts.
-
-Let say, normalized counts are stored as matrix in the \mintinline{R}{normCounts}. \mintinline{R}{sampleTable} is a \mintinline{R}{data.frame} with information about samples: patient IDs, tissue types, etc. \mintinline{R}{voomResult} is an output of the \mintinline{R}{voom} function from the ``limma'' package. This data frame for each gene contains its average expression, log fold change and p-value for significance of the expression difference.
-
-Here, how one can make an app with these two linked plots using the R/LinkedCharts library.
-
-\begin{minted}{R}
-openPage(layout = "table1x2")
-gene <- 1
-
-lc_scatter(dat(
-   x = AveExpr,
-   y = tissuetumour,
-   colour = ifelse(adj.P.Val < 0.1, 
-                   "red", "black"),
-   on_click = function(k) { 
-      gene <<- k
-      updateCharts("A2") 
-   }),
-"A1", with = voomResult)
-
-lc_scatter(dat(
-   x = patient,
-   y = normCounts[gene, ],
-   colourValue = tissue, 
-   logScaleY = 10),
-"A2", with = sampleTable)
-\end{minted}
-
-The app produced by this code and the data to reproduce it can be found in the supplement.
 
 The example is very similar to the one from the previous section. The state of the app is now stored in the \mintinline{R}{gene} variable. Whenever a point in the MA-plot is clicked, this varible is changed and the second plot is updated. Different colours are used to indicated gene with significantly different expression between tumour and normal tissue in the MA-plot and to show different tissue types in the expression plot. We've added the \mintinline{R}{openPage} function to add a table layout to the web page. This step is optional and allows us to put the two charts next to each other.
 
