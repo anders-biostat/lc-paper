@@ -1,0 +1,62 @@
+<head>
+	<script type="text/javascript" src = "maData.js"></script>
+	<script type="text/javascript" src = "heatmapData.js"></script>
+	<script type="text/javascript" src = "../src/linked-charts.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../src/linked-charts.css">
+	<style>
+		.fig-labels {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			font-weight: bold;
+			font-size: 20pt;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			padding-top: 10px;
+			padding-left: 10px;
+		}		
+	</style>
+</head>
+<body>
+<div id = "heatmap_expr">
+<table>
+   <tr>
+      <td id = "hm"></td>
+      <td id = "expr"></td>
+   </tr>
+</table>
+</div>	
+	<script type="text/javascript">
+var xSample = 1, ySample = 2;
+
+var hm = lc.heatmap()
+   .nrows(hData.sampleNames.length)
+   .ncols(hData.sampleNames.length)
+   .value((i, j) => hData.corrMat[i][j])
+   .rowLabel(i => hData.sampleNames[i])
+   .colLabel(i => hData.sampleNames[i])
+   .showLegend(false)
+   .on_click(function(row, col) {
+      xSample = row;
+      ySample = col;
+      sch.update();
+   })
+    .mode("svg")
+   .place("#hm");
+
+var sch = lc.scatter()
+   .x(i => Math.log10(hData.countMatrix[i][xSample] + 1))
+   .y(i => Math.log10(hData.countMatrix[i][ySample] + 1))
+   .axisTitleX(function() {return hData.sampleNames[xSample]})
+   .axisTitleY(function() {return hData.sampleNames[ySample]})
+   .size(1)
+   .mode("svg")
+   .opacity(0.7)
+   .place("#expr");
+
+conts = d3.selectAll(".linked-charts")
+	.data(["a)", "b)"])
+		.append("div")
+			.attr("class", "fig-labels")
+			.text(d => d);
+	</script>
+</body>
