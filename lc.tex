@@ -163,12 +163,59 @@ Such apps would allow a quick and easy spot check of uncovered data patterns and
 
 \subsubsection{Exploratory analysis}
 
-While interactivity is already heavily used for presenting study results to the research community, with R/LinkedCharts we would like to emphasize its advantages for everyday exploratory analysis. Since the syntax of R/LinkedCharts is made to resemble popular R packages such as ggplot2, it is not much more effort to make an interactive app instead of a usual static plot or a collection of plots. This app may not look pretty as most plots one makes while exploring new data aren't. Yet such a quick and dirty solution allows the researcher to pick into the data in an interactive manner without spending time on deploying a propper app. Therefore, interactive apps can be made as often and easily as static plots.
+While interactivity is already heavily used for presenting study results to the research community, with R/LinkedCharts we would like to emphasize its advantages for everyday exploratory analysis. To this end we've made an effort to make it possible for a user to get interactive apps with not more effort than is usually required to get a static plot.
 
-To illustrate this, every live example in the supplement is shown in two versions. One contains bare minimum of code to produce working and useful app. This kind of apps can be easily written on-the-fly to facilitate current research steps. The other shows how to make those work-in-progress-apps more presentable. This, usually, takes more effort, but not much more than to prepare a usual static plot for a paper or a presentation.
+\begin{figure*}
+  \includegraphics[width=\textwidth]{FigE/figE.png}
+  \caption{Will be changed}
+  \label{FigE}
+\end{figure*}
+ 
+For example, let's again have a look at the oral cancer data \citep{conway_2015}. There are overall 57 samples, three from each patient. Previously, we've looked at differentially expressed genes between normal and cancerous tissues, but before getting there a researcher who's just got these data may want to get some overview of the samples. One of the common ways to do so is to check how well the samples are correlated with each other by making a correlation heatmap. Assume that we store sample correlation matrix in a, let say, \mintinline{R}{corMat} variable. In Figure \ref{FigE} are shown a static heatmap from a popular ``pheatmap'' package (a) and an interactive heatmap from ``rlc'' (c). Above each heatmap there is a command that generates it. Both commands look similarly simple and the only big difference in the output is that the rows and columns of the static heatmap (a) are clustered. However, hierarchical clustering is also implemented in R/LinkedCharts heatmaps, but is off by default unlike in pheatmap. One can control it with the same arguments \mintinline{R}{clusterRows} and \mintinline{R}{clusterCols} as in ``pheatmap''.
 
+From any of the heatmaps we can see, that some of the samples are very much different from all others. The next thing one can ask is what is wrong with them. For the first and quick \emph{ad hoc} check one may decide to plot gene expression in several samples against each other to see if any noticeable patterns will hint a direction for further analysis. Let's say, that by looking at the heatmap, we've decided to start with plotting samples ``PG123-N'' and ``PG123-D'' (highlighted on both heatmaps in Firgure \ref{FigE}). These are normal and dysplasia samples from the same patients respectively and the normal one is one of the noticeable outliers.
 
-The example is very similar to the one from the previous section. The state of the app is now stored in the \mintinline{R}{gene} variable. Whenever a point in the MA-plot is clicked, this varible is changed and the second plot is updated. Different colours are used to indicated gene with significantly different expression between tumour and normal tissue in the MA-plot and to show different tissue types in the expression plot. We've added the \mintinline{R}{openPage} function to add a table layout to the web page. This step is optional and allows us to put the two charts next to each other.
+\begin{minted}{R}
+xSample <- "PG123-N"
+ySample <- "PG123-D"
+\end{minted}
+
+Simple scatter plots from base R and ``rlc'' to compare normalized gene expression for both of the samples are shown in Figure \ref{FigE} (b, d) together with the code to produce them. Once again, both code lines are simple enough to be used for some quick on-the-fly checks.
+
+This comparison alone doesn't tell us much, unless we look plot more samples against each other to see how expression for other samples look like, what is "high correlation" for this dataset and what is "low correlation". To this end we will have to store some other sample IDs to \mintinline{R}{xSample} and \mintinline{R}{ySample} variables and rerun the code to generate scatter plots again. Here comes the first point, where interactivity can facilitate exploration. If you surround \mintinline{R}{x} and \mintinline{R}{y} arguments of \mintinline{R}{lc_scatter} with the \mintinline{R}{dat} function, you can update the scatter with a call to the \mintinline{R}{updateCharts} function instead of rerunning the code. The full code will like like this:
+
+\begin{minted}{R}
+xSample <- "PG123-N"
+ySample <- "PG123-D"
+
+lc_scatter(dat(x = normCounts[, xSample], y = normCounts[, ySample]))
+
+xSample <- "PG123-T"
+updateCharts()
+\end{minted}
+
+If one is going to check multiple pairs of samples, it's only natural to put the last two lines in a function, that takes two samples and plots them agains each other.
+
+\begin{minted}{R}
+changePlots <- function(x, y) {
+  xSample <- x
+  ySample <- y
+  updateCharts()
+}
+\end{minted}
+
+At this point, we still need to decide what samples to plot and manually type in their names or indices. This can be avoided simply by supplying this function to the heatmap. Now, instead of entering sample names one can just click on a heatmap cell and it's row and column indices will be automatically given to the function and the scatter plot will be updated. As a result, we've made a functional interactive app with only the step that one may anyway perform during a routine exploratory analisys. The resulting code is shown below. You can also find a little bit prettified live version in the supplement and use it to see that the outlier samples are the ones that were sequenced less deep.
+
+\begin{minted}{R}
+lc_heatmap(value = corMat,
+   on_click = function(d) {
+      xSample <<- d[1]
+      ySample <<- d[2]
+      updateCharts()
+   })
+lc_scatter(dat(x = normCounts[, xSample], 
+   y = normCounts[, ySample]))
+\end{minted}
 
 \subsubsection{Server apps}
 
@@ -190,6 +237,8 @@ LinkedCharts can also be used to create stand-alone apps. This kind of apps do n
 For this kind of apps you don't need a server, but can directly send them to a collaborator as an HTML file that can be opened in any browser. The page will already contain all the data and interactive functionality. Yet to make such an app one should use a JavaScript version of the Linked-Charts library. We tried to make required level of experience with JavaScript to minimum and make necessary code understandable. For each example in the supplement we also provide the JavaScript code necessary to create the same app without running R session. More documentation on linked-charts.js as well as various tutorials are available at...
 
 \subsection{Further customization}
+
+
 
 \begin{small} 
 \balance
