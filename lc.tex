@@ -222,16 +222,19 @@ lc_scatter(dat(x = normCounts[, xSample],
 
 \subsubsection{Server apps}
 
-So far, we've only talked about local apps, i.e. ones that are created by running script locally and are intended to be used by the person who made it. However, the same apps can also be run on the server and shared between multiple users. There is only one additional thing that is required to turn a local app into a server app: One needs to specify a list of local variables and their default values. Local variables are those that can be rewritten by several users independently. In most cases they are also state variables: i.e. variables that store current state of an app (selected genes, samples, etc.). Thus, to run the app from the previous section on a server, one would need just to replace the first two lines with
+Any R/LinkedCharts app starts a server that listens to a given or randomly chosen port. A request from any browser for a starting page to this server will be answered with all the charts user has added so far. In practice it means that any R/LinkedCharts app can be accessed by multiple users, if they can make request to the server, and this doesn't require any additional parameters to be set. Any of the examples, we've shown in different sections of this paper can become apps that are deployed on a server.
+
+For the complete functionality, there is just one thing that is needed to taken care of. If you once again take a look at the code for previously mentioned examples, you can notice that there is usually one or several ``state'' variables. These are gerenally global variables that store currently selected genes, samples, etc. and are changed inside callback functions: \mintinline{R}{gene} from the example in section "Linking charts", \mintinline{R}{xSample} and \mintiniline{R}{ySample} from the example in the previous section. Now, if several users are accessing these apps simultaneously, each click will change the state variables and therefore changing charts for all the users. This still may be usefull if, for example, several people are using the app as a visual addition to an online meeting. Yet in most cases one would like interactivity to be independent for each user.
+
+To this end, one need just to specify the state variables within the \mintinline{R}{openPage} function and give them some default values. For instance, example from the previous section can be turned into a server app simply by adding the following line in the beginning.
 
 \begin{minted}{R}
-openPage(layout = "table1x2", 
-         sessionVars = list(gene = 1))
+openPage(sessionVars = list(xSample = 1, ySample = 2))
 \end{minted}
 
-Now a link to the app can be shared and it can be accessed by multiple users simultaneously.
+Now, multiple users can work with an individual state of the app.
 
-Of course, there are other things that can make a server app more customized. One can add some default content to each opened page, control each client session (and, for example, close those, that don't show any activity for considerable amount of time), limit memory usage or number of active connections simultaneously. Yet, all these parameters are optional. More information about possible options can be found on R man pages for classes \mintinline{R}{App} and \mintinline{R}{Session}.
+Of course, there are other things that can make a server app more customized. One can add some default content to each opened page (in addition to all the charts that are added by default), control each client session (and, for example, close those, that don't show any activity for considerable amount of time), limit memory usage or number of active connections simultaneously. Yet, all these parameters are optional. More information about possible options can be found on R man pages for classes \mintinline{R}{App} and \mintinline{R}{Session} of our ``jrc'' package.
 
 \subsubsection{Stand-alone apps}
 
