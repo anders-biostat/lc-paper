@@ -167,7 +167,7 @@ While interactivity is already heavily used for presenting study results to the 
 
 \begin{figure*}
   \includegraphics[width=\textwidth]{FigE/figE.png}
-  \caption{Will be changed}
+  \caption{Examples of simple plots that are commonly used during exploratory analisys with the code to produce them. Basic plots of ``rlc'' (c, d) package are not more complicated than their static alternatives (a, b), which makes R/LinkedCharts suitable for every day on-the-fly analisys. For static heatmap (a), the ``pheatmap'' package was used; scatter plot (b) was made with a base R function. The heatmaps (a, c) show Spearman correlation of gene expression for all samples from \citet{conway_2015}. To the right from the heatmaps there is gene expression from the two samples (normal and dysplasia tissues from the same patient) plotted against each other (b, d). Normal tissue sample (along x-axis) is one of the outliers that can be seen on any of the heatmaps (the samples that have lower then average correlation in the dataset with all other samples). Here, we consider such simple scatter plots as the quickest way of trying to see what is different about some of the samples. For the sake of simplicity, gene expression for all the samples is subsetted to 8000 randomly selected genes.}
   \label{FigE}
 \end{figure*}
  
@@ -238,13 +238,20 @@ Of course, there are other things that can make a server app more customized. On
 
 \subsubsection{Stand-alone apps}
 
-LinkedCharts can also be used to create stand-alone apps. This kind of apps do not rely on a running R session and thus can be directly sent to a collaborator or used as a supplement to a paper. To make such an app, one should use the JavaScript version of the LinkedCharts library and either load preprocessed data or perform all the calculations with JavaScript. 
+\begin{figure*}
+  \includegraphics[width=\textwidth]{FigF/figF.png}
+  \caption{An example of a stand-alone app with LinkedCharts. The app was used as a supplement for (reference)}
+  \label{FigF}
+\end{figure*}
 
-For this kind of apps you don't need a server, but can directly send them to a collaborator as an HTML file that can be opened in any browser. The page will already contain all the data and interactive functionality. Yet to make such an app one should use a JavaScript version of the Linked-Charts library. We tried to make required level of experience with JavaScript to minimum and make necessary code understandable. For each example in the supplement we also provide the JavaScript code necessary to create the same app without running R session. More documentation on linked-charts.js as well as various tutorials are available at...
+Any app made with R/LinkedCharts (``rlc'' package) requires an R session that runs either locally or on the server. Yet, R session is only responsible for sending required data to the app, while all the visualization and interactivity handling happens on the JavaScript side. This fact makes it possible to use LinkedCharts for generating stand-alone apps in a form of an HTML page. Such a page can then be sent to a collaborator or used as a supplement file for a paper. Unlike a link to an app deployed somewhere on a server, this kind of interactive supplement will be awaylable to any user with an installed web-browser at any moment, without a need for the research team to maintain a runnig app on the server. A supplement to this paper is an example of such an app, contained within an HTML page. Another app was made for (referece to translation paper). A screenshot of this app is shown in Figure \ref{FigF}.
+
+However, to make such an app one has to be familiar with JavaScript. We've tried to make the necessary level of experience with JavaScript as low as possible, but understanding of syntax and some basic concepts is still required. In the supplement to this paper you can also find JS code for all the apps. The data has to be preprocessed (alternatively, all the calculations may be implemented in JavaScript, but that can be complicated) and saved, for example, in JSON format. The result can be directly inserted into the JS code. There are also ohter ways of loading data into the linked-charts.js app, which are described in our tutorial https://anders-biostat.github.io/linked-charts/js/tutorials/data.html. Also on this web-page one can find more tutorials and examples for a JavaScript part of the LinkedCharts library.
 
 \subsection{Further customization}
 
-
+Since LinkedCharts is JavaScript based, it can be combined with many existing web solutions without changing source code of the package. One can cultomize how the charts look like with CSS, add additional scripts, specify an HTML layout. R/LinkedCharts can add interactive charts to an existing HTML page supplied as \mintinline{R}{startPage} argument of the \mintinline{R}{openPage}. Additional images, files or scripts can be loaded from a directory specified by the \mintinline{R}{rootDirectory} argument. And finally, the ``jrc'' package (available on CRAN) on top of which ``rlc'' is built allows you to run any JavaScript code directly from your R session.
+All this gives you full control of how your app looks like and behaves and can be fitted to the specific needs of your current project.
 
 \begin{small} 
 \balance
