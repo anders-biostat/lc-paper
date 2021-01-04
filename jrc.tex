@@ -75,14 +75,15 @@ Object of class Session controls a connection to a certain web page. Instances o
 
 \subsubsection{Security}
 
-The problem of security is only relevant if a jrc-app is made publicly available and is run from an R session on a server. Though ``jrc'' package provide similar capabilities for the both ends of the web-socket connection, security limits are in fact asymetric.
+The problem of security is only relevant if a jrc-app is made publicly available and is run from an R session on a server. Though ``jrc'' package provide similar capabilities for the both ends of the web-socket connection, security limits are in fact asymetric. 
 
-R session at any moment provides a full controly over each opened connection. Specifically, any JavaScript code can be evaluated on the web page, local variables can be inspected and manipulated with, information on the duration and activity of the connection can be obtained and the connection can be closed at any moment. However, jrc-app is incapable of doing anything more than running a JavaScript code in a browser. Thus, privacy of a person, who requests the page from the jrc-app server is protected by in-built browser limitations for JavaScript, which are quite strict.
+R session at any moment provides a full control over each opened connection. Specifically, any JavaScript code can be evaluated on the web page, local variables can be inspected and manipulated with, information on the duration and activity of the connection can be obtained and the connection can be closed at any moment. However, jrc-app is incapable of doing anything more than running a JavaScript code in a browser. Thus, privacy of a person, who requests the page from the jrc-app server is protected by in-built browser limitations for JavaScript, which are quite strict. 
 
-On the other hand many of the commands incoming from the web-page to the R session must be authorized before execution. Specifically, any custom code always requires authorization. As for the functions and variable assignments, one can specify a list of functions that a web-page is allowed to call and variables that can be rewritten. Everything else will require manual authorization. There are also limitations for the local files that can be served by the server: by default these are only files that are stored in the root directory of the server. One can also add other directories to the list of allowed directories. Attempt file outside of specified locations will cause the "Permition forbidden" response.
+On the other hand many of the commands incoming from the web-page to the R session must be authorized before execution. Specifically, any custom code always requires authorization. As for the functions and variable assignments, one can specify a list of functions that a web-page is allowed to call and variables that can be rewritten. Everything else will require manual authorization. There are also limitations for the local files that can be served by the server: by default these are only files that are stored in the root directory of the server. One can also add other directories to the list of allowed directories. Attempt file outside of specified locations will cause the "403: Forbidden" response.
 
 \subsection{Predefining behaviour}
 
+For an app to get some default behaviour ``jrc'' offers couple of callbacks: onStart and onClose which are executed whenever a new connection is established to populate the page with default content and to finalize user's interaction with the page to store some local variables or produce output if needed. By default a jrc-app starts with an eAnother option to preset default behaviour is to provide a p
 
 \begin{small} 
 \balance
