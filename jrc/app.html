@@ -1,0 +1,20 @@
+<h2>My app</h2>
+<img src='#!' id='myImage'/>
+<p>
+	x: <select onchange='updatePlot();' id='x_select'></select> 
+  y: <select onchange='updatePlot();' id='y_select'></select>
+</p>
+<script type="text/javascript">
+  addOptions = function(axis) {
+	  options.map(function(name) {
+		  opt = document.createElement('option');
+		  opt.value = name;
+		  opt.innerHTML = name;
+		  document.getElementById(axis + '_select').appendChild(opt);
+	  })
+  }
+  updatePlot = function() {
+	  jrc.callFunction('updatePlot',
+		  [document.getElementById('x_select').value, document.getElementById('y_select').value])
+  }
+</script>
