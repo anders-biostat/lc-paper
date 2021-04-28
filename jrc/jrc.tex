@@ -53,7 +53,7 @@ The more computers evolve, the mo
 
 ``jrc'' works as a simple bridge between R session and a web-page. It is built on top of the web socket technology (namely via the ``httpuv'' package). A ``jrc'' app starts a local server that maintains a web socket connection with each opened page, thus allowing to control each page from the R session in real time. The connection is two-sided, which means that also R calculations can be easily triggered by interacting with HTML elements.
 
-User interface core of the package comprises of the four functions: sendCommand, callFunction, sendData and sendHTML. These are R functions, but each of them, except for the sendHTML, has a JavaScript counterpart, which is a method of the ``jrc'' object: jrs.sendCommand, jrc.callFunction and jrc.sendData. 
+User interface core of the package comprises of the four functions: sendCommand, callFunction, sendData and sendHTML. These are R functions, but each of them, except for the sendHTML, has a JavaScript counterpart, which is a method of the ``jrc'' object: jrc.sendCommand, jrc.callFunction and jrc.sendData. 
  
 \begin{itemize}
 \item sendCommand sends JavaScript code through the web socket connection to the web page and triggers its evaluation upon receiving. jrc.sendCommand in a similar manner sends R code from the web socket and evaluates it.
