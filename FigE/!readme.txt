@@ -1,0 +1,1 @@
+Unfortunately, wkhtmltopng doesn't support CSS grid layout. Don't want to swithch back to table, therefore FigE.png is just a screenshot.

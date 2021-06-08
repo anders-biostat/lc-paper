@@ -15,50 +15,58 @@
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
 			padding-top: 10px;
 			padding-left: 10px;
-		}		
+		}
+    p {
+      font-family: sans-serif;
+      text-align: center;
+    }
 	</style>
 </head>
 <body>
-<table>
-   <tr>
-      <td>
-        <div class="linked-charts" style="position: relative;">
-          <img src="pheatmap.png">
-        </div>
-      </td>
-      <td>
-        <div class="linked-charts" style="position: relative;">
-          <img src="scatter.png">
-        </div>
-      </td>
-   </tr>
-   <tr>
-     <td>
-        <pre class="language-r"><code>pheatmap(corMat)
 
+<div style="display: grid; grid-template-columns: repeat(4, 300px); grid-template-rows: 250px;" id="container">
+  <div style="grid-column: 1; grid-row: 1;" class="linked-charts">
+    <img src="pheatmap.png">
+  </div>
+  <div style="grid-column: 2; grid-row: 1;" class="linked-charts">
+    <img src="scatter.png">
+  </div>
+  <div style="grid-column: 1/3; grid-row: 2">
+    <pre class="language-r"><code>xSample <- 1
+ySample <- 2
+pheatmap(corMat)
+plot(normCounts[, xSample], normCounts[, ySample], 
+   cex = 0.5)
 </code></pre>
-     </td>
-     <td>
-       <pre class="language-r"><code>plot(normCounts[, xSample], normCounts[, ySample], 
+  </div>
+  <div style="grid-column: 1/5; grid-row: 3">
+    <p style="margin-bottom: 0px; font-weight: bold;">To update the scatter plot:</p>
+  </div>
+  <div style="grid-column: 1/3; grid-row: 4">
+    <p style="font-style: italic;">(repeat for any pair of saples)</p>
+    <pre  class="language-r"><code>xSample <- 10
+ySample <- 15
+
+plot(normCounts[, xSample], normCounts[, ySample], 
    cex = 0.5)</code></pre>
-     </td>
-   </tr>
-   <tr>
-      <td id = "hm"></td>
-      <td id = "expr"></td>
-   </tr>
-   <tr>
-     <td>
-       <pre class="language-r"><code>lc_heatmap(value = corMat)
-
-</code></pre>
-     </td>
-     <td>
-       <pre class="language-r"><code>lc_scatter(x = normCounts[, xSample], y = normCounts[, ySample],
+  </div>
+  <div style="grid-column: 3/5; grid-row: 2">
+    <pre class="language-r"><code>xSample <- 1
+ySample <- 2
+lc_heatmap(value = corMat, clusterRows = TRUE, clusterCols = TRUE)
+lc_scatter(x = normCounts[, xSample], y = normCounts[, ySample],
    size = 1.5)</code></pre>
-     </td>
-   </tr>
-</table>
+  </div>
+  <div style="grid-column: 3/5; grid-row: 4">
+    <p  style="font-style: italic;">(add once to the heatmap arguments)</p>
+    <pre class="language-r"><code>onClick = function(x, y) {
+   xSample <<- x
+   ySample <<- y
+   updateCharts()
+}</code></pre>
+    
+  </div>
+</div>
 
 <script type="text/javascript">
 var xSample = 30, ySample = 31;
@@ -69,13 +77,19 @@ var hm = lc.heatmap()
   .value((i, j) => hData.corrMat[i][j])
   .rowLabel(i => hData.sampleNames[i])
   .colLabel(i => hData.sampleNames[i])
+  .clusterRows(true)
+  .clusterCols(true)
   .on_click(function(row, col) {
     xSample = row;
     ySample = col;
     sch.update();
   })
   .mode("svg")
-  .place("#hm");
+  .place("#container");
+
+hm.container
+  .style("grid-column", "3")
+  .style("grid-row", "1");
 
 var sch = lc.scatter()
   .x(i => hData.countMatrix[i][xSample])
@@ -83,12 +97,19 @@ var sch = lc.scatter()
   .size(1.5)
   .mode("svg")
   .opacity(0.7)
-  .place("#expr");
+  .place("#container");
+
+sch.container
+  .style("grid-column", "4")
+  .style("grid-row", "1");
 
 conts = d3.selectAll(".linked-charts")
 	.data(["a)", "b)", "c)", "d)"])
 		.append("div")
 			.attr("class", "fig-labels")
 			.text(d => d);
+
+d3.selectAll(".linked-charts")
+  .style("transform", "translate(-25%, -25%) scale(0.5)");
 	</script>
 </body>
