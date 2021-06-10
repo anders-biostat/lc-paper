@@ -24,6 +24,8 @@
     citecolor={blue!50!black},
     urlcolor={blue!50!black}
 }
+\renewcommand{\dbltopfraction}{0.7}
+\renewcommand{\textfraction}{0.2}
 
 \begin{document}
 
@@ -57,6 +59,12 @@ The advantage of interactivity lies beyond just simplifying navigation through b
 
 Today many authors accompany their papers with an interactive resource to present their data and results \citep{travaglini_2020, roider_2020, kalucka_2020}. Though these visualizations are often useful and provide a comprehensive insight into the data, they generally serve presentation and communication purposes. Only after the most work on the project is finished, researches spend a couple of days deploying a fancy interactive app to share their data and results with the scientific community \citep{batch_2017}. We, however, believe, that interactivity should become a part of everyday routine to facilitate data exploration. To this end, the tool to produce interactive apps should be both simple and highly customizable.
 
+\begin{figure*}[b]
+	\includegraphics[width=\textwidth]{FigD/figD.png}
+	\caption{Overview of genes differentially expressed in cancerous and normal tissues from \citet{conway_2015}. MA-plot (a) shows all the sequenced genes with their average expression on X-axis and log-fold change on Y-axis. Red indicates genes, where the difference was reported as significant by the ``limma''  \citep{ritchie_2015}  package. Plot to the left (b) shows expression values (CPMs) for a selected gene (in this case, LAMB4) and all the patients. This figure is based on a LinkedCharts app, and its live version is provided in the supplement. When the user clicks on a point of the MA-plot, the expression plot changes, showing the new selected gene. In such a way, one can check immediately, whether the genes, labeled as significantly different, are interesting for further study.}
+	\label{FigD}
+\end{figure*}
+
 Simplicity should serve as an incentive to use interactivity whenever there is any smallest hint that it may be useful. If a tool is too complicated, one may prefer to do most of the analysis by more habitual static means, and wait for a special occasion when it is worthwhile to invest time and effort into an interactive app. It should also be similar in design to most common visualization means since tools with too specific interface tend to be used by people with more extensive programming skill. Even if a researcher with less expertise in coding has an eager-to-help colleague, he or she may be unwilling to ask for assistance in petty everyday tasks and wait for something big.
 
 Still, an attempt to simplify a tool may end in hardcoding and presetting too many parameters. As a result, a simple-to-use tool can require a particular data structure and be fit only for precise data flow patterns. And any attempt of going beyond in-built limitations, if at all possible, can cost a considerable effort. It is not necessarily a disadvantage, since much of routine work in the lab involves typical for the area steps and data types. Yet, it may be useful if one does not try to force a research problem in the predefined mould but instead makes the visualization tool fit the given task. For that, a reasonable degree of flexibility is required.
@@ -72,12 +80,6 @@ With all these, we hope that LinkedCharts can become a useful asset for a scient
 \subsection{Linking charts}
 
 The central concept behind LinkedCharts is, as follows from the name, linking and focusing \citep{buja_1991}. We connect two to or more plots so that manipulations with one of them affect the others. It is easier to understand how this concept works in LinkedCharts with a simple example based on data from \citet{conway_2015}.
-
-\begin{figure*}
-	\includegraphics[width=\textwidth]{FigD/figD.png}
-	\caption{Overview of genes differentially expressed in cancerous and normal tissues from \citet{conway_2015}. MA-plot (a) shows all the sequenced genes with their average expression on X-axis and log-fold change on Y-axis. Red indicates genes, where the difference was reported as significant by the ``limma''  \citep{ritchie_2015}  package. Plot to the left (b) shows expression values (CPMs) for a selected gene (in this case, LAMB4) and all the patients. This figure is based on a LinkedCharts app, and its live version is provided in the supplement. When the user clicks on a point of the MA-plot, the expression plot changes, showing the new selected gene. In such a way, one can check immediately, whether the genes, labelled as significantly different, are interesting for further study.}
-	\label{FigD}
-\end{figure*}
 
 In this study, three samples were taken from 17 patients with oral cancer: Of normal, cancerous, and dysplasia tissues. mRNA from all these samples was sequenced to obtain gene expression values. The first natural question to ask based on these data is about differential expression between various tissues. Several packages offer functionality to answer such questions  \citep{ritchie_2015, love_2014}. Here, we have applied function \mintinline{R}{voom} from the ``limma'' package to compare normal and cancerous tissues. It is common to visualize such a comparison with an MA-plot \citep{dudoit_2002} showing the average gene expression on the x-axis and log fold change between the two groups on the y-axis (Fig \ref{FigD} (a)). Red dots correspond to genes that are considered significantly different between the two conditions (adjusted p.value < 0.1). But how does the difference in expression look like for every single patient? Is it persistent across all the patients or only detected in some of them? Are there any artefacts or outliers that cause the p.value to be too small?
 
@@ -116,7 +118,7 @@ Besides a click, LinkedCharts can react to other events, such as moving the mous
 
 \subsection{Basic syntax}
 
-\begin{figure*}
+\begin{figure*}[t]
 	\includegraphics[width=\textwidth]{FigB/figB.png}
 	\caption{Typical syntax of an R/LinkedCharts plot and its comparison with the ``ggplot2'' \citep{wickham_2016} package as an example of one of the most commonly used plotting libraries. Lines of code are arranged to put the same aspects of the charts next to each other. ``iris'' dataset, which is one of the R built-in datasets, was used for this example. Both pieces of code are fully functional, and their output is shown above the code.}
 	\label{FigB}
@@ -135,7 +137,7 @@ lc_scatter(
 Running this code will produce a scatter plot with 30 randomly located points. Now, every time one calls \mintinline{R}{updateCharts()} x coordinates of each dot will change to a new random value, but all the y coordinates will remain the same.
 
 
-\begin{figure*}
+\begin{figure*}[t]
 	\includegraphics[width=\textwidth]{FigA/figA.png}
 	\caption{Gallery of all available plotting functions the in ``rlc'' package. A scatter plot (a); a bee swarm plot (based on d3-beeswarm plugin \citep{lebeau_2017}) (b); a collection of various lines (c); a histogram and a density plot (density was multiplied by a factor of 500 to be visible on the same plot as the histogram) (d); a heatmap (e); a bar chart (f); a collection of interactive elements to gather input from the user (g); functions to add custom HTML code and static plots to the page (h). All these examples with code to create them can be found in the supplement.}
 	\label{FigA}
@@ -154,7 +156,7 @@ A similar approach is a part of almost any pipeline used in a biological study. 
 
 This idea is the primary motivation behind the LinkedCharts library. Figure \ref{FigC} demonstrates it. If we have a workflow or a pipeline that performs certain transformations of the data, LinkedCharts offers an easy way to look back through each of the steps. Whenever a researcher encounters an interesting or suspicious pattern in the data, he or she can, with minimal effort, check whether it is a real biological finding or some technical artefact missed by quality checks. 
 
-\begin{figure*}
+\begin{figure*}[h]
   \includegraphics[width=\textwidth]{FigC/figC.png}
   \caption{Main idea behind the LinkedCharts library is shown based on a drug screening experiment. The blue arrow shows the direction of a common pipeline used in drug screening experiments. We start with reading intensity values from plates with different cell lines grown in the presence of studied drugs in different concentrations (A). These values are then normalised and aggregated to yield a single score for each drug (B). Different drugs' scores are compared to each other across all the tested cell lines (C). A drug-drug correlation heatmap is then produced to identify clusters of similar drugs (D). Red arrows illustrate visualisation direction. We start by showing the summary heatmap plot (D). If the researcher is interested in a particular cell or a cluster of cells, he or she can examine the corresponding drug scores simply by clicking on the cell (C). Similarly, one can examine the exact viability values for any given drug (B). And finally, if needed, it's possible to take one more step back and to look at raw readouts to inspect them for the presence of any artefacts (A)}
   \label{FigC}
@@ -168,17 +170,18 @@ Such apps would allow a quick and easy spot check of uncovered data patterns and
 
 \subsubsection{Exploratory analysis}
 
-While interactivity is already increasingly used to present results of finished studies to the research community, with R/LinkedCharts, we would like to emphasise its advantages for everyday exploratory analysis. To this end, we have made an effort to make it possible for a user to get interactive apps as easy as it usually takes to get a static plot. Here, we would like to emphasise that we would like to encourage people to use interactivity spontaneously whenever doubt or an idea about the data arises, instead of waiting for a special occasion. Therefore, the interface of the ``rlc'' package is designed to require only the code that one anyway has to write for everyday analysis.
+While interactivity is already increasingly used to present results of finished studies to the research community, with R/LinkedCharts, we would like to point out its usefullness for everyday exploratory analysis. To this end, R/LinkedCharts is designed in a way that requires one to spend as much time desingning an app as it anyway would take to perform similar analysis. One may think of R/LinkedCharts as of a container, where the researcher can put his or her code to turn it into an interactive app. It will not perform any kind of elaborate analysis automatically, but it will also not ask for much more than the usual routine coding, one should do anyway. Basic, yet custom and functional apps do not require any special knowledge of ``rlc'' underlying structure or HTML layout. With this, we've attempted to encourage researches try out interactivity of as a more improvised an need-based approach.
 
-It may seem that Figure \ref{FigC} from the previous section implies a more systematic approach to double-check the result of a pipeline. Once a major analysis step is finished, the researcher designs a presentable app to investigate the outcome. Though R/LinkedCharts can also be used for such a task, its main advantage lies in a more improvised approach.
+Let us return to the example from Figure \ref{FigD}. There we showed a typical part of a differential expression study: an MA-plot (Figure \ref{FigD}A) and a plot with expression values for each sample to explore it (Figure \ref{FigD}B). We have already shown in Figure \ref{FigB} (section ``Basic Syntax'') that making a static plot in R/LinkedCharts is not much different in comparison to popular plotting libraries. It will take same effort and same data structuring an preprocessing to make these plots with, for example, the ``ggplot2'' library, as with the ``rlc''. Now, the plot in Figure \ref{FigD}B serves for spot checking. It allows one to dive into the details of expression patterns, but only for one gene at a time. Of course, one may decide to only rely on the general overview that is provided by the MA-Plot (Figure \ref{FigD}A), however, a better practice is to make sure that there are no unexpected expression artifacts in the genes of interest. To do that one would usually in some way (by filtering or using some special R tools) get a list of genes to check, and then make a plot like the one in Figure \ref{FigD}A for each of them.
 
-Let us return to the example from Figure \ref{FigD}. An MA-plot is a standard part of a differential expression study, which one makes at least once during the project, interactive or not. After that, one may accept the results and make conclusions about up and downregulated genes or pathways based on their position on the plot. However, a better practice is to make sure that there are no unexpected patterns in the expression values of the genes of interest. The most straightforward way to do that is to plot expression values for each relevant gene as in Figure \ref{FigD}B. 
+In the most simple case it would take copying and pasting the code for the spot check plot and replacing \mintinline{R}{y = normCounts["MyGene", ]} with \mintinline{R}{y = normCounts["AnotherMyGene", ]} (see the code chunck in the section ``Linking Charts''. A little improvement to that would be to write \mintinline{R}{y = normCounts[myGene, ]} and keep updating the \mintinline{R}{myGene} variable: \mintinline{R}{myGene <- "MyGene"}, then \mintinline{R}{myGene <- "AnotherMyGene"}. After each update one should stil copy a piece of code that generates the plot into the console. Finally, the most effective way is to place this constantly coppied and pasted code into a function, let say, \mintinline{R}{makePlot} and to call it, when necessary: \mintinline{R}{makePlot("MyGene")}, then \mintinline{R}{makePlot("AnotherMyGene")}.
 
-In Figure \ref{FigA} we have already shown that code for a single plot is not much different in R/LinkedCharts in comparison to popular plotting libraries. 
+Now, we kindly ask the reader to make a little pause here, and return to the section ``Linking Charts'', where the code to produce the app from Figure \ref{FigD} is given. The \mintinline{R}{onClick} function does the same thing that is described in the previous paragraph. It stores the new gene into the variable \mintinline{R}{k} and then performs an equivalent of copying and pasting to the console the code for the second plot, which in the ``rlc'' library can be done with just the \mintinline{R}{updateCharts} for the sake of simplicity. Basically, the core idea here is so identical to the usual spot checking routine that one can just give our imaginary \mintinline{R}{makePlot} function to the ``rlc'' chart (replacing lines 10-12 with \mintinline{R}{onClick = makePlot}) and it will stil work. One only should be aware that in this case the argumet to the \mintinline{R}{makePlot} will be an index of the selected gene and not its name.
 
- However, there is in fact no need to design all four charts of the app to make it functional.
+Thus, there are simply no additional requirements to the data or environment, no practices that one should adopt, in order to perform the usual exploratory analysis or even to convert an existing script into an interactive app. Figure \ref{FigE} shows such a transformation in details for another example of a common spot check practice.
 
-\begin{figure*}
+
+\begin{figure*}[h]
   \includegraphics[width=\textwidth]{FigE/figE.png}
   \caption{Examples of simple plots that are commonly used during exploratory analisys with the code to produce them. Basic plots of ``rlc'' (c, d) package are not more complicated than their static alternatives (a, b), which makes R/LinkedCharts suitable for every day on-the-fly analisys. For static heatmap (a), the ``pheatmap'' package was used; scatter plot (b) was made with a base R function. The heatmaps (a, c) show Spearman correlation of gene expression for all samples from \citet{conway_2015}. To the right from the heatmaps there is gene expression from the two samples (normal and dysplasia tissues from the same patient) plotted against each other (b, d). Normal tissue sample (along x-axis) is one of the outliers that can be seen on any of the heatmaps (the samples that have lower then average correlation in the dataset with all other samples). Here, we consider such simple scatter plots as the quickest way of trying to see what is different about some of the samples. For the sake of simplicity, gene expression for all the samples is subsetted to 8000 randomly selected genes.}
   \label{FigE}
@@ -254,7 +257,7 @@ Of course, there are other things that can make a server app more customized. On
 
 \subsubsection{Stand-alone apps}
 
-\begin{figure*}
+\begin{figure*}[h]
   \includegraphics[width=\textwidth]{FigF/figF.png}
   \caption{An example of a stand-alone app with LinkedCharts. The app was used as a supplement for (reference)}
   \label{FigF}
