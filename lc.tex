@@ -192,7 +192,7 @@ This similarity makes R/LinkedCharts a helpful tool for exploration. The require
 
 \begin{figure*}[t]
    \includegraphics[width=\textwidth]{FigF/figF.png}
-   \caption{An example of a stand-alone app with LinkedCharts. The app was used as a supplement for (reference)}
+   \caption{An example of a stand-alone app with LinkedCharts. The app was used as a supplement for \citet{wang_2020}}
    \label{FigF}
 \end{figure*}
 
@@ -226,9 +226,29 @@ Unfortunately, we can not provide users with an automated converter of R/Linkend
 
 Since LinkedCharts is JavaScript-based, it can be combined with many existing web solutions without changing the source code of the package. One can customise the charts' appearance with CSS, add additional scripts, specify an HTML layout. R/LinkedCharts can add interactive charts to an existing HTML page supplied as \mintinline{R}{startPage} argument of the \mintinline{R}{openPage}. Additional images, files or scripts can be loaded from a directory specified by the \mintinline{R}{rootDirectory} argument. Moreover, the ``jrc'' package (available on CRAN) on top of which ``rlc'' is built allows one to run any JavaScript code directly from your R session. All this gives the user full control of what the app looks like and how it functions. Therefore a LinkedCharts app can be fitted to the specific needs of the particular project.
 
+\section{Discussion}
+
+Interactivity has already proved itself to be useful for data visualisation. Static plots can accommodate only a limited number of accents. Any change, no matter how small, requires one to make a new plot. And yet, it is important to look at the data from different angles and on different scales both to find peculiar patterns and to make sure that there are no hidden artefacts that can influence conclusions. Sometimes, even the visualised transition from one state to another is what helps to understand the data. Thus interactive visualisation is helpful during the research and for presenting data to the scientific community.
+
+The field of interactive visualisation is an actively developing one with some already well known and established tools such as ``shiny'' \citep{shiny} or ``plotly''\citep{sievert_2020}. Yet, possible benefits of interactivity are far from being explored. We have described LinkedCharts as a library for spontaneous and highly customiseable visualisation. Simple interface makes R/LinkedCharts suitable for generating minor on-the-fly apps for data exploration. It can be used by researchers with only basic experience in R or by bioinformatians who are not are not willing to invest much time into an acquaintance with an unfamiliar visualisation library. The linking mechanism is ensured by user-defined callback functions, which allows R/LinkedCharts to do without requirements for fixed data structuring. There are no restrictions on the linking scheme. Every chart can be linked to any other or to multiple ones, any kind of backwards or partial linking is also possible.
+
+We believe easy exploratory analysis to be the main niche for R/Linked charts. As we showed, it provides users with a possibility to generate visualisations with the same effort as one generally puts into a routine data digging and exploration. However, interactive apps are much more engaging than the static plots that are commonly used on the early stages of any project. When checking an idea or concern takes just a click, the researcher is more likely to thoroughly go through the data and with this, maybe, save time on the further steps of the analysis.
+
+Once the need to present final or intermediate results to colleagues arises, the same basic apps that were previously used as ``quick and dirty'' solutions can be prettified and shared by deploying the app on a server. The required changes for a R/LinkedCharts app to work on the server are minimal, and therefore there is no need to start from scratch. One can utilise the same scripts as personal drafts for exploration and as a basis for result presentation.
+
+LinkedCharts is a JavaScript based library, and unlike in existing alternatives we gave users full freedom to employ the functionality of various web solutions. For example, R/LinkedCharts can be embedded into any predefined HTML layout. Therefore, someone with experience in web design may provide the researcher with a custom HTML page with allocated containers for the chart and any predefined functionality that is made available by hundreds of JavaScript packages developed specifically to ensure user's interaction with a web page. Moreover, the ``jrc'' package on top of which R/LinkedCharts is built, allows to run any JavaScript code from the R session and any R code from the web page with that providing endless possibilities for custom functionality and design. Such an app can also load locally stored scripts, images, stylesheets, etc.
+
+The JavaScript basis of R/LinkedCharts offers an interface of its own that is also very simple and similar to the ``rlc'' syntax. This gives a user who is familiar with JavaScript or willing to learn its essentials a way to convert R app into a stand-alone one that is fully contained within an HTML page. Such an app doesn't require any side resources, can be shared by email between collaborators and opened in any browser. It does not need to have a constantly running R session and can be published on any hosting including the most simple ones that does not allow to run other software in the background. An example of such stand-alone apps is the supplement to this paper. There one can also find an examples of conversion from R apps to JavaScript ones. More information can be found in our online tutorials.
+
+The structure of JS/LinkedCharts library and even principles of JavaScript as a language to manipulate DOM elements can allow an experienced user to customise not just the ecosystem in which LinkedCharts will be embedded but the charts themselves without a need to dive into the source code. One can go as far, as defining custom types of charts (see \url{https://anders-biostat.github.io/linked-charts/js/tutorials/layers.html} for more details on that).
+
+Overall, R/LinkedCharts serves two main purposes to facilitate data exploration and presentation. It offers an easy way to utilise interactivity for every day research tasks. And it also provides user with a possibility to fully employ the power of JavaScript for presenting the data. The later aspect addresses more experienced users and thus has no limits for possible customisation of a LinkedCharts app.
+
+
 \subsection{Implementation}
 
 R/LinkedCharts is a JavaScript visualization library with R-based \citep{R_2019} interface. The JavaScipt part is build on top of D3 \citep{bostock_2011} and the user-interface is provided by the ``jrc'' package \citep{jrc_2020}, which in turn heavily relies on the ``httpuv'' \citep{cheng_2020} package.
+
 
 \begin{small} 
 \balance
