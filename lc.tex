@@ -247,8 +247,11 @@ Overall, R/LinkedCharts serves two primary purposes to facilitate data explorati
 
 \subsection{Implementation}
 
-R/LinkedCharts is a JavaScript visualization library with R-based \citep{R_2019} interface. The JavaScipt part is build on top of D3 \citep{bostock_2011} and the user-interface is provided by the ``jrc'' package \citep{jrc_2020}, which in turn heavily relies on the ``httpuv'' \citep{cheng_2020} package.
+The JavaScript foundation of R/LinkedCharts is built on top of the D3 \citep{bostock_2011} library. JS/LinkedCharts is by itself a fully functional tool for interactive data visualisation that can be used by those familiar with JavaScript to create stand-alone apps. The library is open-source and available on GitHub at \url{https://github.com/anders-biostat/linked-charts}. The minified version can be downloaded from \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.min.js}, and its stylesheet is at \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.css}.
 
+The ``jrc'' package \citep{jrc_2020} package is used as a bridge between R and JavaScript. It allows one to run JavaScript code from an R session and vice versa. It also is managing client connections to the app and is responsible for all the functionality necessary to deploy R/LinkedCharts apps on a server. ``jrc'' in turn is based mainly on ``httpuv'' \citep{cheng_2020} package to run a local server and ensure a WebSocket connection \citep{fette_rfc_2011}. 
+
+R/LinkedCharts (``rlc'' package) is an R \citep{R_2019} interface to the JavaScript version of LinkedCharts. In addition to providing access to JS/LinkedCharts functionality, it also ensures proper storing of charts and serving them to each connected client by extending ``App'' class of the ``jrc'' package. ``rlc'' is open source and is available on CRAN or GitHub \url{https://github.com/anders-biostat/rlc}.
 
 %\balance
 \begin{small} 
