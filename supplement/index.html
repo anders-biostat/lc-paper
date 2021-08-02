@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>LinkedCharts - Supplement to the paper</title>
+	<script type="text/javascript" src="src/linked-charts.min.js"></script>
+	<script type="text/javascript" src="src/prism.js"></script>
+	<link rel="stylesheet" type="text/css" href="src/prism.css">
+	<link rel="stylesheet" type="text/css" href="src/linked-charts.css">
+	<link rel="stylesheet" type="text/css" href="src/style.css">
+</head>
+<body>
+	<div id="header">
+		<h1>Supplement to the paper</h1>
+		<p>Some text and bla-bla-bla</p>
+	</div>
+	<div id="gallery">
+		<div id="navigation">
+			<div id="tabs"></div>
+		</div>
+		<div id="panel"></div>
+		<div id="example">
+			<div class="aspect-ratio">
+				<iframe frameBorder="0"></iframe>	
+			</div>
+		</div>
+		<div id="description"></div>
+	</div>
+	<script type="text/javascript">
+		const examples = [{
+				name: "Oral cancer, differential expression",
+				id: "oc_de"
+			}, {
+				name: "Basic syntax, Iris dataset",
+				id: "basic_synt"
+			}, {
+				name: "Example gallery",
+				id: "gallery"
+			}, {
+				name: "Drug screening pipeline",
+				id: "drug"
+			}, {
+				name: "Oral cancer, sample correlation",
+				id: "oc_sc"
+			}];
+
+		d3.select("#tabs").selectAll(".tab")
+			.data(examples)
+			.enter()
+			.append("div")
+				.attr("class", (d, i) => i == 0 ? "tab active" : "tab")
+				.text(d => d.name)
+				.style("border-left", (d, i) => i == 0 ? "1px #224 solid" : "none")
+				.on("click", function(d) {
+					d3.select("#tabs").selectAll(".tab").classed("active", false);
+					d3.select(this).classed("active", true);
+					showExample(d);
+				});
+		d3.select("#navigation")
+			.append("div")
+				.attr("class", "filler");
+		d3.select("#navigation")
+			.style("height", (d3.select(".tab").node().getBoundingClientRect().height - 1) + "px");
+
+		showExample(examples[0]);
+
+		function showExample(d) {
+			d3.select("#example").select("iframe")
+				.attr("src", "examples/" + d.id + "/index.html");
+		}
+	</script>
+</body>
+</html>
