@@ -11,8 +11,8 @@
 </head>
 <body>
 	<div id="header">
-		<h1>Supplement to the paper</h1>
-		<p>Some text and bla-bla-bla</p>
+		<h1>LinkedCharts - Supplement to the paper</h1>
+		<p>This page provides live versions of all the figures from the main paper. Each example is given as a full version with all the decorations, labels and titles and as a minimalistic app with only essential features. For each example, one can look at the full code necessary to generate the app both as an R script and as a JavaScript code. To run the R code, "rlc" package must be installed from <a href="https://CRAN.R-project.org/package=rlc">CRAN</a> or <a href="https://github.com/anders-biostat/rlc">GitHub</a> for the most recent version. JavaScript relies on the <i>linked-charts.js</i> library that can be downloaded from <a href="https://anders-biostat.github.io/linked-charts/js/">here</a>. Links to all the required data for each example are given in the description below.</p>
 	</div>
 	<div id="gallery">
 		<div id="navigation">
@@ -29,20 +29,27 @@
 	<script type="text/javascript">
 		const examples = [{
 				name: "Oral cancer, differential expression",
-				id: "oc_de"
+				id: "oc_de",
+				descr: "Overview of genes differentially expressed in cancerous and normal tissues from \citet{conway_2015}. MA-plot (A) shows all the sequenced genes with their average expression on X-axis and log-fold change on Y-axis. Red indicates genes, where the difference was reported as significant by the ``limma''  \citep{ritchie_2015}  package. Plot to the left (B) shows expression values (CPMs) for a selected gene (in this case, LAMB4) and all the patients. This figure is based on a LinkedCharts app, and its live version is provided in the supplement. When the user clicks on a point of the MA-plot, the expression plot changes, showing the new selected gene. In such a way, one can check immediately, whether the genes, labeled as significantly different, are interesting for further study."
 			}, {
 				name: "Basic syntax, Iris dataset",
-				id: "basic_synt"
+				id: "basic_synt",
+				descr: "description 2"
 			}, {
 				name: "Example gallery",
-				id: "gallery"
+				id: "gallery",
+				descr: "description 3"
 			}, {
 				name: "Drug screening pipeline",
-				id: "drug"
+				id: "drug",
+				descr: "description 4"
 			}, {
 				name: "Oral cancer, sample correlation",
-				id: "oc_sc"
+				id: "oc_sc",
+				descr: "description 5"
 			}];
+
+		var code = "full", cur_ex = 0;
 
 		d3.select("#tabs").selectAll(".tab")
 			.data(examples)
@@ -51,7 +58,8 @@
 				.attr("class", (d, i) => i == 0 ? "tab active" : "tab")
 				.text(d => d.name)
 				.style("border-left", (d, i) => i == 0 ? "1px #224 solid" : "none")
-				.on("click", function(d) {
+				.on("click", function(d, i) {
+					cur_ex = i;
 					d3.select("#tabs").selectAll(".tab").classed("active", false);
 					d3.select(this).classed("active", true);
 					showExample(d);
@@ -62,11 +70,45 @@
 		d3.select("#navigation")
 			.style("height", (d3.select(".tab").node().getBoundingClientRect().height - 1) + "px");
 
+		d3.select("#panel").selectAll(".button")
+			.data(["Full", "Minimal", "R code", "JS code"])
+			.enter()
+			.append("div")
+				.attr("class", "button")
+				.attr("id", d => d == "Full" ? "full" : d == "Minimal" ? "min" : d == "R code" ? "rcode" : "jscode")
+				.text(d => d);
+
+		d3.select("#panel").select("#" + code)
+			.classed("active", true);
+
+		d3.select("#panel").selectAll("#full,#min")
+			.on("click", switchCode);
+		d3.select("#panel").selectAll("#rcode,#jscode")
+			.on("click", showCode);
+
 		showExample(examples[0]);
 
 		function showExample(d) {
 			d3.select("#example").select("iframe")
-				.attr("src", "examples/" + d.id + "/index.html");
+				.attr("src", "examples/" + d.id + "/" + d.id + "_" + code + ".html");
+			d3.select("#description")
+				.html(d.descr);
+		}
+
+		function switchCode(d) {
+			d3.select("#panel").selectAll(".button")
+				.classed("active", false);
+			d3.select(this)
+				.classed("active", true);
+			code = this.id;
+			d3.select("#example").select("iframe")
+				.attr("src", "examples/" + examples[cur_ex].id + "/" + examples[cur_ex].id + "_" + code + ".html");
+		}
+
+		function showCode(d) {
+			const lang = d.split(" ")[0];
+			window.open("examples/" + examples[cur_ex].id + "/" + lang + "_code_" + code + ".html", 
+				lang + " code for the example", "width=600,height=600");
 		}
 	</script>
 </body>
