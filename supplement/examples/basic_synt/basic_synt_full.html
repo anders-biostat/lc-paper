@@ -2,9 +2,19 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<script type="text/javascript" src = "iris.js"></script>
+	<script type="text/javascript" src = "../../src/linked-charts.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../src/linked-charts.css">
 </head>
 <body>
-<p>Basic syntax exmaple</p>
+<script type="text/javascript">
+	lc.scatter()
+	  .x(i => +iris[i].sepal_length)
+    .y(i => +iris[i].petal_length)
+    .size(i => +iris[i].sepal_width * 2)
+    .colourValue(i => +iris[i].petal_width)
+    .symbolValue(i => iris[i].species)
+    .place();
+</script>
 </body>
 </html>
