@@ -18,7 +18,6 @@ body {
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 51%;
 }
 
 #example .aspect-ratio iframe {
@@ -76,4 +75,8 @@ body {
 
 .button.active {
   border: 1px #224 solid;
+}
+
+.disabled {
+  opacity: 0.5;
 }
