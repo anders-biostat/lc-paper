@@ -105,20 +105,21 @@ fullTable %>%
   pheatmap() -> heatmap
 
 plot_grid(plates, curvePlots, heatmap[[4]], cellLines, scale = 0.85, 
-          labels = c("Raw readout", "Estimating drug scores", "Drug vs. Drug comparison", "Correlation heatmap"),
-          nrow = 2, ncol = 2, label_fontface = "plain", label_x = c(0.3, 0.2, 0.2, 0.2)) + 
+          labels = c("Raw readout", "Estimating drug scores", "Correlation heatmap", "Drug vs. Drug comparison"),
+          nrow = 2, ncol = 2, label_fontface = "plain", label_x = c(0.3, 0.15, 0.15, 0.15), label_size = 19) + 
   draw_line(c(.48, .53), c(.77, .77), size = 2, arrow = arrow(), colour = "#1a2c79") + 
   draw_line(c(.77, .77), c(.55, .51), size = 2, arrow = arrow(), colour = "#1a2c79") +
   draw_line(c(.53, .48), c(.27, .27), size = 2, arrow = arrow(), colour = "#1a2c79") +
   draw_line(c(.53, .48), c(.73, .73), size = 2, arrow = arrow(), colour = "#fe4a49") + 
   draw_line(c(.73, .73), c(.51, .55), size = 2, arrow = arrow(), colour = "#fe4a49") +
-  draw_line(c(.48, .53), c(.23, .23), size = 2, arrow = arrow(), colour = "#fe4a49") -> plots
+  draw_line(c(.48, .53), c(.23, .23), size = 2, arrow = arrow(), colour = "#fe4a49") +
+  draw_text(c("A", "C", "B", "D"), c(.05, .05, .55, .55), c(.99, .49, .99, .49), size = 25, fontface = "bold") -> plots
 
 ggdraw(ylim = c(0.45, 0.55)) +
   draw_line(c(0.05, 0.1), c(0.5, 0.5), size = 2, arrow = arrow(), colour = "#1a2c79") +
   draw_line(c(0.55, 0.6), c(0.5, 0.5), size = 2, arrow = arrow(), colour = "#fe4a49") +
-  draw_text("Data generation", .13, 0.5, hjust = 0, colour = "#1a2c79") +
-  draw_text("Data visualization", .63, 0.5, hjust = 0, colour = "#fe4a49") -> legend
+  draw_text("Data generation", .13, 0.5, hjust = 0, colour = "#1a2c79", size = 19) +
+  draw_text("Data visualization", .63, 0.5, hjust = 0, colour = "#fe4a49", size = 19) -> legend
   
 plot_grid(plots, legend, nrow = 2, rel_heights = c(0.95, 0.05)) -> figC
 
