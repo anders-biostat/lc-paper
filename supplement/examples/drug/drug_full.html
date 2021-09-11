@@ -43,6 +43,9 @@ function get_curve ( drug, cellLine, x ){
     (1 + Math.pow(10, -(x - Math.log10(IC50/minConc)) * slope));
 }
 
+	selDrugs = [drugs[0], drugs[1]];
+	selCellLine = cellLines[0];
+
 	lc.heatmap()
 		.nrows(drugs.length)
 		.ncols(drugs.length)
@@ -54,7 +57,7 @@ function get_curve ( drug, cellLine, x ){
 		.clusterCols(true)
 		.value((row, col) => corMat[row][col])
 		.on_click((row, col) => {
-			selDrugs = [row, col];
+			selDrugs = [drugs[row], drugs[col]];
 			dssplot.update();
 			viability.update();
 			plateHms[0].update();
@@ -62,24 +65,21 @@ function get_curve ( drug, cellLine, x ){
 		})
 		.place("#A1");
 
-	selDrugs = [0, 1];
-	selCellLine = 0;
-
 	var dssplot = lc.scatter()
 		.width(300)
 		.height(250)
 		.title("DSS value")
-		.x(i => scoreMat[i][selDrugs[0]])
-		.y(i => scoreMat[i][selDrugs[1]])
+		.x(i => scoreMat[i][drugs.indexOf(selDrugs[0])])
+		.y(i => scoreMat[i][drugs.indexOf(selDrugs[1])])
 		.domainX([0, 45])
 		.domainY([0, 45])
 		.set_paddings({bottom: 20})
-		.colour(i => i == selCellLine ? "black" : "grey")
-		.axisTitleX(() => drugs[selDrugs[0]])
-		.axisTitleY(() => drugs[selDrugs[1]])
+		.colour(i => i == cellLines.indexOf(selCellLine) ? "black" : "grey")
+		.axisTitleX(() => selDrugs[0])
+		.axisTitleY(() => selDrugs[1])
 		.label(i => cellLines[i])
 		.on_click(d => {
-			selCellLine = d;
+			selCellLine = cellLines[d];
 			dssplot.get_layer("layer0").updateElementStyle();
 			viability.update();
 			plateHms[0].update();
@@ -95,26 +95,22 @@ function get_curve ( drug, cellLine, x ){
 	var viability = lc.scatter()
 	 	.nelements(10)
 	 	.x(i => i % 5)
-	 	.y(i => {
-	 		let drug = drugs[selDrugs[Math.floor(i / 5)]];
-	 		let cl = cellLines[selCellLine];
-	 		return curves[drug][cl]["D" + (i % 5 + 1)];
-	 	})
+	 	.y(i => curves[selDrugs[+(i < 5)]][selCellLine]["D" + (i % 5 + 1)])
 	 	.domainY([-10, 105])
-	 	.colourValue(i => drugs[selDrugs[Math.floor(i / 5)]]);
+	 	.colourValue(i => selDrugs[+(i < 5)]);
 
 	lc.xLine("line", viability)
 		.width(300)
 		.height(150)
-		.title(() => cellLines[selCellLine])
+		.title(() => selCellLine)
 		.axisTitleX("Concentration order")
 		.axisTitleY("Cell viability, %")
 		.set_paddings({bottom: 20})
 		.nelements(2)
 		.addColourScaleToLegend(false)
-		.lineFun((x, i) => get_curve(drugs[selDrugs[i]], cellLines[selCellLine], x))
-		.colourValue(i => drugs[selDrugs[i]])
-		.legend.container(d3.select("#A2"))
+		.lineFun((x, i) => get_curve(selDrugs[i], selCellLine, x))
+		.colourValue(i => selDrugs[i])
+		.legend.container("#A2")
 		.legend.width(300)
 		.place("#A2");
 
@@ -129,33 +125,23 @@ function get_curve ( drug, cellLine, x ){
  			.width(300)
  			.height(225)
  			.showPanel(false)
- 			.title(() => {
- 				let drug = drugs[selDrugs[i]];
- 				let cl = cellLines[selCellLine];
- 				return "Plate " + curves[drug][cl].Barcode;
- 			})
+ 			.title(() => "Plate " + curves[selDrugs[i]][selCellLine].Barcode)
  			.titleSize(15)
  			.paddings({top: 40, left: 15, bottom: 5, right: 5})
  			.rowIds("ABCDEFGHIJKLMNOP".split(""))
  			.colIds(d3.range(24).map(el => el + 1))
- 			.value((row, col) => {
- 		 		let drug = drugs[selDrugs[i]];
- 		 		let cl = cellLines[selCellLine];
- 				return plates[curves[drug][cl].Barcode][row + col].rawIntensity;
- 			})
+ 			.value((row, col) => 
+ 				plates[curves[selDrugs[i]][selCellLine].Barcode][row + col].rawIntensity)
  			.informText((row, col) => {
- 		 		let drug = drugs[selDrugs[i]],
- 		 			cl = cellLines[selCellLine],
- 		 			well = plates[curves[drug][cl].Barcode][row + col];
+ 		 		let well = plates[curves[selDrugs[i]][selCellLine].Barcode][row + col];
 
 				return "<b>" + well.ProductName + "</b><br>" + 
-					"Concentration:" + well.Concentration +
+					"Concentration:" + well.Concentration + "<br>" +
 					"Value: " + well.rawIntensity;
  			})
  			.showLegend(false)
  			.place("#A3"); 		
  	}
-
 </script>
 </body>
 </html>

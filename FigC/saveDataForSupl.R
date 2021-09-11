@@ -42,29 +42,32 @@ rd %>%
   select(DWell, DRow, DCol, ProductName, Concentration, Barcode, rawIntensity) -> plates
 
 corMat <- cor(scoreMatrix)
+cellLines <- rownames(scoreMatrix)
+
 rownames(corMat) <- NULL
 colnames(corMat) <- NULL
 rownames(scoreMatrix) <- NULL
 colnames(scoreMatrix) <- NULL
+
 writeLines(c(paste0("drugs = ", toJSON(drugs), ";"),
-             paste0("cellLines = ", toJSON(rownames(scoreMatrix)), ";"),
+             paste0("cellLines = ", toJSON(cellLines), ";"),
              paste0("corMat = ", toJSON(corMat), ";"),
              paste0("scoreMat = ", toJSON(scoreMatrix), ";")), "scoreData.js")
 
 writeLines(c(paste0("curves = ", toJSON(curves), ";"),
              paste0("plates = ", toJSON(plates), ";")), "rawData.js")
 
-drugTable %>%
-  select(DRUG_NAME, D1:D5, Max.Conc.tested) %>%
-  pivot_longer(D1:D5, values_to = "y") %>%
-  separate(name, c("tmp", "x"), 1, convert = T) %>%
-  select(-tmp) %>%
-  mutate(x = Max.Conc.tested * 10^(x - 4)) %>%
-  select(-Max.Conc.tested) -> points
+rownames(scoreMatrix) <- str_replace_all(rownames(scoreMatrix), "-", "_")
 
+curves %>%
+  mutate(CellLine = str_replace_all(CellLine, "-", "_")) %>%
+  unite(id, CellLine, Drug) %>%
+  column_to_rownames("id") %>%
+  as.data.frame() -> curves
 
-get_curve <- function(data) {
-  x <- seq(0, 4, length.out = 30)
-  y <- data$MIN + (data$MAX - data$MIN)/ (1 + data$SLOPE * 10^(-x + log10(data$IC50/data$Max.Conc.tested) + 4))
-  tibble(DRUG_NAME = data$DRUG_NAME, y = y, x = data$Max.Conc.tested * 10^(x - 3))
-}
+barcodes <- curves$Barcode
+names(barcodes) <- rownames(curves)
+curves$Barcode <- NULL
+curves <- as.matrix(curves)
+
+save(plates, barcodes, curves, scoreMatrix, file = "drugScreen.RData")
