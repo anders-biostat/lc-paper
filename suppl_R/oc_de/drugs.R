@@ -77,6 +77,19 @@ lc_line(dat(
   chartId = "viability", addLayer = TRUE
 )
 
+getInfo <- function(drug) {
+  plates %>% 
+    filter(Barcode == barcodes[paste(selCellLine, drug, sep = "_")]) %>%
+    transmute(DRow, DCol, text = str_c(
+      "<b>", ProductName, "</b><br>",
+      "Concentration: ", str_replace_na(Concentration), "<br>",
+      "Value: ", rawIntensity
+    )) %>%
+    pivot_wider(names_from = DCol, values_from = text) %>%
+    select(-DRow) %>%
+    as.matrix()
+}
+
 getPlate <- function(drug) {
   plates %>% 
     filter(Barcode == barcodes[paste(selCellLine, drug, sep = "_")]) %>%
@@ -89,7 +102,8 @@ getPlate <- function(drug) {
 placeHeatmap <- function(i) {
   lc_heatmap(dat(
     title = paste0("Plate ", barcodes[paste(selCellLine, selDrugs[ind], sep = "_")]),
-    value = getPlate(selDrugs[ind])),
+    value = getPlate(selDrugs[ind]),
+    informText = getInfo(selDrugs[ind])),
   width = 300,
   height = 225,
   showPanel = FALSE,
