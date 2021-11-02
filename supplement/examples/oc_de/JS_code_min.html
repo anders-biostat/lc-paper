@@ -7,12 +7,11 @@ lc.scatter()
    .x(i => maData.pvals[i].AveExpr)
    .y(i => maData.pvals[i].tissuetumour)
    .colour(i => maData.pvals[i]["adj.P.Val"] < 0.1 ? "red" : "black")
-   .size(1.3)
    .on_click(i => {selGene = i; exprPlot.update();})
    //here, a CSS selector for an existing DOM element is used
    .place("#ma");
 
-lc.scatter()
+var exprPlot = lc.scatter()
    .x(i => maData.patients[i])
    //raw counts are normalised on-the-fly
    .y(i => maData.countMatrix[selGene][i]/maData.countSums[i] * 1e6 + .1)

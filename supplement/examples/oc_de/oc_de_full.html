@@ -38,7 +38,7 @@ lc.scatter()
 	.axisTitleX("Average expression")
 	.on_click(i => {selGene = i; exprPlot.update();})
 	.set_paddings({left: 100})
-	.place(d3.select("#ma-expr").select("#ma"));
+	.place("#ma");
 
 var exprPlot = lc.scatter()
 	.elementIds(d3.range(maData.patients.length)
@@ -54,9 +54,8 @@ var exprPlot = lc.scatter()
 	.ticksRotateX(45)
 	.set_paddings({left: 100})
 	.colourLegendTitle("Tissue")
-	.place(d3.select("#ma-expr").select("#expr"));
-
-exprPlot.legend.width(120).update();
+	.legend.width(120)
+	.place("#expr");
 
 conts = d3.selectAll(".linked-charts")
 	.data(["A", "B"])

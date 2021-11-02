@@ -10,20 +10,19 @@ lc_scatter(
   x = voomResult$AveExpr,
   y = voomResult$tissuetumour,
   colour = ifelse(voomResult$adj.P.Val < 0.1, "red", "black"),
-  size = 1.3,
   on_click = function(i) {
     selGene <<- i
     updateCharts("A2")
   },
   place = "A1"
-  )
+)
 
 lc_scatter(dat(
-    x = sampleTable$patient,
-    y = countMatrix[selGene, ] / countsums * 1e6 + .1,
-    logScaleY = 10,
-    colourValue = sampleTable$tissue,
-    title = rownames(countMatrix)[selGene]),
+  x = sampleTable$patient,
+  y = countMatrix[selGene, ] / countsums * 1e6 + .1,
+  logScaleY = 10,
+  colourValue = sampleTable$tissue,
+  title = rownames(countMatrix)[selGene]),
   place = "A2")
 
 #for full example
@@ -43,9 +42,10 @@ lc_scatter(
     selGene <<- i
     updateCharts("A2")
   },
-  place = "A1"
-)
+  place = "A1")
 
+#original data contains also information on dysplasia tissue sample
+#remove them for plot's clarity
 dyspl <- sampleTable$tissue == "dysplasia"
 
 lc_scatter(dat(

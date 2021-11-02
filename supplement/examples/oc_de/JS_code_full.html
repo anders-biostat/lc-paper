@@ -15,7 +15,8 @@ lc.scatter()
    //here, a CSS selector for an existing DOM element is used
    .place("#ma");
 
-lc.scatter()
+//the chart object is stored in a variable to update it later
+var exprPlot = lc.scatter()
    //original data contains also information on dysplasia tissue sample
    //remove them for plot's clarity
    .elementIds(d3.range(maData.patients.length)
@@ -31,6 +32,7 @@ lc.scatter()
    .axisTitleX("Patients")
    .ticksRotateX(45)
    .colourLegendTitle("Tissue")
+   .legend.width(120)
    //here, a CSS selector for an existing DOM element is used
    .place("#expr");
 </code></pre>
