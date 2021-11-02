@@ -1,37 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="../../src/linked-charts.css">
-  <script type="text/javascript" src = "../../src/linked-charts.min.js"></script>
-  <script type="text/javascript" src = "scoreData.js"></script>
-  <script type="text/javascript" src = "rawData.js"></script>
-</head>
-<body>
-<table>
-  <tr>
-    <td id="A1"></td>
-    <td id="A2"></td>
-    <td id="A3"></td>
-  </tr> 
-</table>
+<link rel="stylesheet" type="text/css" href="../../src/prism.css">
+<script type="text/javascript" src="../../src/prism.js"></script>
 
-<!-- <table>
-  <tr>
-    <td id="corHeatmap" rowspan="2"></td>
-    <td id="dssPlot"></td>
-  </tr>
-  <tr>
-    <td id="viabilityPlot"></td>
-  </tr>
-  <tr>
-    <td id="plate0"></td>
-    <td id="plate1"></td>
-  </tr>
-</table>
- -->
-
-<script type="text/javascript">
+<pre class="language-javascript line-numbers"><code>// a function to build a sigmoid curve
 function get_curve ( drug, cellLine, x ){
   var max = curves[drug][cellLine].max,
     min = curves[drug][cellLine].min,
@@ -62,6 +32,8 @@ lc.heatmap()
   .place("#A1");
 
 var dssplot = lc.scatter()
+   //sizes and paddings are, in fact, optional parameters
+   //however, we leave them here to roughly keep the layout of the app
   .width(300)
   .height(250)
   .x(i => scoreMat[i][drugs.indexOf(selDrugs[0])])
@@ -76,6 +48,8 @@ var dssplot = lc.scatter()
   })
   .place("#A2");    
 
+//here, data are transformed from an array in a nested format
+//which easier and faster by the linked-charts.js to access
 curves = lc.separateBy(curves, ["Drug", "CellLine"]);
 
 var viability = lc.scatter()
@@ -94,6 +68,11 @@ lc.xLine("line", viability)
 
 plates = lc.separateBy(plates, ["Barcode", "DWell"]);
 
+//since heatmaps for readouts are so similar to each other
+//it is easier to make them both within a "for" loop
+//however, since we need the index variable inside the callback
+//functions, we are using a "placeHeatmap" function that produces
+//and returns a heatmap
 var plateHms = [];
 for(let i = 0; i < 2; i++)
   plateHms[i] = placeHeatmap(i);
@@ -109,12 +88,10 @@ function placeHeatmap(i) {
       plates[curves[selDrugs[i]][selCellLine].Barcode][row + col].rawIntensity)
     .informText((row, col) => {
       let well = plates[curves[selDrugs[i]][selCellLine].Barcode][row + col];
-        return "<b>" + well.ProductName + "</b><br>" + 
-          "Concentration:" + well.Concentration + "<br>" +
+        return "&lt;b>" + well.ProductName + "&lt;/b>&lt;br>" + 
+          "Concentration:" + well.Concentration + "&lt;br>" +
           "Value: " + well.rawIntensity;
     })
     .place("#A3");
 }
-</script>
-</body>
-</html>
+</code></pre>

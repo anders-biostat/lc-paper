@@ -9,7 +9,6 @@ lc_scatter(
   x = voomResult$AveExpr,
   y = voomResult$tissuetumour,
   colour = ifelse(voomResult$adj.P.Val < 0.1, "red", "black"),
-  size = 1.3,
   on_click = function(i) {
     selGene <<- i
     updateCharts("A2")
