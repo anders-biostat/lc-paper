@@ -40,6 +40,7 @@ lc.heatmap()
   .value((i, j) => hData.corrMat[i][j])
   .rowLabel(i => hData.sampleNames[i])
   .colLabel(i => hData.sampleNames[i])
+  .paddings({left: 55, top: 55, right: 30, bottom: 30})
   .clusterRows(true)
   .clusterCols(true)
   .on_click(function(row, col) {
@@ -52,16 +53,22 @@ lc.heatmap()
 var sch = lc.scatter()
   .x(i => Math.log10(maData.countMatrix[i][xSample]/maData.countSums[xSample] * 1000000 + 0.1))
   .y(i => Math.log10(maData.countMatrix[i][ySample]/maData.countSums[ySample] * 1000000 + 0.1))
+  .axisTitleX(() => hData.sampleNames[xSample])
+  .axisTitleY(() => hData.sampleNames[ySample])
+  .label(i => maData.geneNames[i])
   .size(1.5)
-  .opacity(0.5)
+  .opacity(0.5);
+
+lc.xLine("line", sch)
+  .lineFun(x => x)
+  .colour("red")
   .place("#corplot");
 
 
-d3.selectAll(".linked-charts")
+d3.selectAll("div.linked-charts")
 	.data(["C", "D"])
 		.append("div")
 			.attr("class", "fig-labels")
 			.text(d => d);
-
 	</script>
 </body>

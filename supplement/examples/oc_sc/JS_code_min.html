@@ -1,0 +1,28 @@
+<link rel="stylesheet" type="text/css" href="../../src/prism.css">
+<script type="text/javascript" src="../../src/prism.js"></script>
+
+<pre class="language-javascript line-numbers"><code>vvar xSample = 30, ySample = 31;
+
+lc.heatmap()
+  .nrows(hData.sampleNames.length)
+  .ncols(hData.sampleNames.length)
+  .value((i, j) => hData.corrMat[i][j])
+  .rowLabel(i => hData.sampleNames[i])
+  .colLabel(i => hData.sampleNames[i])
+  .on_click(function(row, col) {
+    xSample = row;
+    ySample = col;
+    sch.update();
+  })
+  .place("#heatmap");
+
+var sch = lc.scatter()
+//expression values are normalized on-the-fly.
+//raw counts are used as input data
+  .x(i => Math.log10(maData.countMatrix[i][xSample]/
+    maData.countSums[xSample] * 1000000 + 0.1))
+  .y(i => Math.log10(maData.countMatrix[i][ySample]/
+    maData.countSums[ySample] * 1000000 + 0.1))
+  .size(1.5)
+  .place("#corplot");
+</code></pre>
