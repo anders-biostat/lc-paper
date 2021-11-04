@@ -1,7 +1,10 @@
-<link rel="stylesheet" type="text/css" href="../../src/prism.css">
-<script type="text/javascript" src="../../src/prism.js"></script>
+library(rlc)
 
-<pre class="language-r line-numbers"><code>xSample <- 31
+load("oscc.rda")
+
+#Full code
+
+xSample <- 31
 ySample <- 32
 
 colsums <- colSums(countMatrix)
@@ -33,4 +36,3 @@ lc_abLine(a = 1, b = 0,
           colour = "red",
           chartId = "A2",
           addLayer = TRUE)
-</code></pre>

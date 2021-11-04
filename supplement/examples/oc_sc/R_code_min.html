@@ -1,26 +1,25 @@
 <link rel="stylesheet" type="text/css" href="../../src/prism.css">
 <script type="text/javascript" src="../../src/prism.js"></script>
 
-<pre class="language-r line-numbers"><code>countsums <- colSums(countMatrix)
-openPage(useViewer = FALSE, layout = "table1x2")
-selGene <- 1915
+<pre class="language-r line-numbers"><code>xSample <- 31
+ySample <- 32
 
-lc_scatter(
-  x = voomResult$AveExpr,
-  y = voomResult$tissuetumour,
-  colour = ifelse(voomResult$adj.P.Val < 0.1, "red", "black"),
-  on_click = function(i) {
-    selGene <<- i
-    updateCharts("A2")
-  },
-  place = "A1"
-  )
+colsums <- colSums(countMatrix)
+normCounts <- t(log10(t(countMatrix)/colsums * 10^6 + 0.1))
+
+openPage(FALSE, layout = "table1x2")
+
+lc_heatmap(
+  value = cor(normCounts, method = "spearman"),
+  on_click = function(d) {
+    xSample <<- d[1]
+    ySample <<- d[2]
+    updateCharts()
+  }, place = "A1")
 
 lc_scatter(dat(
-    x = sampleTable$patient,
-    y = countMatrix[selGene, ] / countsums * 1e6 + .1,
-    logScaleY = 10,
-    colourValue = sampleTable$tissue,
-    title = rownames(countMatrix)[selGene]),
+  x = normCounts[, xSample],
+  y = normCounts[, ySample]),
+  size = 1.5,
   place = "A2")
 </code></pre>
