@@ -1,5 +1,32 @@
+@import url(fonts/comfortaa/font.css);
+@import url(fonts/IBM_Plex_Sans/font.css);
+
+h1 {
+  font-family: Comfortaa, Helvetica, Arial;
+  color: #422304;
+  text-decoration: underline;
+}
+
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: IBMPlex, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#main {
+  width: 1205px;
+  margin: auto;
+}
+
+#main p {
+  text-align: justify;
+}
+
+a {
+  text-decoration: none;
+  color: #a83a27;
+}
+
+a:hover {
+  color: #561e14;
 }
 
 #gallery {

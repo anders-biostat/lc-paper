@@ -10,21 +10,23 @@
 	<link rel="stylesheet" type="text/css" href="src/style.css">
 </head>
 <body>
-	<div id="header">
-		<h1>LinkedCharts - Supplement to the paper</h1>
-		<p>This page provides live versions of all the figures from the main paper. Each example is given as a full version with all the decorations, labels and titles and as a minimalistic app with only essential features. For each example, one can look at the full code necessary to generate the app both as an R script and as a JavaScript code. To run the R code, "rlc" package must be installed from <a href="https://CRAN.R-project.org/package=rlc">CRAN</a> or <a href="https://github.com/anders-biostat/rlc">GitHub</a> for the most recent version. JavaScript relies on the <i>linked-charts.js</i> library that can be downloaded from <a href="https://anders-biostat.github.io/linked-charts/js/">here</a>. Links to all the required data for each example are given in the description below.</p>
-	</div>
-	<div id="gallery">
-		<div id="navigation">
-			<div id="tabs"></div>
+	<div id="main">
+		<div id="header">
+			<h1>LinkedCharts - Supplement to the paper</h1>
+			<p>This page provides live versions of all the figures from the main paper. Each example is given as a full version with all the decorations, labels and titles and as a minimalistic app with only essential features. For each example, one can look at the full code necessary to generate the app both as an R script and as a JavaScript code. To run the R code, "rlc" package must be installed from <a href="https://CRAN.R-project.org/package=rlc">CRAN</a> or <a href="https://github.com/anders-biostat/rlc">GitHub</a> for the most recent version. JavaScript relies on the <i>linked-charts.js</i> library that can be downloaded from <a href="https://anders-biostat.github.io/linked-charts/js/">here</a>. Links to all the required data for each example are given in the description below.</p>
 		</div>
-		<div id="panel"></div>
-		<div id="example">
-			<div class="aspect-ratio">
-				<iframe frameBorder="0"></iframe>	
+		<div id="gallery">
+			<div id="navigation">
+				<div id="tabs"></div>
 			</div>
-		</div>
-		<div id="description"></div>
+			<div id="panel"></div>
+			<div id="example">
+				<div class="aspect-ratio">
+					<iframe frameBorder="0"></iframe>	
+				</div>
+			</div>
+			<div id="description"></div>
+		</div>		
 	</div>
 	<script type="text/javascript">
 		const examples = [{
@@ -52,7 +54,7 @@
 				name: "Oral cancer, sample correlation",
 				id: "oc_sc",
 				ar: "45%",
-				descr: 'The heatmap shows Spearman correlation values of gene expression in cancerous, normal and dysplasia tissues from 19 patients (<a href="https://doi.org/10.18632/oncotarget.5529">Conway et al. (2015)</a>). Clicking on any cell of the heatmap, one can explore the expression patterns in the sample since the scatter plot will show gene expression values for the two selected samples against each other. In this way, it is easy to get some feeling of the data behind each correlation value and check what abnormalities in the data caused the outliers (in the right bottom corner of the correlated heatmap) to have lower correlation values than all other samples.<br><br>To run the provided code, please, download the following data:<br><b>For R:</b> <a href="https://anders-biostat.github.io/linked-charts/rlc/tutorials/oscc/oscc.rda" target="_blank">ocss.rda</a><br><b>For JS:</b> <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/maData.js">maData.js</a> and <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/heatmapData.js">heatmapData.js</a>'
+				descr: 'The heatmap (C) shows Spearman correlation values of gene expression in cancerous, normal and dysplasia tissues from 19 patients (<a href="https://doi.org/10.18632/oncotarget.5529">Conway et al. (2015)</a>). Clicking on any cell of the heatmap, one can explore the expression patterns in the sample since the scatter plot (D) will show gene expression values for the two selected samples against each other. In this way, it is easy to get some feeling of the data behind each correlation value and check what abnormalities in the data caused the outliers (in the right bottom corner of the correlated heatmap) to have lower correlation values than all other samples.<br><br>To run the provided code, please, download the following data:<br><b>For R:</b> <a href="https://anders-biostat.github.io/linked-charts/rlc/tutorials/oscc/oscc.rda" target="_blank">ocss.rda</a><br><b>For JS:</b> <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/maData.js">maData.js</a> and <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/heatmapData.js">heatmapData.js</a>'
 			}];
 
 		var code = "full", cur_ex = 0;
