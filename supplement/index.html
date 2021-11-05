@@ -9,7 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="src/linked-charts.css">
 	<link rel="stylesheet" type="text/css" href="src/style.css">
 </head>
-<body>
+<body onload="setNavHeight();">
 	<div id="main">
 		<div id="header">
 			<h1>LinkedCharts - Supplement to the paper</h1>
@@ -57,6 +57,11 @@
 				descr: 'The heatmap (C) shows Spearman correlation values of gene expression in cancerous, normal and dysplasia tissues from 19 patients (<a href="https://doi.org/10.18632/oncotarget.5529">Conway et al. (2015)</a>). Clicking on any cell of the heatmap, one can explore the expression patterns in the sample since the scatter plot (D) will show gene expression values for the two selected samples against each other. In this way, it is easy to get some feeling of the data behind each correlation value and check what abnormalities in the data caused the outliers (in the right bottom corner of the correlated heatmap) to have lower correlation values than all other samples.<br><br>To run the provided code, please, download the following data:<br><b>For R:</b> <a href="https://anders-biostat.github.io/linked-charts/rlc/tutorials/oscc/oscc.rda" target="_blank">ocss.rda</a><br><b>For JS:</b> <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/maData.js">maData.js</a> and <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/heatmapData.js">heatmapData.js</a>'
 			}];
 
+		function setNavHeight() {
+			d3.select("#navigation")
+				.style("height", (d3.select(".tab").node().getBoundingClientRect().height - 1) + "px");
+		}
+
 		var code = "full", cur_ex = 0;
 
 		d3.select("#tabs").selectAll(".tab")
@@ -75,11 +80,20 @@
 		d3.select("#navigation")
 			.append("div")
 				.attr("class", "filler");
-		d3.select("#navigation")
-			.style("height", (d3.select(".tab").node().getBoundingClientRect().height - 1) + "px");!
 
-		d3.select("#panel").selectAll(".button")
-			.data(["Full", "Minimal", "R code", "JS code"])
+		d3.select("#panel").selectAll(".panel-block")
+			.data(["version", "code"])
+			.enter()
+			.append("div")
+				.attr("class", "panel-block")
+				.attr("id", d => d)
+				.append("div")
+					.attr("class", "label")
+					.text(d => d == "version" ? "Version:" : "Check code:");
+
+		d3.select("#panel")
+			.selectAll(".panel-block").selectAll(".button")
+			.data(d => d == "version" ? ["Full", "Minimal"] : ["R", "JavaScript"])
 			.enter()
 			.append("div")
 				.attr("class", "button")
