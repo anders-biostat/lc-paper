@@ -23,7 +23,8 @@
     <tr>
       <td>
         <p class="header">ggplot2</p>
-        <pre class="language-r line-numbers"><code>ggplot(iris) + geom_point(aes(
+        <pre class="language-r line-numbers"><code>library(ggplot2)
+ggplot(iris) + geom_point(aes(
   x = Sepal.Length,
   y = Petal.Length,
   size = Sepal.Width * 2,
@@ -33,7 +34,8 @@
       </td>
       <td>
         <p class="header">rlc</p>
-        <pre class="language-r line-numbers"><code>lc_scatter(with = iris, data = dat(
+        <pre class="language-r line-numbers"><code>library(rlc)
+lc_scatter(with = iris, data = dat(
   x = Sepal.Length,
   y = Petal.Length,
   size = Sepal.Width * 2,

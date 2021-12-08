@@ -34,9 +34,16 @@ read_csv("all_raw.csv") %>%
   mutate(ProductName = str_replace_all(ProductName, " ", "")) -> rd
 
 
+select(rd, Screen = screen_id, Drug = ProductName, Barcode, well = DWell, Concentration) %>%
+  filter(!is.na(Concentration), !(Drug %in% c("BzCl", "dmso"))) %>%
+  group_by(Drug, Screen) %>%
+  mutate(conc_rank = str_c("W", rank(Concentration))) %>%
+  select(-Concentration) %>%
+  pivot_wider(names_from = conc_rank, values_from = well) -> wells
+
 fullTable %>%
-  left_join(select(rd, Screen = screen_id, Drug = ProductName, Barcode) %>% distinct()) %>%
-  select(CellLine, Drug, minConc, D1:D5, IC50:Barcode) -> curves
+  left_join(wells) %>%
+  select(CellLine, Drug, minConc, D1:D5, IC50:W1) -> curves
 
 rd %>%
   select(DWell, DRow, DCol, ProductName, Concentration, Barcode, rawIntensity) -> plates

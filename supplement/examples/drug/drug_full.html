@@ -92,14 +92,7 @@ function get_curve ( drug, cellLine, x ){
 
 	curves = lc.separateBy(curves, ["Drug", "CellLine"]);
 
-	var viability = lc.scatter()
-	 	.nelements(10)
-	 	.x(i => i % 5)
-	 	.y(i => curves[selDrugs[+(i < 5)]][selCellLine]["D" + (i % 5 + 1)])
-	 	.domainY([-10, 105])
-	 	.colourValue(i => selDrugs[+(i < 5)]);
-
-	lc.xLine("line", viability)
+	var viability = lc.xLine()
 		.width(300)
 		.height(150)
 		.title(() => selCellLine)
@@ -109,10 +102,25 @@ function get_curve ( drug, cellLine, x ){
 		.nelements(2)
 		.addColourScaleToLegend(false)
 		.lineFun((x, i) => get_curve(selDrugs[i], selCellLine, x))
-		.colourValue(i => selDrugs[i])
-		.legend.container("#A2")
-		.legend.width(300)
-		.place("#A2");
+		.colourValue(i => selDrugs[i]);
+
+
+	lc.scatter("points", viability)
+	 	.nelements(10)
+	 	.x(i => i % 5)
+	 	.y(i => curves[selDrugs[+(i < 5)]][selCellLine]["D" + (i % 5 + 1)])
+	 	.domainY([-10, 105])
+	 	.on_mouseover(i => {
+	 		let well = curves[selDrugs[+(i < 5)]][selCellLine]["W" + (i % 5 + 1)];
+	 		plateHms[+(i < 5)].mark([well[0], well.slice(1)]);
+	 	})
+	 	.on_mouseout(() => {
+	 		plateHms.forEach(el => el.mark("__clear__"));
+	 	})	 	
+	 	.colourValue(i => selDrugs[+(i < 5)])
+	 	.legend.container("#A2")
+	 	.legend.width(300)
+	 	.place("#A2");
 
  	plates = lc.separateBy(plates, ["Barcode", "DWell"]);
 

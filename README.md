@@ -29,3 +29,5 @@ Figures are made as JS/LinkedCharts scripts. To get .svg files (or may be .png)
 ```
 wkhtmltoimage --enable-local-file-access -f png figA_static.html figA.png
 ```
+
+UPD: New version of wkhtmltopdf can run JS and, therefore, saving pages as static HTML is no longer required.
