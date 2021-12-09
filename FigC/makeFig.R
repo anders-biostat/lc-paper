@@ -113,7 +113,7 @@ plot_grid(plates, curvePlots, heatmap[[4]], cellLines, scale = 0.85,
   draw_line(c(.53, .48), c(.73, .73), size = 2, arrow = arrow(), colour = "#fe4a49") + 
   draw_line(c(.73, .73), c(.51, .55), size = 2, arrow = arrow(), colour = "#fe4a49") +
   draw_line(c(.48, .53), c(.23, .23), size = 2, arrow = arrow(), colour = "#fe4a49") +
-  draw_text(c("A", "C", "B", "D"), c(.05, .05, .55, .55), c(.99, .49, .99, .49), size = 25, fontface = "bold") -> plots
+  draw_text(c("A", "D", "B", "C"), c(.05, .05, .55, .55), c(.99, .49, .99, .49), size = 25, fontface = "bold") -> plots
 
 ggdraw(ylim = c(0.45, 0.55)) +
   draw_line(c(0.05, 0.1), c(0.5, 0.5), size = 2, arrow = arrow(), colour = "#1a2c79") +
