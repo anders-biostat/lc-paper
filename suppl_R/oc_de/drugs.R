@@ -51,20 +51,6 @@ lc_abLine(
   addLayer = TRUE
 )
 
-lc_scatter(dat(
-  x = c(0:4, 0:4),
-  y = c(curves[paste(selCellLine, selDrugs[1], sep = "_"), paste0("D", 1:5)],
-        curves[paste(selCellLine, selDrugs[2], sep = "_"), paste0("D", 1:5)]),
-  title = selCellLine,
-  colourValue = rep(selDrugs, each = 5)),
-  width = 300,
-  height = 150,
-  axisTitleX = "Concentration order",
-  axisTitleY = "Cell viability, %",
-  paddings = list(bottom = 20),
-  place = "A2", chartId = "viability"
-)
-
 x <- seq(0, 4, length.out = 50)
 lc_line(dat(
   x = x,
@@ -72,9 +58,32 @@ lc_line(dat(
             getCurve(selDrugs[2], selCellLine, x)),
   colourValue = selDrugs),
   addColourScaleToLegend = FALSE,
+  width = 300,
+  height = 150,
+  axisTitleX = "Concentration order",
+  axisTitleY = "Cell viability, %",
+  paddings = list(bottom = 20),  
   legend_container = "#A2",
   legend_width = 300,
-  chartId = "viability", addLayer = TRUE
+  chartId = "viability", place = "A2"
+)
+
+lc_scatter(dat(
+  x = c(0:4, 0:4),
+  y = c(unlist(curves[paste(selCellLine, selDrugs[1], sep = "_"), paste0("D", 1:5)]),
+        unlist(curves[paste(selCellLine, selDrugs[2], sep = "_"), paste0("D", 1:5)])),
+  title = selCellLine,
+  colourValue = rep(selDrugs, each = 5)),
+  on_mouseover = function(d) {
+    well <- curves[paste(selCellLine, selDrugs[(d > 5) + 1], sep = "_"), paste0("W", d %% 5 + 1)]
+    row <- which(LETTERS %in% str_sub(well, 1, 1))
+    col <- str_sub(well, 2)
+    mark(c(row, col), str_c("plate", (d > 5) + 1), clear = TRUE)
+  },
+  on_mouseout = function() {
+    mark(clear = TRUE, chartId = c("plate1", "plate2"))
+  },
+  addLayer = TRUE, chartId = "viability"
 )
 
 getInfo <- function(drug) {

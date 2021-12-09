@@ -75,6 +75,6 @@ curves %>%
 barcodes <- curves$Barcode
 names(barcodes) <- rownames(curves)
 curves$Barcode <- NULL
-curves <- as.matrix(curves)
+#curves <- as.matrix(curves)
 
 save(plates, barcodes, curves, scoreMatrix, file = "drugScreen.RData")

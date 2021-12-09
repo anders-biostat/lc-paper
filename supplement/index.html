@@ -93,12 +93,12 @@
 
 		d3.select("#panel")
 			.selectAll(".panel-block").selectAll(".button")
-			.data(d => d == "version" ? ["Full", "Minimal"] : ["R", "JavaScript"])
+			.data(d => d == "version" ? ["Full", "Minimal"] : ["R", "JS"])
 			.enter()
 			.append("div")
 				.attr("class", "button")
 				.attr("id", d => d == "Full" ? "full" : d == "Minimal" ? "min" : d == "R code" ? "rcode" : "jscode")
-				.text(d => d);
+				.text(d => d == "R" ? "R" : "JavaScript");
 
 		d3.select("#panel").select("#" + code)
 			.classed("active", true);
@@ -144,7 +144,7 @@
 		function showCode(d) {
 			const lang = d.split(" ")[0];
 			window.open("examples/" + examples[cur_ex].id + "/" + lang + "_code_" + code + ".html", 
-				lang + " code for the example", "width=700,height=600");
+				lang + " code for the example", "width=800,height=600");
 		}
 	</script>
 </body>

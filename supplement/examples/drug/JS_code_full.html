@@ -65,25 +65,32 @@ lc.xLine("line", dssplot)
 //which easier and faster by the linked-charts.js to access
 curves = lc.separateBy(curves, ["Drug", "CellLine"]);
 
-var viability = lc.scatter()
-   .nelements(10)
-   .x(i => i % 5)
-   .y(i => curves[selDrugs[+(i < 5)]][selCellLine]["D" + (i % 5 + 1)])
-   .domainY([-10, 105])
+var viability = lc.xLine()
    .width(300)
    .height(150)
    .title(() => selCellLine)
    .axisTitleX("Concentration order")
    .axisTitleY("Cell viability, %")
-   .set_paddings({bottom: 20})   
-   .colourValue(i => selDrugs[+(i < 5)]);
-
-lc.xLine("line", viability)
+   .set_paddings({bottom: 20})
    .nelements(2)
    .addColourScaleToLegend(false)
    .lineFun((x, i) => get_curve(selDrugs[i], selCellLine, x))
-   .colourValue(i => selDrugs[i])
-   .legend.container(d3.select("#A2"))
+   .colourValue(i => selDrugs[i]);
+
+lc.scatter("points", viability)
+   .nelements(10)
+   .x(i => i % 5)
+   .y(i => curves[selDrugs[+(i < 5)]][selCellLine]["D" + (i % 5 + 1)])
+   .domainY([-10, 105])
+   .on_mouseover(i => {
+      let well = curves[selDrugs[+(i < 5)]][selCellLine]["W" + (i % 5 + 1)];
+      plateHms[+(i < 5)].mark([well[0], well.slice(1)]);
+   })
+   .on_mouseout(() => {
+      plateHms.forEach(el => el.mark("__clear__"));
+   })    
+   .colourValue(i => selDrugs[+(i < 5)])
+   .legend.container("#A2")
    .legend.width(300)
    .place("#A2");
 
