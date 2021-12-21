@@ -29,6 +29,9 @@
 \renewcommand{\dbltopfraction}{0.7}
 \renewcommand{\textfraction}{0.2}
 
+\newcommand{\supplement}{\href{https://anders-biostat.github.io/lc-paper/}{supplement}}
+
+
 \begin{document}
 
 \setcounter{secnumdepth}{0}
@@ -62,7 +65,7 @@ In practice, however, interactivity is still seriously underused during data ana
 
 \begin{figure*}[b]
 	\includegraphics[width=\textwidth]{FigD/figD.png}
-	\caption{An overview of genes differentially expressed in cancerous and normal tissues from \citet{conway_2015}. The MA plot (A) shows all the sequenced genes with their average expression on the X-axis and log-fold change on the Y-axis. Red indicates genes where the difference was reported as significant by the ``limma::voom'' function \citep{law_2014}. The plot to the right (B) shows expression values (CPMs) for a selected gene (in this case, LAMB4) and all the patients. This figure is a screenshot of a LinkedCharts app, and its live version is provided in the supplement. When the user clicks on any point of the MA plot (A), the expression plot (B) changes, showing the new selected gene. In this way, one can check immediately whether the genes labelled as significantly different are interesting for further study.}  
+	\caption{An overview of genes differentially expressed in cancerous and normal tissues from \citet{conway_2015}. The MA plot (A) shows all the sequenced genes with their average expression on the X-axis and log-fold change on the Y-axis. Red indicates genes where the difference was reported as significant by the ``limma::voom'' function \citep{law_2014}. The plot to the right (B) shows expression values (CPMs) for a selected gene (in this case, LAMB4) and all the patients. This figure is a screenshot of a LinkedCharts app, and its live version is provided in the \supplement. When the user clicks on any point of the MA plot (A), the expression plot (B) changes, showing the new selected gene. In this way, one can check immediately whether the genes labelled as significantly different are interesting for further study.}  
 	\label{FigD}
 \end{figure*}
 
@@ -96,11 +99,11 @@ About these genes, one may now wonder: How does the difference in expression loo
 
 To investigate such questions, we can add another plot that shows expression values (as "counts per million", CPM) from each individual sample (Fig \ref{FigD}(B)). While this second plot can show expression for only one selected gene at a time, the \emph{linking} between the two charts  overcomes this limitation: A mouse click on a point in the MA plot causes the plot to the right to switch to displaying the expression values for the thus selected gene. Fig \ref{FigD} depicts a LinkedCharts app, which is provided in this paper's online supplement (\url{https://anders-biostat.github.io/lc-paper/}) -- and we encourage the reader to pause for a moment and try it out. 
 
-In the supplement, we also provide full code to generate the app and links to necessary data files to immediately get this app in one's R session and experiment with it. For this and all further examples, we provide two versions of the code: minimal with only essential parameters needed to make the app functional, and more extended with custom colors, labels, etc. In the paper, we only focus on the minimal code.
+In the \supplement, we also provide full code to generate the app and links to necessary data files to immediately get this app in one's R session and experiment with it. For this and all further examples, we provide two versions of the code: minimal with only essential parameters needed to make the app functional, and more extended with custom colors, labels, etc. In the paper, we only focus on the minimal code.
 
 \begin{figure*}[b]
 	\includegraphics[width=\textwidth]{FigA/figA.png}
-	\caption{Gallery of all available plotting functions in the ``rlc'' package. A scatter plot (A); a bee swarm plot (based on d3-beeswarm plugin \citep{lebeau_2017}) (B); a collection of various lines (C); a histogram and a density plot (D); a heatmap (E); a bar chart (F); a collection of interactive elements to gather input from the user (G); functions to add custom HTML code and static plots to the page (H). All these examples with code to create them can be found in the supplement.}
+	\caption{Gallery of all available plotting functions in the ``rlc'' package. A scatter plot (A); a bee swarm plot (based on d3-beeswarm plugin \citep{lebeau_2017}) (B); a collection of various lines (C); a histogram and a density plot (D); a heatmap (E); a bar chart (F); a collection of interactive elements to gather input from the user (G); functions to add custom HTML code and static plots to the page (H). All these examples with code to create them can be found in the \supplement.}
 	\label{FigA}
 \end{figure*}
 
@@ -156,7 +159,7 @@ As an example of an analysis pipeline with multiple data-reduction steps, we use
 
 Often, such an analysis pipeline is fully automated and no one ever looks at the intermediate plots. Inspecting them is, however, crucial to note problems with data quality or mistakes in the design or programming of the analysis pipeline.
 
-LinkedCharts allows to ``walk'' such an analysis pipeline backward: In the Supplement, we show an app that depicts the plots of Figure \ref{FigC} in an interactive fashion, as follows. As each cell of the final heatmap (panel C of Figure \ref{FigC}) summarizes on scatter plot comparing two drugs (panel D), we can click on any cell in the heatmap and then see the corresponding scatter plot. Each point in that scatter plot represents a pair of drug sensitivity scores, which are, themselves, summaries of a dose response curves. Again, clicking on a point in the correlation scatter plot will display these two dose response curves. Finally, each value in a drug response curve stems from a well in a microtiter plate, and hovering over a point there hence highlights the well in a heatmap depicting the plate.
+LinkedCharts allows to ``walk'' such an analysis pipeline backward: In the \supplement, we show an app that depicts the plots of Figure \ref{FigC} in an interactive fashion, as follows. As each cell of the final heatmap (panel C of Figure \ref{FigC}) summarizes on scatter plot comparing two drugs (panel D), we can click on any cell in the heatmap and then see the corresponding scatter plot. Each point in that scatter plot represents a pair of drug sensitivity scores, which are, themselves, summaries of a dose response curves. Again, clicking on a point in the correlation scatter plot will display these two dose response curves. Finally, each value in a drug response curve stems from a well in a microtiter plate, and hovering over a point there hence highlights the well in a heatmap depicting the plate.
 
 Thus, LinkedCharts allows to explore the ``parentage'' of any result value. If we find a specific drug-drug correlation value suspicious or surprising, or if we just wish to double-check it before drawing further conclusions from it, we can check its provenance in arbitrary detail. Similarly, we can perform random spot checks. 
 
@@ -168,7 +171,7 @@ Each layer in the backwards journey can inform about another type of problem: Fr
   \label{FigC}
 \end{figure*}
 
-Once such an analysis pipeline has been developed, all the intermediate results are typically available in suitable data structures, which can be readily explored with LinkedCharts. The supplement provides code for the example just described.
+Once such an analysis pipeline has been developed, all the intermediate results are typically available in suitable data structures, which can be readily explored with LinkedCharts. The \supplement provides code for the example just described.
 
 \subsection{Quality assurance thresholds}
 
@@ -180,7 +183,7 @@ The approach of "walking the pipeline backwards" with LinkedCharts opens another
 
 \begin{figure*}[t]
 	\includegraphics[width=\textwidth]{FigE/figE.png}
-	\caption{An example of an R/LinkedCharts app (C, D) for a simple exploratory analysis and the code to generate it in comparison with static plots (A, B) produced for the same purpose. The heatmaps (A, C) show Spearman correlation of gene expression for all samples from \citet{conway_2015}. Here, we can see, inter alia, two outlier samples in the heatmap's bottom-right corner and some more or less pronounced clusters of samples with similar gene expression levels. The scatter plots (B, D) show expression values for two samples plotted against each other. Browsing through several such plots can help the researcher get a feeling of the data and explore unexpected patterns like the outliers just mentioned. The code is split into two pieces, where the upper one is responsible for generating the plots and the lower part shows the code to update them to show a specific sample pair. For static plots, one has to execute the same lines of code for any pair of samples, while for R/LinkedCharts the provided code should be added to the list of arguments for the heatmap. After that, switching between pairs of samples can be done simply by clicking on the corresponding cell of the heatmap. The static heatmap (A) was generated with the ``pheatmap'' package  \citep{kolde_2019}; scatter plot (B) was made with a base R function. The live version of the app can be found in the supplement. For simplicity, gene expression for all the samples is subset to 8000 randomly selected genes.}
+	\caption{An example of an R/LinkedCharts app (C, D) for a simple exploratory analysis and the code to generate it in comparison with static plots (A, B) produced for the same purpose. The heatmaps (A, C) show Spearman correlation of gene expression for all samples from \citet{conway_2015}. Here, we can see, inter alia, two outlier samples in the heatmap's bottom-right corner and some more or less pronounced clusters of samples with similar gene expression levels. The scatter plots (B, D) show expression values for two samples plotted against each other. Browsing through several such plots can help the researcher get a feeling of the data and explore unexpected patterns like the outliers just mentioned. The code is split into two pieces, where the upper one is responsible for generating the plots and the lower part shows the code to update them to show a specific sample pair. For static plots, one has to execute the same lines of code for any pair of samples, while for R/LinkedCharts the provided code should be added to the list of arguments for the heatmap. After that, switching between pairs of samples can be done simply by clicking on the corresponding cell of the heatmap. The static heatmap (A) was generated with the ``pheatmap'' package  \citep{kolde_2019}; scatter plot (B) was made with a base R function. The live version of the app can be found in the \supplement. For simplicity, gene expression for all the samples is subset to 8000 randomly selected genes.}
 	\label{FigE}
 \end{figure*}
 
@@ -225,9 +228,9 @@ The app, when considered as a supplement to the publication, hence offers multip
 
 Apps based on R/LinkedCharts (``rlc'' package) require a connection to a running R session. Typically, however, the server-side R session is only needed to provide data to the app and trigger updating of displayed charts, while all the visualization and interactivity handling happens on the client side, by the part of LinkedCharts written in JavaScript and running in the browser. In fact, this JavaScript component is the larger part of LinkedCharts, the code in the R package ``rlc'' is merely a thin layer to handle communication between server and client.
 
-The JavaScript part of LinkedCharts can be used independent of R. The JavaScript library \emph{linked-charts.js} offers a user-friendly and well documented interface providing access to all the functionality described so far and all the chart types shown in Figure \ref{FigA}. Bioinformaticians familiar with JavaScript will find its use not much more difficult then use of the R package discussed so far. The LinkedCharts documentation offers multiple tutorials  describing the JavaScript API. In the supplement, there is also a JavaScript version of the code for every app.
+The JavaScript part of LinkedCharts can be used independent of R. The JavaScript library \emph{linked-charts.js} offers a user-friendly and well documented interface providing access to all the functionality described so far and all the chart types shown in Figure \ref{FigA}. Bioinformaticians familiar with JavaScript will find its use not much more difficult then use of the R package discussed so far. The LinkedCharts documentation offers multiple tutorials  describing the JavaScript API. In the \supplement, there is also a JavaScript version of the code for every app.
 
-The advantage of working with the JavaScript library is that one can generate stand-alone apps, containing all code and data in a single HTML file. Such an HTML page can then be sent, as a single file, to a collaborator or used as a supplement file for a paper. Unlike a link to an app deployed somewhere on a server, this kind of interactive supplement will be available to any user with an installed web browser at any moment, without a need for the research team to maintain a running app on the server. The supplement to this paper is an example of such an app contained within an HTML page. Another example is the app for \citet{wang_2020} (Fig.\ \ref{FigF}), discussed in the preceding section, which has also been implemented using the JavaScript rather than the R interface of LinkedCharts. 
+The advantage of working with the JavaScript library is that one can generate stand-alone apps, containing all code and data in a single HTML file. Such an HTML page can then be sent, as a single file, to a collaborator or used as a supplement file for a paper. Unlike a link to an app deployed somewhere on a server, this kind of interactive supplement will be available to any user with an installed web browser at any moment, without a need for the research team to maintain a running app on the server. The \supplement to this paper is an example of such an app contained within an HTML page. Another example is the app for \citet{wang_2020} (Fig.\ \ref{FigF}), discussed in the preceding section, which has also been implemented using the JavaScript rather than the R interface of LinkedCharts. 
 
 As Javascript-based LinkedCharts do not require that a running R session is maintained on a server, they are especially suitable for inclusion on web pages served by existing web servers, as the HTML/JavaScript code for the app can simply be inserted into existing pages. Thus, a JS app may be used in a blog or even as a main figure of a scientific publication: Some journals have recently begun allowing for interactive plots to be included into online articles as main figures \citep{ingraham_2017}. So far, only the Plotly platform is typically supported, but as Plotly figures are integrated by simply inserting HTML snippets, extension of such services to other HTML/JS-based interactive apps should be straight-forward.
 
@@ -262,7 +265,7 @@ Once the need to present final or intermediate results to colleagues arises, the
 
 LinkedCharts is a JavaScript-based library, and unlike in existing alternatives, we gave users complete freedom to employ the functionality of various web solutions. For example, R/LinkedCharts can be embedded into any predefined HTML layout. Therefore, someone with experience in web design may provide the researcher with a custom HTML page with allocated containers for the chart and any predefined functionality made available by hundreds of JavaScript packages explicitly developed to ensure user interaction with a web page. Moreover, the ``jrc'' package on top of which R/LinkedCharts is built allows running any JavaScript code from the R session and any R code from the web page, providing endless possibilities for custom functionality and design. Such an app can also load locally stored scripts, images, stylesheets, etc.
 
-The JavaScript basis of R/LinkedCharts offers an interface of its own that is also very simple and similar to the ``rlc'' syntax. Therefore a user who is familiar with JavaScript or willing to learn its essentials gets a way to convert R app into a stand-alone one fully contained within an HTML page. Such an app doesn't require any side resources, can be shared by email between collaborators and opened in any browser. It does not need to have a constantly running R session and can be published on any hosting, including the most simple ones that do not allow to run other software in the background. An example of such stand-alone apps is the supplement to this paper. There, one can also find examples of conversion from R apps to JavaScript ones. More information can be found in our online tutorials.
+The JavaScript basis of R/LinkedCharts offers an interface of its own that is also very simple and similar to the ``rlc'' syntax. Therefore a user who is familiar with JavaScript or willing to learn its essentials gets a way to convert R app into a stand-alone one fully contained within an HTML page. Such an app doesn't require any side resources, can be shared by email between collaborators and opened in any browser. It does not need to have a constantly running R session and can be published on any hosting, including the most simple ones that do not allow to run other software in the background. An example of such stand-alone apps is the \supplement to this paper. There, one can also find examples of conversion from R apps to JavaScript ones. More information can be found in our online tutorials.
 
 The structure of the \emph{linked-charts.js} library and even principles of JavaScript as a language to manipulate DOM elements can allow an experienced user to customize not just the ecosystem in which LinkedCharts will be embedded but the charts themselves without a need to dive into the source code. One can go as far as defining custom types of charts (see \url{https://anders-biostat.github.io/linked-charts/js/tutorials/layers.html} for more details on that).
 
@@ -277,9 +280,19 @@ The ``jrc'' package \citep{jrc_2020} package is used as a bridge between R and J
 
 R/LinkedCharts (``rlc'' package) is an R \citep{R_2019} interface to the JavaScript version of LinkedCharts. In addition to providing access to \emph{linked-charts.js} functionality, it also ensures proper storing of charts and serving them to each connected client by extending ``App'' class of the ``jrc'' package. ``rlc'' is open source and is available on CRAN or GitHub \url{https://github.com/anders-biostat/rlc}.
 
+\subsection{Acknowledgement}
+
+The authors acknowledge funding by the Deutsche Forschungsgemeinschaft via CRC 1366.
+
+\section{Supplement}
+
+The interactive supplement to this paper can be found online at \url{https://anders-biostat.github.io/lc-paper/} or offline in the zip file accompanying the paper. To see the supplement offline, unpack the zip file and use a web browser to open the file \emph{index.html} contained within.
+
+
 \begin{small} 
 \bibliography{lc}
 \end{small}
+
 
 \end{document}
 
