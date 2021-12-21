@@ -13,7 +13,8 @@
 	<div id="main">
 		<div id="header">
 			<h1>LinkedCharts - Supplement to the paper</h1>
-			<p>This page provides live versions of all the figures from the main paper. Each example is given as a full version with all the decorations, labels and titles and as a minimalistic app with only essential features. For each example, one can look at the full code necessary to generate the app both as an R script and as a JavaScript code. To run the R code, "rlc" package must be installed from <a href="https://CRAN.R-project.org/package=rlc">CRAN</a> or <a href="https://github.com/anders-biostat/rlc">GitHub</a> for the most recent version. JavaScript relies on the <i>linked-charts.js</i> library that can be downloaded from <a href="https://anders-biostat.github.io/linked-charts/js/">here</a>. Links to all the required data for each example are given in the description below.</p>
+			<p>This page provides live versions of all the figures from the main paper. Each example is given as a <i>full</i> version with all the decorations, labels and titles and as a <i>minimalistic</i> app with only essential features.</p> 
+			<p>For each example, one can look at the full code requried to generate the app both as an R script and as a JavaScript code. To run the R code, the "rlc" package must be installed from <a href="https://CRAN.R-project.org/package=rlc">CRAN</a>, or <a href="https://github.com/anders-biostat/rlc">GitHub</a> for the most recent version. The JavaScript code relies on the <i>linked-charts.js</i> library that can be downloaded from <a href="https://anders-biostat.github.io/linked-charts/js/">here</a>. Links to all the required data for each example are given in the description below.</p>
 		</div>
 		<div id="gallery">
 			<div id="navigation">
@@ -89,7 +90,7 @@
 				.attr("id", d => d)
 				.append("div")
 					.attr("class", "label")
-					.text(d => d == "version" ? "Version:" : "Check code:");
+					.text(d => d == "version" ? "Version:" : "See code:");
 
 		d3.select("#panel")
 			.selectAll(".panel-block").selectAll(".button")
@@ -97,8 +98,8 @@
 			.enter()
 			.append("div")
 				.attr("class", "button")
-				.attr("id", d => d == "Full" ? "full" : d == "Minimal" ? "min" : d == "R code" ? "rcode" : "jscode")
-				.text(d => d == "R" ? "R" : "JavaScript");
+				.attr("id", d => d == "Full" ? "full" : d == "Minimal" ? "min" : d == "R" ? "rcode" : "jscode")
+				.text(d => d == "Full" ? "full" : d == "Minimal" ? "minimal" : d == "R" ? "R" : "JavaScript");
 
 		d3.select("#panel").select("#" + code)
 			.classed("active", true);
