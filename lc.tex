@@ -11,13 +11,26 @@
 \usepackage{dblfloatfix}  
 \usemintedstyle{colorful}
 \usepackage[font=small,labelfont=bf]{caption}
+
 \urlstyle{same} % no tt font for URLs
+
+% Fix URL // kerning:
+% https://www.joachim-breitner.de/blog/519-Nicer_URL_formatting_in_LaTeX
+\makeatletter
+\let\UrlSpecialsOld\UrlSpecials
+\def\UrlSpecials{\UrlSpecialsOld\do\/{\Url@slash}\do\_{\Url@underscore}}%
+\def\Url@slash{\@ifnextchar/{\kern-.11em\mathchar47\kern-.2em}%
+	{\kern-.0em\mathchar47\kern-.08em\penalty\UrlBigBreakPenalty}}
+\def\Url@underscore{\nfss@text{\leavevmode \kern.06em\vbox{\hrule\@width.3em}}}
+\makeatother
+
 \newcommand{\blockade}{\rule{3em}{0.7em}}  %% Marker for things to change before submission
 \newcommand{\fixme}[1]{[ \blockade FIXME: #1]}
 
 \usepackage{natbib}
 \bibliographystyle{genome_research}
 \setcitestyle{aysep={}} 
+
 
 \usepackage[dvipsnames]{xcolor}
 \hypersetup{
@@ -62,8 +75,7 @@ With the advance of modern computer technology, interactive visualization emerge
 
 \begin{figure*}
 	\includegraphics[width=\textwidth]{FigD/figD.png}
-	\caption{An example for two linked charts, based on a study by \citet{conway_2015} comparing cancerous and normal tissues from 19 patients. The MA plot (A) shows all genes with their average expression on the X-axis and log$_2$-fold change between tumour and notmal on the Y-axis. Red indicates genes where the difference was reported as significant by the ``voom'' method \citep{law_2014}. The plot to the right (B) shows, for one selected gene (here, LAMB4), the individual expression values for each sample. This figure is a screenshot of a LinkedCharts app, the live version of which is provided in the \Supplement (as Interactive Supplementary Figure 1): When the user clicks on any point in the MA plot (A), the expression plot (B) changes, showing the selected gene. In this way, one can rapidly gain an impression of the details hidden in a summarizing plot like the
-		MA plot.}  
+	\caption{An example for two linked charts, based on a study by \citet{conway_2015} comparing cancerous and normal tissues from 19 patients. The MA plot (A) shows all genes with their average expression on the X-axis and log$_2$-fold change between tumour and notmal on the Y-axis. Red indicates genes where the difference was reported as significant by the ``voom'' method \citep{law_2014}. The plot to the right (B) shows, for one selected gene (here, LAMB4), the individual expression values (as counts per million, CPM) for each sample. This figure is a screenshot of a LinkedCharts app, the live version of which is provided in the \Supplement (as Interactive Supplementary Figure 1): When the user clicks on any point in the MA plot (A), the expression plot (B) changes, showing the selected gene. Thus, one can rapidly gain an impression of the details hidden in a summarizing plot like the MA plot.}  
 	\label{FigD}
 \end{figure*}
 
@@ -286,7 +298,9 @@ Overall, R/LinkedCharts serves two primary purposes: to facilitate data explorat
 
 \subsection{Implementation}
 
-The JavaScript foundation of R/LinkedCharts is built on top of the D3 \citep{bostock_2011} library. \emph{linked-charts.js} is by itself a fully functional tool for interactive data visualization that can be used by those familiar with JavaScript to create stand-alone apps. The library is open-source and available on GitHub at \url{https://github.com/anders-biostat/linked-charts}. The minified version can be downloaded from \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.min.js}, and its stylesheet is at \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.css}.
+The JavaScript foundation of R/LinkedCharts is built on top of the D3 library \citep{bostock_2011}. 
+
+\emph{linked-charts.js} is by itself a fully functional tool for interactive data visualization that can be used by those familiar with JavaScript to create stand-alone apps. The library is open-source and available on GitHub at \url{https://github.com/anders-biostat/linked-charts}. The minified version can be downloaded from \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.min.js}, and its stylesheet is at \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.css}.
 
 The ``jrc'' package \citep{jrc_2020} package is used as a bridge between R and JavaScript. It allows one to run JavaScript code from an R session and vice versa. It also manages client connections to the app and is responsible for all the functionality necessary to make an R/LinkedCharts app public. ``jrc'' in turn is based mainly on ``httpuv'' \citep{cheng_2020} package to run a local server and ensure a WebSocket connection \citep{fette_rfc_2011}. 
 
