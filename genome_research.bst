@@ -1223,6 +1223,8 @@ FUNCTION {manual}
   address "address" bibinfo.check output
   format.edition output
   new.block
+  howpublished "howpublished" bibinfo.check output
+  new.block  
   format.note output
   fin.entry
 }
@@ -1307,6 +1309,8 @@ FUNCTION {techreport}
   format.tr.number output.nonnull
   institution "institution" bibinfo.warn output
   address "address" bibinfo.check output
+  new.block
+  howpublished "howpublished" bibinfo.check output
   new.block
   format.note output
   fin.entry
