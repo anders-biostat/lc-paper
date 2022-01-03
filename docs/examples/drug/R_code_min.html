@@ -39,8 +39,8 @@ lc_scatter(dat(
 
 lc_scatter(dat(
   x = c(0:4, 0:4),
-  y = c(curves[paste(selCellLine, selDrugs[1], sep = "_"), paste0("D", 1:5)],
-        curves[paste(selCellLine, selDrugs[2], sep = "_"), paste0("D", 1:5)]),
+  y = c(unlist(curves[paste(selCellLine, selDrugs[1], sep = "_"), paste0("D", 1:5)]),
+        unlist(curves[paste(selCellLine, selDrugs[2], sep = "_"), paste0("D", 1:5)])),
   colourValue = rep(selDrugs, each = 5)),
   width = 300,
   height = 150,
