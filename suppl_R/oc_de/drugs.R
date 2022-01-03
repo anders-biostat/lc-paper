@@ -75,13 +75,14 @@ lc_scatter(dat(
   title = selCellLine,
   colourValue = rep(selDrugs, each = 5)),
   on_mouseover = function(d) {
-    well <- curves[paste(selCellLine, selDrugs[(d > 5) + 1], sep = "_"), paste0("W", d %% 5 + 1)]
+    well <- curves[paste(selCellLine, selDrugs[(d > 5) + 1], sep = "_"), paste0("W", (d - 1) %% 5 + 1)]
     row <- which(LETTERS %in% str_sub(well, 1, 1))
-    col <- str_sub(well, 2)
+    col <- as.numeric(str_sub(well, 2))
     mark(c(row, col), str_c("plate", (d > 5) + 1), clear = TRUE)
   },
   on_mouseout = function() {
-    mark(clear = TRUE, chartId = c("plate1", "plate2"))
+    mark(clear = TRUE, chartId = "plate1")
+    mark(clear = TRUE, chartId = "plate2")
   },
   addLayer = TRUE, chartId = "viability"
 )
@@ -165,8 +166,8 @@ lc_scatter(dat(
 
 lc_scatter(dat(
   x = c(0:4, 0:4),
-  y = c(curves[paste(selCellLine, selDrugs[1], sep = "_"), paste0("D", 1:5)],
-        curves[paste(selCellLine, selDrugs[2], sep = "_"), paste0("D", 1:5)]),
+  y = c(unlist(curves[paste(selCellLine, selDrugs[1], sep = "_"), paste0("D", 1:5)]),
+        unlist(curves[paste(selCellLine, selDrugs[2], sep = "_"), paste0("D", 1:5)])),
   colourValue = rep(selDrugs, each = 5)),
   width = 300,
   height = 150,
