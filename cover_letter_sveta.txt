@@ -1,0 +1,17 @@
+Dear Editor,
+
+Various pipelines are now a part of almost any biological study. Generally, they consist of several data summarisation steps, each accompanied by quality check algorithms. However, since there are too many ways of something going wrong, we strongly believe in the importance of manual inspection, which is usually performed by producing more and less detailed visualisations of each summarised data unit. Moreover, such an inspection is beneficial after all the summarisation steps are completed, and the researcher has already familiarised her- or himself with the general data patterns. At this point, it can be very useful to take a step backwards to see how the data behind an "average" data point look like and how it is different from outliers. Thus, one can easily distinguish between an interesting biological effect and technical abnormality.
+
+In this manuscript, we present a tool to enable such a spot check of summarised biological data. "Linked Charts" is an R library for creating interactive apps based on the concept of "linking" two or more plots. "Linking" here means that user interaction with a more general plot (for instance, a click on a specific point) forces another chart to display detailed information on this point (such as individual gene expression values behind a point on an MA plot). With this idea in mind, we have developed an easy-to-use framework that is suited for both trivial and complex tasks and can fit the needs of the given project and data.
+
+Of course, there are plenty of tools for interactive data visualisation. Some are very easy but based on specific data structures and experiment design. Others are more general but require certain coding skills and are mainly used for data presentation. In the present manuscript, we argue that "Linked Charts" occupy a niche in between: It can be fitted to a very specific task, and at the same time, its syntax is designed to resemble most commonly used solutions for static visualisations. Therefore, it is especially apt for the early exploratory stages of a study, when researchers are more inclined towards easy draft-like visualisations. Also, the familiar syntax of "Linked Chats" can be more easily adopted by people with not so strong coding experience.
+
+With all this, we believe that "Linked Charts" is particularly useful for a non-standard, innovative analysis that usually happens at the edge of scientific progress.
+
+In addition, we show that "Linked Charts" is also suitable to produce presentable apps. Initial draft apps can later be converted into prettified and well-organised versions without a need to start from scratch. This aspect of "Linked Charts" can also be of interest for more advanced users since the library offers easy access to its JavaScript basis and all the space for customisation that comes with it.
+
+Therefore, we feel that our work might be of great interest to your readers.
+
+With best regards
+
+Simon Anders and Svetlana Ovchinnikova
