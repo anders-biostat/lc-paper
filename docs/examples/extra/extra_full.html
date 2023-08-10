@@ -3,56 +3,66 @@
 	<link rel="stylesheet" type="text/css" href="../../src/style.css">
 	<link rel="stylesheet" type="text/css" href="../../src/linked-charts.css">
 	<style type="text/css">
-		#main {
+		#main_grid {
 			display: grid;
 			grid-gap: 1px;
 			background-color: black;
+			padding: 0px;
+			margin: 0px;
 		}
 
 		.example_block {
 			background-color: white;
 			padding-top: 20px;
+			padding-bottom: 10px;
 		}
 
 		.title {
 			padding-top: 10px;
+			padding-bottom: 10px;
 			text-align: center;
 			font-size: 110%;
+			font-weight: bold;
+			color: #561e14;
+		}
+		.description {
+			border-top: 1px dashed black;
+			padding: 5px;
 		}
 	</style>
 </head>
 <body>
-<div id="main" style="display: grid;">
+<div id="main_grid" style="display: grid;">
 	
 </div>
 <script type="text/javascript">
 var examples = [{
 		img: "explorer.png",
 		name: "Transcriptome and translatome co-evolution",
-		link: "https://ex2plorer.kaessmannlab.org/"
+		descr: "This app is a part of <a target='_blank' href='https://www.nature.com/articles/s41586-020-2899-z'><i>Wang et al. (2020)</i></a>.<br>Explore the live version <a target='_blank' href='https://ex2plorer.kaessmannlab.org/'>here</a>.<br>The app is written in JavaScript and the source code can be found on <a target='_blank' href='https://github.com/kloivenn/kloivenn.github.io/blob/master/TTI/ex2plorer_new.html'>GitHub</a>."
 	}, {
 		img: "lamp.png",
 		name: "LAMP testing results viewer",
-		link: "https://github.com/anders-biostat/lamp_plate_analysis"
+		descr: "This app has been used as an interface to inspect and store results in a SARS-CoV-19 survelliance study (<a target='_blank' href='https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-020-04982-z'><i>Deckert et al (2021)</i></a>). The app relies on the running R session and doesn't have a live stand-alone version. However, code, example data and run instruction can be found on <a target='_blank' href='https://github.com/anders-biostat/lamp_plate_analysis'>GitHub</a>."
 	} , {
 		img: "igv.png",
 		name: "Comnining LinkedCharts with IGV browser",
-		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/igv.html"
+		descr: "This app shows how one can combine LinkedCharts with other services. In this case, <a target='_blank' href='https://software.broadinstitute.org/software/igv/'>IGV browser</a>. <a target='_blank' href='https://anders-biostat.github.io/linked-charts/rlc/tutorials/igv.html'>Here</a>, we provide a detailed tutorial and a live verstion."
 	}, {
 		img: "citeseq.png",
 		name: "Exploring scRNA-Seq t-SNE plot",
-		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/citeseq1.html"
+		descr: "This app shows how LinkedCharts can be used to facilitate scRNA-Seq analysis. It shows a t-SNE embedding, allows to explore variable genes expression and search for marker genes of the selected group of cells. The full tutorial can be found <a target='_blank' href='https://anders-biostat.github.io/linked-charts/rlc/tutorials/citeseq1.html'>here</a>."
 	}, {
 		img: "colour_channels.png",
 		name: "Colour channels for marker expression",
-		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/citeseq2.html"
+		descr: "The app shows how to simultaneously explore expression of several (up to three) marker genes, assign to each a specific colour channel. The full tutorial can be found <a target='_blank' href='https://anders-biostat.github.io/linked-charts/rlc/tutorials/citeseq2.html'>here</a>."
 	}, {
 		img: "umap.png",
 		name: "Explore UMAP parameters",
-		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/inputs.html"
+		descr: "<a href='https://anders-biostat.github.io/linked-charts/rlc/tutorials/inputs.html'>This</a> tutorial demonstrates how to gather and process user input from a web page. As an example, we use an app that allows to check the effect of UMAP parameters on the embedding."
 	}];
 
-	var ex_divs = d3.select("#main").selectAll(".example_block")
+	var ex_divs = d3.select("#main_grid").selectAll(".example_block")
 		.data(examples)
 		.enter()
 		.append("div")
@@ -67,11 +77,13 @@ var examples = [{
 				});
 	ex_divs.append("img")
 		.attr("src", d => "img/" + d.img)
-		.style("margin", "0px 25px");
+		.style("margin", "0px 20px");
 	ex_divs.append("div")
 		.classed("title", true)
-		.append("a")
-			.attr("href", d => d.link)
-			.text(d => d.name);
+		.text(d => d.name);
+	ex_divs.append("div")
+		.classed("description", true)
+		.html(d => d.descr);
+
 </script>
 </body>
