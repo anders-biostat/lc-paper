@@ -1,0 +1,77 @@
+<head>
+	<script type="text/javascript" src = "../../src/linked-charts.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../src/style.css">
+	<link rel="stylesheet" type="text/css" href="../../src/linked-charts.css">
+	<style type="text/css">
+		#main {
+			display: grid;
+			grid-gap: 1px;
+			background-color: black;
+		}
+
+		.example_block {
+			background-color: white;
+			padding-top: 20px;
+		}
+
+		.title {
+			padding-top: 10px;
+			text-align: center;
+			font-size: 110%;
+		}
+	</style>
+</head>
+<body>
+<div id="main" style="display: grid;">
+	
+</div>
+<script type="text/javascript">
+var examples = [{
+		img: "explorer.png",
+		name: "Transcriptome and translatome co-evolution",
+		link: "https://ex2plorer.kaessmannlab.org/"
+	}, {
+		img: "lamp.png",
+		name: "LAMP testing results viewer",
+		link: "https://github.com/anders-biostat/lamp_plate_analysis"
+	} , {
+		img: "igv.png",
+		name: "Comnining LinkedCharts with IGV browser",
+		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/igv.html"
+	}, {
+		img: "citeseq.png",
+		name: "Exploring scRNA-Seq t-SNE plot",
+		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/citeseq1.html"
+	}, {
+		img: "colour_channels.png",
+		name: "Colour channels for marker expression",
+		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/citeseq2.html"
+	}, {
+		img: "umap.png",
+		name: "Explore UMAP parameters",
+		link: "https://anders-biostat.github.io/linked-charts/rlc/tutorials/inputs.html"
+	}];
+
+	var ex_divs = d3.select("#main").selectAll(".example_block")
+		.data(examples)
+		.enter()
+		.append("div")
+			.classed("example_block", true)
+			.style("grid-row", function(d, i) {
+				var c = Math.floor(i / 3)
+				return (c + 1) + "/" + (c + 2);
+			})
+			.style("grid-column", function(d, i) {
+				var c = i % 3;
+				return (c + 1) + "/" + (c + 2);
+				});
+	ex_divs.append("img")
+		.attr("src", d => "img/" + d.img)
+		.style("margin", "0px 25px");
+	ex_divs.append("div")
+		.classed("title", true)
+		.append("a")
+			.attr("href", d => d.link)
+			.text(d => d.name);
+</script>
+</body>

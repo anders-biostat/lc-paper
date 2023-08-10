@@ -56,6 +56,11 @@
 				id: "oc_sc",
 				ar: "45%",
 				descr: 'The heatmap (C) shows Spearman correlation values of gene expression in cancerous, normal and dysplasic tissues from 19 patients (<a href="https://doi.org/10.18632/oncotarget.5529">Conway et al. (2015)</a>). Clicking on any cell of the heatmap, one can explore the expression patterns in the two samples compared there: the scatter plot (D) will show gene expression values for the two selected samples against each other. In this way, it is easy to get some feeling of the data behind each correlation value and check, for example, what abnormalities in the data caused the outliers (in the right bottom corner of the correlation heatmap) to have lower correlation values than all other samples.<br><br>To run the provided code, please, download the following data:<br><b>For R:</b> <a href="https://anders-biostat.github.io/linked-charts/rlc/tutorials/oscc/oscc.rda" target="_blank">ocss.rda</a><br><b>For JS:</b> <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/maData.js">maData.js</a> and <a target="_blank" href="https://github.com/anders-biostat/linked-charts/raw/master/docs/rlc/tutorials/oscc/heatmapData.js">heatmapData.js</a>'
+			}, {
+				name: "+",
+				id: "extra",
+				ar: "45%",
+				descr: 'Here you can find a list of several additional examples of the LinkedCharts usage, most of which are accomanied by detailed tutorials. Click the correspoing linked-charts to learn more about each of the mentioned examples.'
 			}];
 
 		function setNavHeight() {
@@ -112,6 +117,13 @@
 		showExample(examples[0]);
 		
 		function showExample(d) {
+			if(d.name == "+") {
+				d3.select("#panel")
+					.style("display", "none");
+			} else {
+				d3.select("#panel")
+					.style("display", "block");				
+			}
 			d3.select("#example").select(".aspect-ratio")
 				.style("padding-bottom", d.ar);
 			if(d.no_min) {
