@@ -197,7 +197,7 @@ Each layer in the backwards journey can inform about another type of problem: Fr
 
 Once such an analysis pipeline has been developed, all the intermediate results are typically available in suitable data structures, which can be readily explored with LinkedCharts. The \Supplement provides code for the example just described.
 
-\subsection{Quality assurance thresholds}
+\subsubsection{Quality assurance thresholds}
 
 Typically, analysis pipelines include steps to exclude bad-quality data. Often, this is done by calculating quality metrics and setting thresholds. In the drug screen example, the goodness of fit of the dose response curves might be quantified by the residual sum of squares, and if this value exceeds a threshold, the drug sensitivity score might be discarded as unreliable. In the oral-cancer sample, the log fold change of some genes might be unduly influenced by a single outlying sample, and one might use a threshold on an outlier-detection score such as Cook's distance to flag such genes.
 
@@ -225,7 +225,7 @@ Figure \ref{FigE} illustrates this with another example based on the oral cancer
    \label{FigF}
 \end{figure*}
 
-\subsection{Public apps and concurrent use}
+\subsubsection{Public apps and concurrent use}
 
 Technically, an R/LinkedCharts app is provided by a web server running inside the R session and can hence be used from any web browser. Importantly, there is no need for that web browser to be running on the same computer as the R session. This allows a bioinformatician to easily share a LinkedCharts application with colleagues. They only have to direct their operating system's firewall to open the TCP/IP port the app is listening at for incoming connections and tell their colleagues their computer's IP address or DNS name and the port number, which they simply enter into their browser's address line.
 
@@ -236,7 +236,7 @@ openPage(layout = "table1x2",
 \end{minted}
 
 
-\subsection{LinkedCharts for Open Science}
+\subsubsection{LinkedCharts for Open Science}
 
 Analyses in computational biology are often complex and involved, making them difficult to explain and even more so to verify. It is not uncommon that neither the peer reviewers nor the readers of a publication are effectively able to double-check a result unless they would be willing to redo the whole analysis themselves. The importance of making all raw data and code available to do that has been often stressed \citep{gentleman_2005}, but even verifying a complex analysis is a demanding task.
 
@@ -248,7 +248,7 @@ The definition of this $\Delta$-score is technical, and it is hard for the reade
 
 The app, when considered as a supplement to the publication, hence offers multiple benefits: It helps the reader in understanding the publication's core quantitative analysis, it explains the meaning of calculated scores, and it allows the reader to verify that the examples discussed as typical in the paper are, in fact, typical, and not cherry-picked. Finally, it makes the data easily accessible; for example, readers can input their ``favorite'' gene to inspect its evolutionary analysis. All these aspects greatly contribute to making the publication's results truly open science -- the data is not only available somehow, but it is easily accessible.
 
-\subsection{Javascript stand-alone apps}
+\subsubsection{Javascript stand-alone apps}
 
 Apps based on R/LinkedCharts (``rlc'' package) require a connection to a running R session. Typically, however, the server-side R session is only needed to provide data to the app and trigger updating of displayed charts, while all the visualization and interactivity handling happens on the client side, by the part of LinkedCharts written in JavaScript and running in the browser. In fact, this JavaScript component is the larger part of LinkedCharts, the code in the R package ``rlc'' is merely a thin layer to handle communication between server and client.
 
@@ -276,7 +276,6 @@ Figure \ref{lc_FigG} shown a screenshot of an example of a more complex LinkedCh
 
 Here, LinkedCharts turned out to be well suited to quickly develop the app, to continuously refine it while the assay was finalized, and to turn it into a production tool, well integrated into the testing campaign's databases and result reporting services.
 
-
 \section{Discussion}
 
 Interactivity has already proved itself to be useful for data visualization. Static plots can accommodate only a limited number of accents. Any change, no matter how small, requires one to make a new plot. And yet, it is crucial to look at the data from different angles and on different scales to find peculiar patterns and make sure that there are no hidden artifacts that can influence conclusions. Sometimes, even the visualize transition from one state to another is what helps to understand the data. Thus interactive visualization is helpful during the research and for presenting data to the scientific community.
@@ -287,7 +286,7 @@ We believe easy exploratory analysis to be the main niche for R/Linked charts. A
 
 Once the need to present final or intermediate results to colleagues arises, the same essential apps that were previously used as ``quick and dirty'' solutions can be prettified and shared by deploying the app on a server. The required changes for a R/LinkedCharts app to work on the server are minimal, and therefore there is no need to start from scratch. One can utilize the same scripts as personal drafts for exploration and as a basis for result presentation.
 
-LinkedCharts is a JavaScript-based library, and unlike in existing alternatives, we gave users complete freedom to employ the functionality of various web solutions. For example, R/LinkedCharts can be embedded into any predefined HTML layout. Therefore, someone with experience in web design may provide the researcher with a custom HTML page with allocated containers for the chart and any predefined functionality made available by hundreds of JavaScript packages explicitly developed to ensure user interaction with a web page. Moreover, the ``jrc'' package on top of which R/LinkedCharts is built allows running any JavaScript code from the R session and any R code from the web page, providing endless possibilities for custom functionality and design. Such an app can also load locally stored scripts, images, stylesheets, etc.
+LinkedCharts is a JavaScript-based library, and unlike in existing alternatives, we gave users complete freedom to employ the functionality of various web solutions. For example, R/LinkedCharts can be embedded into any predefined HTML layout. Therefore, someone with experience in web design may provide the researcher with a custom HTML page with allocated containers for the chart and any predefined functionality made available by hundreds of JavaScript packages explicitly developed to ensure user interaction with a web page. Moreover, the ``jrc'' package on top of which R/LinkedCharts is built allows running any JavaScript code from the R session and any R code from the web page, providing endless possibilities for custom functionality and design. Such an app can also load locally stored scripts, images, stylesheets, etc. One of the examples in the \Supplement of this paper demostrate this approach by combining LinkedCharts and \emph{igv.js} \citep{robinson_2023}, a JavaScript version of the popular genomic browser. 
 
 The JavaScript basis of R/LinkedCharts offers an interface of its own that is also very simple and similar to the ``rlc'' syntax. Therefore a user who is familiar with JavaScript or willing to learn its essentials gets a way to convert R app into a stand-alone one fully contained within an HTML page. Such an app doesn't require any side resources, can be shared by email between collaborators and opened in any browser. It does not need to have a constantly running R session and can be published on any hosting, including the most simple ones that do not allow to run other software in the background. An example of such stand-alone apps is the \Supplement to this paper. There, one can also find examples of conversion from R apps to JavaScript ones. More information can be found in our online tutorials.
 
