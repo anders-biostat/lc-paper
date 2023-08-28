@@ -81,7 +81,9 @@ Interactive figures are engaging. They allow users to observe data from multiple
 
 Numerous tools \citep{caldarola_2017} now provide means of interactive inspection for many specific types of data. Examples from biology include metabolic maps \citep{noronha_2017}, genome assemblies \citep{wick_2015}, scRNA-Seq or other kind of omics data \citep{hillje_2020, rue_2018}, QTL data \citep{broman_2015} and many more. While such solutions are each tailored for one very specific type of data, there are also a number of general low-level frameworks to create interactive apps, such as D3 \citep{bostock_2011} and Vega-Lite \citep{satyanarayan_2015}, and more high-level but still general-purpose packages, such as Vega \citep{satyanarayan_2016}, Shiny \citep{shiny}, BPG \citep{p_2019}, plotly \citep{sievert_2019, sievert_2020} and Observable Plot \citep{observable_2023}.
 
-However, a crucial part that is missing from most general-purpose interactive plotting frame is functionality to ``link'' two plots such that the user's click on, e.g., a data point in one plot causes details to this very data item be shown in another chart \citep{buja_1991}. For technical reasons (which we review in the Discussion), such functionality is, if at all, only offered by frameworks for web programming in JavaScript -- which is most unsatisfactory for bioinformatics, a field where most work is done using R and Python.
+A crucial part that is used in many of the special-purpose solutions is ``linking'' of charts: the user's click on, e.g., a data point in one overview chart (the overview chart) causes details to this very data item be shown in another chart (the details chart) \citep{buja_1991}. While such linking is often what makes interactive tools for specialized purpose useful, functionality for linking in general is missing from most general-purpose frameworks. 
+
+For technical reasons (which we review in the Discussion), such functionality is, if at all, only offered by frameworks for web programming in JavaScript -- which is most unsatisfactory for bioinformatics, a field where most work is done using R and Python.
 
 In this paper, we present R/LinkedCharts, an R package that makes it very simple to produce linked interactive plots. We will first review the concept of chart linking and explain why it is of so much value especially for bioinformatics data analysis and then demonstrate the versatility of our framework and justify our design decisions. We end with a Discussion on what sets our approach apart from earlier work.
 
@@ -168,8 +170,17 @@ Once one has developed a rough prototype of a LinkedCharts app, the app's appear
 \end{figure*}
 
 
-
 \subsection{Use cases}
+
+\subsubsection{Interactivity for EDA and for presentation}
+
+In general, the use of interactive data visualization falls into two areas, exploratory data analysis (EDA) and data presentation and dissemination. The latter case is becoming well established: more and more authors now accompany their papers with an interactive resource to present their data and results (for example \citet{travaglini_2020, roider_2020, kalucka_2020}) and allow the reader to browse through them. Typically, this chiefly serve to present and communicate research that has already been completed, and, often, it is only after most of the work on a project has been finished and the paper is being written up that researchers spend a couple of days implementing a nice-looking interactive app to accompany their publication.
+
+However, interactive visualization has possibly even more potential in the eraly stages of an analysis where the analyst tries to explore new data and to get a feel for it. The reason this is so rarely done (the "interactive visualization gap" in the words of \citet{batch_2017}) might be that setting up interactive visualization usually seems time-consuming and cumbersome. This is why R/LinkedCharts is designed to make it easy to rapidly create a simple app with only few lines of codes. The analyst might produce many such ``quick-and-dirty'' visualizations, and only keep a few to later turn them into more polished works for presentation.
+
+In the following, we will discuss use cases along this axis from early EDA to polished presentation.
+
+
 \subsubsection{Back-tracking in analysis pipelines}
 
 Most analysis of big data comprises multiple steps of data summarization, each reducing the total amount of data and thus losing information.
@@ -271,6 +282,8 @@ The JavaScript basis of R/LinkedCharts offers an interface of its own that is si
 Unfortunately, we can not provide users with an automated converter of R/LinkendCharts apps into their JavaScript counterparts. Unrestricted customization is an essential part of the ``rlc'' package, and therefore providing such a converter is equivalent to developing a tool to translate any R code (including various packages and their chains of dependencies) into a JavaScript equivalent which is a major computer science project in its own.
 
 Overall, R/LinkedCharts serves two primary purposes: to facilitate data exploration and presentation. It offers an easy way to utilize interactivity for everyday research tasks. And it also provides the user with the possibility to fully employ the power of JavaScript for presenting the data. The latter aspect addresses more experienced users and thus has no limits for possible customization of a LinkedCharts app.
+
+\section{Methods}
 
 \subsection{Implementation}
 
