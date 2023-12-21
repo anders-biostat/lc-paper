@@ -8,7 +8,8 @@
 \usepackage{hyperref}
 \usepackage{minted}
 \usepackage{balance}
-\usepackage{dblfloatfix}  
+\usepackage{dblfloatfix}
+\usepackage[numbers]{natbib}  
 \usemintedstyle{colorful}
 \usepackage[font=small,labelfont=bf]{caption}
 
@@ -28,7 +29,8 @@
 \newcommand{\fixme}[1]{[ \blockade FIXME: #1]}
 
 \usepackage{natbib}
-\bibliographystyle{genome_research}
+% \bibliographystyle{genome_research}
+\bibliographystyle{sn-vancouver} 
 \setcitestyle{aysep={}} 
 
 
@@ -67,7 +69,11 @@ August 2023
 \section{Abstract}
 In any research project involving data-rich assays, exploratory data analysis is a crucial step. Typically, this involves jumping back and forth between visualizations that provide overview of the whole data and others that dive into details. In data quality assessment, for example, it might be very helpful to have one chart showing a summary statistic for all samples, and clicking on one of the data points would display details on this sample in a second plot. Setting up such interactively linked charts is usually too cumbersome and time-consuming to use them in \emph{ad hoc} analysis. We present R/LinkedCharts, a framework that renders this task radically simple: Producing linked charts is as quickly done as is producing conventional static plots in R, requiring a data scientist to write only very few lines of simple R code to obtain complex and general visualization. We expect that the convenience of our new tool will enable data scientists and bioinformaticians to perform much deeper and more thorough EDA with much less effort. Furthermore, R/LinkedCharts apps, typically first written as quick-and-dirty hacks, can also later be polished to provide interactive data access in publication quality, thus contributing to open science.
 
-\section{Introduction}
+In research involving data-rich assays, exploratory data analysis is a crucial step. Typically, this involves jumping back and forth between visualizations that provide overview of the whole data and others that dive into details. For example, it might be helpful to have one chart showing a summary statistic for all samples, with data points linked to a more detailed, second plot. We present R/LinkedCharts, a framework that renders this task radically simple, requiring only very few lines of simple R code to obtain complex and general visualization. R/LinkedCharts apps can be polished to provide interactive data access of publication quality.
+
+In research involving data-rich assays, exploratory data analysis is a crucial step. Typically, this involves jumping back and forth between visualizations that provide overview of the whole data and others that dive into details. For example, it might be helpful to have one chart showing a summary statistic for all samples, with data points linked to a more detailed, second plot. We present R/LinkedCharts, a framework that renders this task radically simple, requiring only very few lines of simple R code to obtain complex and general visualization, which later can be polished to provide interactive data access of publication quality.
+
+\section{Background}
 
 Effective data visualization has been crucial for scientific success since the first quantitative experiments. Yet the amount and complexity of the available data have continuously grown over the last decades, while there are certain limits to how much information one can learn from a static image \citep{hegarty_2011}. Excessive details and multiple overlapping layers make it harder to grasp the crux of a plot. One solution to the problem is to come up with more and more creative and elaborate types of plots, the other is to add an extra dimension by employing interactivity. The first attempts of the latter started in the 1970s \citep{newman_1979, becker_1987}, and by now interactivity is applied ubiquitously, not only in science but also in marketing, journalism and any other field, where there is a need to communicate data-based knowledge to an audience.
 
@@ -172,7 +178,7 @@ Once one has developed a rough prototype of a LinkedCharts app, the app's appear
 
 \begin{figure*}
 	\centering\includegraphics[width=.9\textwidth]{FigC/figC.png}
-	\caption{LinkedCharts can be used to ``walk backwards'' through an analysis pipeline. This is illustrated here using a drug screening experiment \citep{he_2018} as an example.
+	\caption{LinkedCharts can be used to ``walk backwards'' through an analysis pipeline. This is illustrated here using a drug screening experiment \citep{he_2018, ozkan_2020} as an example.
 		For an interactive version, see Interactive \Supplementary{} Figure 4.
 		The \emph{blue arrows} show the direction of a typical analysis pipeline used in drug screening experiments. We start with reading intensity values from plates with different cell lines cultured in the presence of studied drugs (A). These values are then normalized and turned into a fraction of the cells that remained viable. A sigmoid curve is fitted to the obtained viability values at different drug concentrations, and the area under the fitted curve yields a single score for each drug (B). Different drugs' scores are compared to each other across all the tested cell lines (C). A drug-drug correlation heatmap is then produced to identify clusters of similar drugs (D). The \emph{red arrows} illustrate the direction of interactive data exploration: We start by showing the summary heatmap plot (D). Suppose the researcher is interested in a particular drug combination or a cluster of drugs. In that case, he or she can examine the corresponding drug scores simply by clicking on the heatmap cell (D) to see the underlying correlation plots (C). Similarly, one can click in a point in (C) to examine the individual viability values at the tested concentrations and check the sigmoid fit (B). And finally, if needed, it is possible to take one more step back and to look at the raw read-outs to inspect them for the presence of any artifacts (A).}
 	\label{FigC}
@@ -196,7 +202,7 @@ Most analysis of big data comprises multiple steps of data summarization, each r
 
 For example, in the oral-cancer example, we first have for each gene expression values from 28 samples, but the differential expression data analysis summarizes this to just 3 values: the gene's average expression over all samples, the fold change between tumor and healthy and the associated p-value. The LinkedCharts app shown in Figure \ref{FigD} allows to ``undo'' this summarization by inspecting the original values for each gene.
 
-As an example of an analysis pipeline with multiple data-reduction steps, we use the drug-screening study of \citet{he_2018}. A collection of drugs was tested against various pancreatic cancer cell lines at several concentrations per drug. Figure \ref{FigC} illustrates a possible analysis pipeline: Panel A shows the viability read-out from the microtiter plates. For each combination of one cell line and one drug, the values for the different tested concentrations can be shown as a scatter plot, with each point depicting the viability value from one well (panel B). Here, we can fit dose-response curves, which can then be further summarized to a single number, such as the area under the curve, or, in the case of this study, a refined variant of that, called the drug sensitivity score (DSS) \citep{yadav_2014}. If two drugs show effect on the same subset of cell lines, they likely have similar modes of action. Hence, to assess the similarity for each pair of drugs, we compare their activity over all cell lines, as shown by the scatter plots in panel D, where each point represents a cell line, with its \emph{x} and \emph{y} coordinates denoting the drug sensitivity scores of that cell line for the two compared drugs. Again, we summarize each such plot into a single number, the correlation coefficient, and finally, we depict all the correlation coefficients in a correlation-matrix heatmap (panel C).
+As an example of an analysis pipeline with multiple data-reduction steps, we use the drug-screening study of \citet{ozkan_2020}. A collection of drugs was tested against various pancreatic cancer cell lines at several concentrations per drug. Figure \ref{FigC} illustrates a possible analysis pipeline: Panel A shows the viability read-out from the microtiter plates. For each combination of one cell line and one drug, the values for the different tested concentrations can be shown as a scatter plot, with each point depicting the viability value from one well (panel B). Here, we can fit dose-response curves, which can then be further summarized to a single number, such as the area under the curve, or, in the case of this study, a refined variant of that, called the drug sensitivity score (DSS) \citep{yadav_2014}. If two drugs show effect on the same subset of cell lines, they likely have similar modes of action. Hence, to assess the similarity for each pair of drugs, we compare their activity over all cell lines, as shown by the scatter plots in panel D, where each point represents a cell line, with its \emph{x} and \emph{y} coordinates denoting the drug sensitivity scores of that cell line for the two compared drugs. Again, we summarize each such plot into a single number, the correlation coefficient, and finally, we depict all the correlation coefficients in a correlation-matrix heatmap (panel C).
 
 Often, such an analysis pipeline is fully automated and no one ever looks at the intermediate plots. Inspecting them is, however, crucial to note problems with data quality or mistakes in the design or programming of the analysis pipeline.
 
@@ -279,11 +285,13 @@ The importance of using interactivity in data exploration has been discussed sin
 
 We have presented R/LinkedCharts, a general-purpose framework for interactive data visualization for R that pulls all event handling from the JavaScript core to the R-based development side. This enables bioinformaticians to code arbitrary reactions to user interactions with individual data points in a chart and to thus link several charts. We show that this allows to easily set up apps where an "overview chart" shows the main results and a click on any item in this overview displays details on this element in a "detail chart". We have discussed numerous ways how variations on this general idea enable powerful data analysis strategies, that can be easily incorporated into a data analyst's existing work routine. We have argued that the consequent use of such techniques allows for improvements at all stages of a project.
 
-\subsection{Availability}
+\subsection{Availability of Data and Materials}
 
-R/LinkedCharts is available as an R package from CRAN, the standard archive for R packages (\url{https://cran.r-project.org/}), i.e., it can simply be installed with \mintinline{R}{install.packages("rlc")}. No further installation is required, as all components, including the web server and the functionality to link to the web browser, are included in the package and started automatically.
+R/LinkedCharts \citep{rlc_2023} is available as an R package from CRAN, the standard archive for R packages (\url{https://cran.r-project.org/}), i.e., it can simply be installed with \mintinline{R}{install.packages("rlc")}. No further installation is required, as all components, including the web server and the functionality to link to the web browser, are included in the package and started automatically.
 
 Codes and detailed explanations for all examples discussed in this paper are given in the paper's interactive Supplement, which is also available at \url{https://anders-biostat.github.io/lc-paper/}. Several detailed usage tutorials are available at \url{https://anders-biostat.github.io/linked-charts/}.
+
+The dataset used for example in Fig \ref{FigD} is available on the European Read Archive (ERA) under accession PRJEB7455 (secondary accession: ERP007185). The count data have been downloaded from the \emph{recount2} project \citep{collado_2017} at \url{https://jhubiostatistics.shinyapps.io/recount/}. The dataset for example in Fig \ref{FigC} was obtained from the authours. All the data necessary to recreate the example apps are provided in the \Supplement of the paper along side the corresponding code.
 
 
 \section{Methods}
@@ -298,16 +306,21 @@ The ``jrc'' package \citep{jrc_2020} package is used as a bridge between R and J
 
 R/LinkedCharts (``rlc'' package) is an R \citep{R_2019} interface to the JavaScript version of LinkedCharts. In addition to providing access to \emph{linked-charts.js} functionality, it also ensures proper storing of charts and serving them to each connected client by extending ``App'' class of the ``jrc'' package. ``rlc'' is open source and is available on CRAN or GitHub \url{https://github.com/anders-biostat/rlc}.
 
-\subsection{Acknowledgement}
+\subsection{Funding}
 
 The authors acknowledge funding by the Deutsche Forschungsgemeinschaft via CRC 1366 and by the Klaus-Tschira-Stiftung via grant 00.022.2019.
+
+\subsection{Authors’ Contributions}
+SO implemented the ``rlc'' package and wrote the manuscript. SA supervised the project, contributed to the implementation, made suggestions and decisions on the package's architecture and editted the manuscript.
+
+\subsection{Ethical Approval}
+Not applicable for this publication.
 
 \section{Supplement}
 
 The interactive supplement to this paper can be found online at \url{https://anders-biostat.github.io/lc-paper/} or offline in the zip file accompanying the paper. To see the supplement offline, unpack the zip file and use a web browser to open the file \emph{index.html} contained within.
 
-
-\begin{small} 
+\begin{small}
 \bibliography{lc}
 \end{small}
 
