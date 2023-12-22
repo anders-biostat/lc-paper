@@ -2016,7 +2016,7 @@ FUNCTION {begin.bib}
   write$ newline$
   "\providecommand{\doi}[1]{\url{https://doi.org/#1}}"
   write$ newline$
-  "\bibcommenthead" write$ newline$
+  %% "\bibcommenthead"  %% Commented out by Simon A.
 }
 EXECUTE {begin.bib}
 EXECUTE {init.config.constants}

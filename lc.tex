@@ -29,10 +29,8 @@
 \newcommand{\fixme}[1]{[ \blockade FIXME: #1]}
 
 \usepackage{natbib}
-% \bibliographystyle{genome_research}
 \bibliographystyle{sn-vancouver} 
 \setcitestyle{aysep={}} 
-
 
 \usepackage[dvipsnames]{xcolor}
 \hypersetup{
@@ -42,7 +40,8 @@
     urlcolor={blue!50!black}
 }
 \renewcommand{\dbltopfraction}{0.7}
-\renewcommand{\textfraction}{0.2}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\bottomfraction}{0.1}
 
 \newcommand{\Supplement}{\href{https://anders-biostat.github.io/lc-paper/}{Supplement}}
 \newcommand{\Supplementary}{\href{https://anders-biostat.github.io/lc-paper/}{Supplementary}}
@@ -67,7 +66,7 @@ August 2023
 }]
 
 \section{Abstract}
-In research involving data-rich assays, exploratory data analysis is a crucial step. Typically, this involves jumping back and forth between visualizations that provide overview of the whole data and others that dive into details. For example, it might be helpful to have one chart showing a summary statistic for all samples, with data points linked to a more detailed, second plot. We present R/LinkedCharts, a framework that renders this task radically simple, requiring only very few lines of simple R code to obtain complex and general visualization, which later can be polished to provide interactive data access of publication quality.
+In research involving data-rich assays, exploratory data analysis is a crucial step. Typically, this involves jumping back and forth between visualizations that provide overview of the whole data and others that dive into details. For example, it might be helpful to have one chart showing a summary statistic for all samples, while a second chart provides details whenever a data point is selected in the first chart. We present R/LinkedCharts, a framework that renders this task radically simple, requiring only very few lines of simple R code to obtain complex and general visualization, which later can be polished to provide interactive data access of publication quality.
 
 \section{Background}
 
@@ -75,17 +74,9 @@ Effective data visualization has been crucial for scientific success since the f
 
 Interactive figures are engaging. They allow users to observe data from multiple self-chosen angles making the conveyed message more credible. They also bolster data exploration sparing researchers the necessity of handpicking presumably important parts of data in advance. Therefore, we believe that further integration of interactive tools in a researcher's routine can significantly improve the quality of research.
 
-\begin{figure*}
-   \centering\includegraphics[width=.9\textwidth]{FigD/figD.png}
-   \caption{An example for two linked charts, based on a study by \citet{conway_2015} comparing cancerous and normal tissues from 19 patients. The MA plot (A) shows all genes with their average expression on the X-axis and log$_2$-fold change between tumour and normal on the Y-axis. Red indicates genes where the difference was reported as significant by the ``voom'' method \citep{law_2014}. The plot to the right (B) shows, for one selected gene (here, LAMB4), the individual expression values (as counts per million, CPM) for each sample. This figure is a screenshot of a LinkedCharts app, the live version of which is provided in the \Supplement{} (as Interactive Supplementary Figure 1): When the user clicks on any point in the MA plot (A), the expression plot (B) changes, showing the selected gene. Thus, one can rapidly gain an impression of the details hidden in a summarizing plot like the MA plot.}  
-   \label{FigD}
-\end{figure*}
-
 Numerous tools \citep{caldarola_2017} now provide means of interactive inspection for many specific types of data. Examples from biology include metabolic maps \citep{noronha_2017}, genome assemblies \citep{wick_2015}, scRNA-Seq or other kind of omics data \citep{hillje_2020, rue_2018}, QTL data \citep{broman_2015} and many more. While such solutions are each tailored for one very specific type of data, there are also a number of general low-level frameworks to create interactive apps, such as D3 \citep{bostock_2011} and Vega-Lite \citep{satyanarayan_2015}, and more high-level but still general-purpose packages, such as Vega \citep{satyanarayan_2016}, Shiny, BPG \citep{p_2019}, plotly, Bokeh and Observable Plot.
 
-A crucial part that is used in many of the special-purpose solutions is ``linking'' of charts: the user's click on, e.g., a data point in one overview chart (the overview chart) causes details to this very data item to be shown in another chart (the details chart) \citep{buja_1991}. While such linking is often what makes interactive tools for specialized purposes useful, functionality for linking in general is missing from most general-purpose frameworks. 
-
-For technical reasons, such functionality is, if at all, only offered by frameworks for web programming in JavaScript -- which is most unsatisfactory for bioinformatics, a field where most work is done using R and Python.
+A crucial part that is used in many of the special-purpose solutions is ``linking'' of charts: the user's click on, e.g., a data point in one overview chart (the overview chart) causes details to this very data item to be shown in another chart (the details chart) \citep{buja_1991}. Even though such linking is often what makes interactive tools for specialized purposes useful, functionality for linking in general is missing from most general-purpose frameworks. For technical reasons, such functionality is, if at all, only offered by frameworks for web programming in JavaScript -- which is most unsatisfactory for bioinformatics, a field where most work is done using R and Python.
 
 In this paper, we present R/LinkedCharts, an R package that makes it very simple to produce linked interactive plots by providing convinient R wrappers around a core built using D3. We will first review the concept of chart linking and explain why it is of so much value especially for bioinformatics data analysis and then demonstrate the versatility of our framework and justify our design decisions. We end with a Discussion on what sets our approach apart from earlier work.
 
@@ -95,30 +86,20 @@ In this paper, we present R/LinkedCharts, an R package that makes it very simple
 
 As its name suggests, the central concept of LinkedCharts is linking and focusing \citep{buja_1991}: one can connect two or more plots thus that interacting with one of them affects what is displayed in the others. We illustrate the concept of linking charts with a simple example based on data from \citet{conway_2015}.
 
-In that study, three samples were taken from each of 17 patients with oral cancer: of normal, cancerous, and dysplasic tissue. mRNA from all these samples was sequenced to obtain gene expression values. The goal was to find genes that are differentially expressed between the tissue types -- a standard task in bioinformatics, readily addressed using available software tools \citep{ritchie_2015, love_2014}. Here, we have used the function \mintinline{R}{voom} from the ``limma'' package \citep{law_2014} to compare normal and cancerous tissues. It is common to visualize such a comparison with an MA plot \citep{dudoit_2002}, where each dot represents a gene, showing the gene's average expression on the X-axis and log fold change between the two groups on the Y-axis (Fig \ref{FigD}(A)). Red dots correspond to genes that are considered significantly different between the two conditions (adjusted p-value $<$ 0.1). 
+In that study, three samples were taken from each of 17 patients with oral cancer: of normal, cancerous, and dysplasic tissue. mRNA from all these samples was sequenced to obtain gene expression values. The goal was to find genes that are differentially expressed between the tissue types -- a standard task in bioinformatics, readily addressed using available software tools \citep{ritchie_2015, love_2014}. Here, we have used the function \mintinline{R}{voom} from the ``limma'' package \citep{law_2014} to compare normal and cancerous tissues. It is common to visualize such a comparison with an MA plot \citep{dudoit_2002}, where each dot represents a gene, showing the gene's average expression on the X-axis and log fold change between the two groups on the Y-axis (Fig \ref{FigD}A). Red dots correspond to genes that are considered significantly different between the two conditions (adjusted p-value $<$ 0.1). 
+
+\begin{figure*}
+   \centering\includegraphics[width=.9\textwidth]{FigD/figD.png}
+   \caption{An example for two linked charts, based on a study by \citet{conway_2015} comparing cancerous and normal tissues from 19 patients. The MA plot (A) shows all genes with their average expression on the X-axis and log$_2$-fold change between tumour and normal on the Y-axis. Red indicates genes where the difference was reported as significant by the ``voom'' method \citep{law_2014}. The plot to the right (B) shows, for one selected gene (here, LAMB4), the individual expression values (as counts per million, CPM) for each sample. This figure is a screenshot of a LinkedCharts app, the live version of which is provided in the \Supplement{} (as Interactive Supplementary Figure 1): When the user clicks on any point in the MA plot (A), the expression plot (B) changes, showing the selected gene. Thus, one can rapidly gain an impression of the details hidden in a summarizing plot like the MA plot.}  
+   \label{FigD}
+\end{figure*}
 
 About these genes, one may now wonder: How does the difference in expression look like for every single patient? Is it consistent across all the patients or only detected in some of them? Are there any artifacts or outliers that cause the p-value to be too small?
 
-To investigate such questions, we can add another plot that shows expression values (as "counts per million", CPM) from each individual sample (Fig \ref{FigD}(B)). While this second plot can show expression for only one selected gene at a time, the \emph{linking} between the two charts overcomes this limitation: In our implementation, a mouse click on a point in the MA plot causes the plot to the right to switch to displaying the expression values for the thus selected gene. Fig \ref{FigD} depicts our LinkedCharts app, while a live version of the app is provided in this paper's online \Supplement{}  (\url{https://anders-biostat.github.io/lc-paper/}) -- and we encourage the reader to pause for a moment and try it out there. 
+To investigate such questions, we can add another plot that shows expression values (as "counts per million", CPM) from each individual sample (Fig \ref{FigD}B). While this second plot can show expression for only one selected gene at a time, the \emph{linking} between the two charts overcomes this limitation: In our implementation, a mouse click on a point in the MA plot causes the plot to the right to switch to displaying the expression values for the thus selected gene. Fig \ref{FigD} depicts our LinkedCharts app, while a live version of the app is provided in this paper's online \Supplement{}  (\url{https://anders-biostat.github.io/lc-paper/}) -- and we encourage the reader to pause for a moment and try it out there. 
 
-\begin{figure*}[t]
-	\centering\includegraphics[width=.8\textwidth]{FigB/figB.png}
-	\caption{Typical syntax of an R/LinkedCharts plot with comparison to the ``ggplot2'' \citep{wickham_2016} package, one of the most widely used plotting libraries. Lines of the code are arranged to put the same aspects of the charts next to each other. The ``iris'' dataset, one of the built-in example datasets of R, was used here. Both pieces of code are complete and fully functional, and their output is shown above the code.}
-	\label{FigB}
-\end{figure*}
-
-
-
-\begin{figure*}
-	\includegraphics[width=\textwidth]{FigA/figA.png}
-	\caption{Gallery of all available plotting functions in the ``rlc'' package. A scatter plot (A); a bee swarm plot (based on the d3-beeswarm plugin of \citet{lebeau_2017}) (B); a collection of various lines (C); a histogram and a density plot (D); a heatmap (E); a bar chart (F); a collection of interactive elements to gather input from the user (G); functions to add custom HTML code and static plots to the page (H). All these examples with code to create them can be found in the \Supplement.}
-	\label{FigA}
-\end{figure*}
-
-Of course, there are already several tools available for exploring the data from differential-expression assays (e.g., iSee by \citet{rue_2018}), which may or may not fit the needs of a specific analysis. With R/LinkedCharts, we offer the building blocks to build such an app with minimal effort "from scratch", while giving the analyst the flexibility to generate arbitrary plots and arbitrary linkages.
-
-In fact, the minimal code to set up this app takes only the following few lines. (The full code, i.e., including the code for loading the data and running limma/voom, is given in the online \Supplement.)
-
+\begin{figure}[bh!]
+\begin{minipage}{\columnwidth}
 \begin{minted}[xleftmargin=20pt, linenos, highlightlines={2,9-12,17}]{R}
 openPage(layout = "table1x2")
 gene <- 1
@@ -141,12 +122,36 @@ lc_scatter(dat(
    logScaleY = 10),
 "A2", with = sampleTable)
 \end{minted}
+\end{minipage}
+\caption{Code for generating Figure \ref{FigD}. See text for details.}
+\label{listing}
+\end{figure}
+
+
+
+\begin{figure*}[t]
+	\centering\includegraphics[width=.8\textwidth]{FigB/figB.png}
+	\caption{Typical syntax of an R/LinkedCharts plot with comparison to the ``ggplot2'' \citep{wickham_2016} package, one of the most widely used plotting libraries. Lines of the code are arranged to put the same aspects of the charts next to each other. The ``iris'' dataset, one of the built-in example datasets of R, was used here. Both pieces of code are complete and fully functional, and their output is shown above the code.}
+	\label{FigB}
+\end{figure*}
+
+
+
+\begin{figure*}
+	\includegraphics[width=\textwidth]{FigA/figA.png}
+	\caption{Gallery of all available plotting functions in the ``rlc'' package. A scatter plot (A); a bee swarm plot (based on the d3-beeswarm plugin of \citet{lebeau_2017}) (B); a collection of various lines (C); a histogram and a density plot (D); a heatmap (E); a bar chart (F); a collection of interactive elements to gather input from the user (G); functions to add custom HTML code and static plots to the page (H). All these examples with code to create them can be found in the \Supplement.}
+	\label{FigA}
+\end{figure*}
+
+Of course, there are already several tools available for exploring the data from differential-expression assays (e.g., iSee \cite{rue_2018}), and these may or may not fit the needs of a specific analysis. With R/LinkedCharts, we offer the building blocks to build such an app with minimal effort "from scratch", while giving the analyst the flexibility to generate arbitrary plots and arbitrary linkages.
+
+In fact, the minimal code to set up this app takes only the few lines shown in Figure \ref{listing}. (The full code, i.e., including the code for loading the data and running limma/voom, is given in the online \Supplement.)
 
 The two \mintinline{R}{lc_scatter} calls set up the two scatter charts shown in Figure \ref{FigD}. In the left-hand chart (``A1''), each point depicts a gene, and x and y coordinate and point color are taken from the indicated columns of \mintinline{R}{voomResult}, the results table provided by the limma/voom differential-expression tool. Similarly, the right-hand chart (``A2'') takes its data from the sample table, and the y axis from the matrix of normalizxed read counts (that was also used as input to limma/voom).
 
-The lines highlighted in blue cause the linking: In In Line 2, we introduce a global variable, \mintinline{R}{gene}, which stores the index of the gene to be shown in the right-hand plot. This index tells the chart which line of the \mintinline{R}{normCounts} matrix (where the normalized counts are stored) to use as \emph{y} values of the expression plot (Line 17). Almost every chart type in R/LinkedCharts has the \mintinline{R}{on_click} argument, which allows the user to define a function that is called whenever someone clicks on an element of the plot (point, line, cell of a heatmap, etc.) and is passed the index of the clicked element (\mintinline{R}{k}).  Here, our callback function simply changes the value of \mintinline{R}{gene} to the clicked point index (Line 10). Then, we tell R/LinkedCharts to update the second plot (Line 11; ``A2'' is its ID set in Line 20). Updating means that the package will reevaluate all arguments inside the \mintinline{R}{dat()} function and redraw the chart accordingly. In our case, a new value of \mintinline{R}{gene} will yield new \emph{y} values for the expression plot.
+The lines highlighted in blue cause the linking: In Line 2, we introduce a global variable, \mintinline{R}{gene}, which stores the index of the gene to be shown in the right-hand plot. This index tells the chart which line of the \mintinline{R}{normCounts} matrix (where the normalized counts are stored) to use as \emph{y} values of the expression plot (Line 17). Almost every chart type in R/LinkedCharts has the \mintinline{R}{on_click} argument, which allows the user to define a function that is called whenever someone clicks on an element of the plot (point, line, cell of a heatmap, etc.) and is passed the index of the clicked element (\mintinline{R}{k}).  Here, our callback function simply changes the value of \mintinline{R}{gene} to the clicked point index (Line 10). Then, we tell R/LinkedCharts to update the second plot (Line 11; ``A2'' is its ID set in Line 20). Updating means that the package will reevaluate all arguments inside the \mintinline{R}{dat()} function and redraw the chart accordingly. In our case, a new value of \mintinline{R}{gene} will yield new \emph{y} values for the expression plot.
 
-This simple logic is not limited to just two plots, but provides a basis to create many simple and complex apps. In the following, we will show case a few more examples. The paper's online \Supplement contains live versions for all these apps, as well as the full code to generate the apps and links to necessary data files, allowing the reader to immediately get the app in their R session and experiment with it. For all examples, we provide two versions of the code: minimal with only essential parameters needed to make the app functional, and more extended with custom colors, labels, etc. In the paper, we only focus on the minimal code.
+This simple logic is not limited to just two plots, but provides a basis to create many simple and complex apps. In the following, we will showcase a few more examples. The paper's online \Supplement contains live versions for all these apps, as well as the full code to generate the apps and links to necessary data files, allowing the reader to immediately get the app in their R session and experiment with it. For all examples, we provide two versions of the code: minimal with only essential parameters needed to make the app functional, and more extended with custom colors, labels, etc. In the paper, we only focus on the minimal code.
 
 Even more example can be found in our online tutorial at \url{https://anders-biostat.github.io/linked-charts/rlc/tutorials}, including examples dealing with exploration of single-cell sequencing data.
 
@@ -162,7 +167,7 @@ For details on how R/LinkedCharts makes it now possible to write event handlers 
 
 \subsection{Basic syntax, chart types, and HTML5 integration}
 
-We aimed to make R/LinkedCharts simple and familiar to any user with at least some basic knowledge of R. Every chart has a set of properties to define each of its specific aspects. In the previous example, we set the properties \mintinline{R}{x}, \mintinline{R}{y} and \mintinline{R}{color}, which received vectors of coordinates and colors to specify the scatter plots' data points. This principle will be familiar to most users from other plotting libraries. For example, Figure \ref{FigB} shows a comparison of the syntax in R/LinkedCharts (``rlc'' package) and ggplot (from the widely used ``ggplot2'' package by \citet{wickham_2016}) for a simple scatter plot. Lines are arranged to match the same aspects of the plots; above each code block, its output is shown. One can see that the input data structure is identical, and there is hardly any difference between the two.
+We aimed to make R/LinkedCharts simple and familiar to any user with at least some basic knowledge of R. Every chart has a set of properties to define each of its specific aspects. In the previous example, we set the properties \mintinline{R}{x}, \mintinline{R}{y} and \mintinline{R}{color}, which received vectors of coordinates and colors to specify the scatter plots' data points. This principle will be familiar to most users from other plotting libraries. For example, Figure \ref{FigB} shows a comparison of the syntax in R/LinkedCharts (``rlc'' package) and ggplot (from the widely used ``ggplot2'' \citet{wickham_2016}) for a simple scatter plot. Lines are arranged to match the same aspects of the plots; above each code block, its output is shown. One can see that the input data structure is identical, and there is hardly any difference between the two.
 
 R/LinkedCharts is not limited to scatter plots. There are 15 main functions in the ``rlc'' package, each generating a specific type of plot (such as scatter plot, heatmap, bar plot, etc.) or a navigation element (such as sliders or text fields). Figure \ref{FigA} shows them all. Each plot is defined by its properties: some of them are required (such as \mintinline{R}{x} and \mintinline{R}{y} for a scatter plot or \mintinline{R}{value} for a heatmap), others are optional (\mintinline{R}{palette}, \mintinline{R}{title}, \mintinline{R}{ticks} etc.). A full list of all the properties with live examples is available at \url{https://anders-biostat.github.io/linked-charts/rlc/tutorials/props.html} and also on the R man page of each plotting function. For each chart type, event handlers (such as the \mintinline{R}{on_click} function already mentioned, and others) can be defined.
 
@@ -185,7 +190,7 @@ Once one has developed a rough prototype of a LinkedCharts app, the app's appear
 
 \subsubsection{Interactivity for EDA and for presentation}
 
-In general, the use of interactive data visualization falls into two areas, exploratory data analysis (EDA) and data presentation and dissemination. The latter case is becoming well established: more and more authors now accompany their papers with an interactive resource to present their data and results (for example \citet{travaglini_2020, roider_2020, kalucka_2020}) and allow the reader to browse through them. Typically, this chiefly serves to present and communicate research that has already been completed, and, often, it is only after most of the work on a project has been finished and the paper is being written up that researchers spend a couple of days implementing a nice-looking interactive app to accompany their publication.
+In general, the use of interactive data visualization falls into two areas, exploratory data analysis (EDA) and data presentation and dissemination. The latter case is becoming well established: more and more authors now accompany their papers with an interactive resource to present their data and results (for example \cite{travaglini_2020, roider_2020, kalucka_2020}) and allow the reader to browse through them. Typically, this chiefly serves to present and communicate research that has already been completed, and, often, it is only after most of the work on a project has been finished and the paper is being written up that researchers spend a couple of days implementing a nice-looking interactive app to accompany their publication.
 
 However, interactive visualization has possibly even more potential in the early stages of an analysis where the analyst tries to explore new data and to get a feel for it. The reason this is so rarely done (the "interactive visualization gap" in the words of \citet{batch_2017}) might be that setting up interactive visualization usually seems time-consuming and cumbersome. This is why R/LinkedCharts is designed to make it easy to rapidly create a simple app with only a few lines of code. The analyst might produce many such ``quick-and-dirty'' visualizations and only keep a few to later turn them into more polished works for presentation.
 
@@ -208,7 +213,7 @@ Thus, LinkedCharts allows to explore the ``parentage'' of any result value. If w
 
 Each layer in the backwards journey can inform about another type of problem: From the correlation scatter plots, we may find that the correlation coefficient was unduly influenced by a single out-lying cell line, from the dose-response plot, we may find that specific dose-response curves fail to have the expected sigmoid shape, and from inspecting plate plots, we may trace back a surprising final result to, say, a normalization issue or a plate-edge effect.
 
-Once such an analysis pipeline has been developed, all the intermediate results are typically available in suitable data structures, which can be readily explored with LinkedCharts. The \Supplement provides code for the example just described.
+Once such an analysis pipeline has been developed, all the intermediate results are typically available in suitable data structures, which can be readily explored with LinkedCharts. The \Supplement{} provides code for the example just described.
 
 \subsubsection{Quality assurance thresholds}
 
@@ -258,8 +263,8 @@ openPage(layout = "table1x2",
 
 In all examples discussed so far, user input is constrained to selecting data points in one chart in order to affect the display in a linked chart. However, the LinkedCharts library also provides for more general means of data input by the user, by leveraging the HTML5 tag \mintinline{html}{<input>} and thus offering buttons, checkboxes, radio buttons, scrolls and text fields via the ``rlc'' function \mintinline{R}{lc_input} (Figure \ref{FigA}G). As for any other LinkedCharts element, \mintinline{R}{lc_input} can be provided a callback function that is run every time the user changes the state of an input element (e.g., clicks a button or enters new text). This allows to easily add functionality to enter, say, a gene name rather than clicking on its point (as in Figure \ref{FigF}), but also to build up complex apps.
 
-Figure \ref{lc_FigG} shown a screenshot of an example of a more complex LinkedCharts app, which was developed as part of an effort to establish LAMP-based testing for SARS-CoV-2 at Heidelberg University campus \citep{daothi_2020}. In this project, a colorimetric assay based on loop-mediated DNA amplification (LAMP, \citet{notomi_2000}) was carried out on microtiter plates. The app allowed
-lab technicians to inspect the measured change in pH as function of incubation time, to link curves to wells and to patients, to compare replicates, and to check and, if needed, amend automatic result calling. (See \citet{Lou_2023} for details.) Such continuous quality control is vital for reliable medical diagnostics and has to be offered in an easy-to-use manner and quick-to-grasp to avoid mistakes from repetition and fatigue.
+Figure \ref{lc_FigG} shown a screenshot of an example of a more complex LinkedCharts app, which was developed as part of an effort to establish LAMP-based testing for SARS-CoV-2 at Heidelberg University campus \citep{daothi_2020}. In this project, a colorimetric assay based on loop-mediated DNA amplification (LAMP, \citep{notomi_2000}) was carried out on microtiter plates. The app allowed
+lab technicians to inspect the measured change in pH as function of incubation time, to link curves to wells and to patients, to compare replicates, and to check and, if needed, amend automatic result calling. (See \citep{Lou_2023} for details.) Such continuous quality control is vital for reliable medical diagnostics and has to be offered in an easy-to-use manner and quick-to-grasp to avoid mistakes from repetition and fatigue.
 
 Here, LinkedCharts turned out to be well suited to quickly develop the app, to continuously refine it while the assay was finalized, and to turn it into a production tool, well integrated into the testing campaign's databases and result reporting services.
 
@@ -271,7 +276,7 @@ Published interactive apps for data exploration are hence the next step towards 
 
 While we consider the main area of application for the LinkedCharts to be a part of data analysis, it can be used for result presentation as well. For instance, a LinkedCharts app was used as online supplement to the paper of \citet{wang_2020}, a big-data study aiming at elucidating to which extent evolution of expression regulation acts on transcription and to which extent on translation. Using RNA-Seq and ribosomal footprinting data from three organs, taken from animals of six species, changes in transcript abundance and in translation of transcripts into proteins were quantified and compared. A core idea of the analysis was that the evolutionary changes to transcription and translation may either compensate for each other  (thus compensating deleterious changes in one layer by an opposite change in the other), or reinforce each other (in case of adaptive changes). To this extent, a score denoted as $\Delta$ was calculated, which is negative if the between-species difference is lower in the ribosome footprinting data than in the transcriptional data (thus indicating that transcriptional difference are at least partially compensated on the translational layer) and positive if the variance at the ribosomal layer is higher (indicating reinforcement).
 
-The definition of this $\Delta$-score is technical, and it is hard for the reader to form an intuition on its meaning. By ``playing around'' a bit with the app, available at \href{https://ex2plorer.kaessmannlab.org/}{(static picture: Figure \ref{FigF})}, this is quickly remedied:  The reader can click on any gene in the upper scatter plot, inspecting examples of genes with positive, negative, or near-zero $\Delta$-score to see the data from the individual samples. After a few clicks, the relationship between the transcriptional and the translational data on the one hand and the $\Delta$ score on the other hand will be clearer than after reading several paragraphs of text. The use of HTML design elements to position explanatory labels renders the app nearly self-explanatory. Here, it is not a simple picture, but an interactive one, that is worth the proverbial thousand word. 
+The definition of this $\Delta$-score is technical, and it is hard for the reader to form an intuition on its meaning. By ``playing around'' a bit with the app, available at \url{https://ex2plorer.kaessmannlab.org/} (static picture: Figure \ref{FigF}), this is quickly remedied:  The reader can click on any gene in the upper scatter plot, inspecting examples of genes with positive, negative, or near-zero $\Delta$-score to see the data from the individual samples. After a few clicks, the relationship between the transcriptional and the translational data on the one hand and the $\Delta$ score on the other hand will be clearer than after reading several paragraphs of text. The use of HTML design elements to position explanatory labels renders the app nearly self-explanatory. Here, it is not a simple picture, but an interactive one, that is worth the proverbial thousand word. 
 
 LinkedCharts apps can be used as paper supplements in two ways. As it was described previously, any R/LinkedCharts app supports concurrent use and therefore can be made available for public usage with a very few changes to the code. Alternatively, a user with the knowledge of JavaScript can use the \emph{linked-charts.js} library which is a foundation of R/LinkedCharts to make an app fully contained within an HTML file, as the aforementioned supplement to \citet{wang_2020}. Though this approach requires considerably more effort, the resulting app is extremely easy to share, does not require any form of installation and can be run in any modern web browser. The interface of \emph{linked-charts.js} in many aspects is the same as of R/LinkedCharts, which facilitates the code transformation. To give readers a feeling of similarity between R code of R/LinkedCharts and JavaScript apps of \emph{linked-charts.js}, for every example in the \Supplement, we provided code for the both languages.
 
@@ -283,11 +288,11 @@ We have presented R/LinkedCharts, a general-purpose framework for interactive da
 
 \subsection{Availability of Data and Materials}
 
-R/LinkedCharts \citep{rlc_2023} is available as an R package from CRAN, the standard archive for R packages (\url{https://cran.r-project.org/}), i.e., it can simply be installed with \mintinline{R}{install.packages("rlc")}. No further installation is required, as all components, including the web server and the functionality to link to the web browser, are included in the package and started automatically.
+R/LinkedCharts is available as an R package from CRAN, the standard archive for R packages (\url{https://cran.r-project.org/}), i.e., it can simply be installed with \mintinline{R}{install.packages("rlc")}. No further installation is required, as all components, including the web server and the functionality to link to the web browser, are included in the package and started automatically. For an archived version of the software, see \cite{rlc_2023}.
 
 Codes and detailed explanations for all examples discussed in this paper are given in the paper's interactive Supplement, which is also available at \url{https://anders-biostat.github.io/lc-paper/}. Several detailed usage tutorials are available at \url{https://anders-biostat.github.io/linked-charts/}.
 
-The dataset used for example in Fig \ref{FigD} is available on the European Read Archive (ERA) under accession PRJEB7455 (secondary accession: ERP007185). The count data have been downloaded from the \emph{recount2} project \citep{collado_2017} at \url{https://jhubiostatistics.shinyapps.io/recount/}. The dataset for example in Fig \ref{FigC} was obtained from the authours. All the data necessary to recreate the example apps are provided in the \Supplement of the paper along side the corresponding code.
+The dataset used for example in Fig \ref{FigD} is available on the European Read Archive (ERA) under accession PRJEB7455 (secondary accession: ERP007185). The count data have been downloaded from the \emph{recount2} project \citep{collado_2017} at \url{https://jhubiostatistics.shinyapps.io/recount/}. The dataset for example in Fig \ref{FigC} was obtained from the authors. All the data necessary to recreate the example apps are provided in the \Supplement{} of the paper along side the corresponding code.
 
 
 \section{Methods}
@@ -296,9 +301,9 @@ The dataset used for example in Fig \ref{FigD} is available on the European Read
 
 The JavaScript foundation of R/LinkedCharts is built on top of the D3 library \citep{bostock_2011}. 
 
-\emph{linked-charts.js} is by itself a fully functional tool for interactive data visualization that can be used by those familiar with JavaScript to create stand-alone apps. The library is open-source and available on GitHub at \url{https://github.com/anders-biostat/linked-charts}. The minified version can be downloaded from \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.min.js}, and its stylesheet is at \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.css}.
+\emph{linked-charts.js} is by itself a fully functional tool for interactive data visualization that can be used by those familiar with JavaScript to create stand-alone apps. The library is open-source and available on GitHub at \url{https://github.com/anders-biostat/linked-charts}. %The minified version can be downloaded from \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.min.js}, and its stylesheet is at \url{https://github.com/anders-biostat/linked-charts/raw/master/lib/linked-charts.css}.
 
-The ``jrc'' package \citep{jrc_2020} package is used as a bridge between R and JavaScript. It allows one to run JavaScript code from an R session and vice versa. It also manages client connections to the app and is responsible for all the functionality necessary to make an R/LinkedCharts app public. ``jrc'' in turn is based mainly on ``httpuv'' \citep{cheng_2020} package to run a local server and ensure a WebSocket connection \citep{fette_rfc_2011}. 
+The ``jrc'' package package is used as a bridge between R and JavaScript. It allows one to run JavaScript code from an R session and vice versa. It also manages client connections to the app and is responsible for all the functionality necessary to make an R/LinkedCharts app public. ``jrc'' in turn is based mainly on ``httpuv'' \citep{cheng_2020} package to run a local server and ensure a WebSocket connection \citep{fette_rfc_2011}. A current version can be found at \url{https://github.com/anders-biostat/jrc}, an archived one at \cite{jrc_2020}.
 
 R/LinkedCharts (``rlc'' package) is an R \citep{R_2019} interface to the JavaScript version of LinkedCharts. In addition to providing access to \emph{linked-charts.js} functionality, it also ensures proper storing of charts and serving them to each connected client by extending ``App'' class of the ``jrc'' package. ``rlc'' is open source and is available on CRAN or GitHub \url{https://github.com/anders-biostat/rlc}.
 
@@ -307,7 +312,7 @@ R/LinkedCharts (``rlc'' package) is an R \citep{R_2019} interface to the JavaScr
 The authors acknowledge funding by the Deutsche Forschungsgemeinschaft via CRC 1366 and by the Klaus-Tschira-Stiftung via grant 00.022.2019.
 
 \subsection{Authors’ Contributions}
-SO implemented the ``rlc'' package and wrote the manuscript. SA supervised the project, contributed to the implementation, made suggestions and decisions on the package's architecture and editted the manuscript.
+SO implemented the ``rlc'' package and wrote the manuscript. SA conceived and supervised the project, contributed to its implementation, and edited the manuscript. Both authors jointly designed the software architecture.
 
 \subsection{Ethical Approval}
 Not applicable for this publication.
