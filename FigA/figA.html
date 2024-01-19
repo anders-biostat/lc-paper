@@ -20,13 +20,14 @@
       background-color: honeydew;
       height: 40px;
       font-weight: bold;
+      font-size: 15pt;
     }
 		.panelLabel {
 			position: absolute;
 			left: 0px;
 			top: 0px;
 			font-weight: bold;
-			font-size: 20pt;
+			font-size: 25pt;
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
 			padding-top: 10px;
 			padding-left: 10px;
@@ -154,13 +155,14 @@
 			.nsteps(dens.nsteps)
 			.place("#A4");
 
-		lc.heatmap()
+		var hm = lc.heatmap()
 			.ncols(30)
       .nrows(30)
       .colLabel(d => "Sample " + (d + 1))
       .rowLabel(d => "Feature " + (d + 1))
-      .width(400)
+      .width(350)
       .height(400)
+      .set_paddings({left: 70})
 			.value(function(row, col) {
 				var val = Math.random();
 				if(row > 20)
@@ -169,8 +171,10 @@
 					val += Math.random() * 4 + 0.5;
 
 				return val;
-			})
-			.place("#B1");
+			});
+		hm.legend
+			.width(90);
+		hm.place("#B1");
 
 		
 		var barData = d3.range(5).map(el1 => d3.range(3)
@@ -233,7 +237,7 @@
 */
     d3.select("#B3")
       .append("img")
-        .attr("src", "inps.png")
+        .attr("src", "inps-hires.png")
         .attr("width", "400px")
         .style("margin-left", "15px");
     
@@ -261,8 +265,18 @@
 					val += +d[1] - 1;
 					return labels[val];
 				});
-		
-    
+
+d3.selectAll(".tick")
+	.selectAll("text")
+	.attr("font-size", "12pt");
+d3.selectAll(".label")
+	.attr("font-size", "17");
+d3.selectAll("#B1")
+	.selectAll(".label")
+	.attr("font-size", "9pt");
+	d3.selectAll(".sample")
+	.selectAll("text")
+	.attr("font-size", "11pt");
   </script>
   
 </body>

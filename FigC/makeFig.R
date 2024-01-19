@@ -77,7 +77,7 @@ drugTable %>%
   group_by(Drug) %>%
   summarise(mean = mean(DSS)) %>%
   arrange(desc(mean)) %>%
-  head(n = 50) %>%
+  head(n = 35) %>%
   pull(Drug) -> drugs
 
 drugTable %>%
@@ -123,7 +123,8 @@ ggdraw(ylim = c(0.45, 0.55)) +
   
 plot_grid(plots, legend, nrow = 2, rel_heights = c(0.95, 0.05)) -> figC
 
-png("figC.png", width = 1500, height = 1500)
+#png("figC.png", width = 1500, height = 1500)
+svg("figC.svg", width = 13, height = 13)
 print(figC)
 dev.off()
 

@@ -67,11 +67,30 @@ d3.selectAll(".axis")
 	.selectAll(".label")
 	.style("fill", "#444")
 	.style("font-size", 18);
+d3.selectAll(".tick")
+	.selectAll("text")
+	.attr("font-size", "11pt");
 
 conts = d3.selectAll(".linked-charts")
 	.data(["A", "B"])
 		.append("div")
 			.attr("class", "fig-labels")
 			.text(d => d);
+d3.selectAll("#expr")
+	.selectAll("#layer0_colour")
+	.selectAll("svg")
+	.attr("height", 60);
+d3.selectAll("#expr")
+	.selectAll("#layer0_colour")
+	.selectAll(".title")
+	.attr("transform", "rotate(-90)translate(-60, 0)")
+	.selectAll("text")
+	.attr("font-size", "15pt");
+d3.selectAll("#expr")
+	.selectAll("#layer0_colour")
+	.selectAll(".sample")
+	.selectAll("text")
+	.attr("font-size", "13pt");
+
 	</script>
 </body>

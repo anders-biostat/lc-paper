@@ -1,0 +1,1 @@
+wkhtmltopdf --enable-local-file-access --dpi 300 --page-width 280 --page-height 128 figD_static.html figD.pdf
